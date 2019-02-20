@@ -11,7 +11,10 @@
 
 
 ;; Some defaults for emacs
-(setq-default inhibit-startup-message t) ; Disable emacs welcome screen
+(setq-default inhibit-startup-message t    ; Disable emacs welcome screen
+              indent-tabs-mode nil         ; Don't use hard tabs
+              ) 
+              
 
 (setq backup-directory-alist `(("." . "backups")) ; backup files in this directory
       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
@@ -20,7 +23,6 @@
       version-control nil          ; disable emacs version control
       column-number-mode t         ; display column number
       show-paren-delay 0           ; show matching immediately
-      indent-tabs-mode nil         ; don't use hard tabs
       )
 
 (set-language-environment "UTF-8")  ; Use UTF-8
@@ -127,7 +129,7 @@
 (use-package sly
   :defer t
   :requires (sly-quicklisp sly-autoload)
-  :commands sly  
+  :commands sly
   :hook
   ((lisp-mode . sly-mode)
    (lisp-interaction-mode . sly-mode)))
