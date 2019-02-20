@@ -31,6 +31,7 @@
 (tool-bar-mode -1)                  ; Hide tool bar
 (scroll-bar-mode -1)                ; Hide scroll bar
 (show-paren-mode t)                 ; Parenthesis highlighting
+(delete-selection-mode t)           ; Enable delete selection mode
 
 (eval-when-compile
   ;; package management
