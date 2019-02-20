@@ -2,7 +2,7 @@
   ;; Change GC threshold for duration of init, technique from DOOM Emacs FAQ
   ;; Reset at the end of this file
   (setq gc-cons-threshold 402653184
-	gc-cons-percentage 0.6))
+        gc-cons-percentage 0.6))
 
 ;; file handler check is not needed during start up
 ;; reset at the end of this file
@@ -45,8 +45,8 @@
 
   ;; enable 'use-package'
   (unless (package-installed-p 'use-package) ; check if it's already installed
-    (package-refresh-contents)      ; update package archive
-    (package-install 'use-package)) ; install the most recent version of use-package
+          (package-refresh-contents)      ; update package archive
+          (package-install 'use-package)) ; install the most recent version of use-package
 
   (require 'use-package)
   (setq use-package-always-ensure t))
@@ -58,17 +58,17 @@
 (use-package telephone-line
   :config
   (setq telephone-line-lhs
-	'((nil    . (telephone-line-window-number-segment))
-	  (accent . (telephone-line-vc-segment
-		     telephone-line-erc-modified-channels-segment
-		     telephone-line-process-segment))
-	  (nil    . (telephone-line-misc-info-segment
-		     telephone-line-airline-position-segment))
-	  (accent . (telephone-line-buffer-modified-segment))
-	  (nil    . (telephone-line-buffer-name-segment))))
+   '((nil    . (telephone-line-window-number-segment))
+     (accent . (telephone-line-vc-segment
+                telephone-line-erc-modified-channels-segment
+                telephone-line-process-segment))
+     (nil    . (telephone-line-misc-info-segment
+                telephone-line-airline-position-segment))
+     (accent . (telephone-line-buffer-modified-segment))
+     (nil    . (telephone-line-buffer-name-segment))))
   (setq telephone-line-rhs
-	'((accent . (telephone-line-minor-mode-segment))
-	  (nil    . (telephone-line-major-mode-segment))))
+   '((accent . (telephone-line-minor-mode-segment))
+     (nil    . (telephone-line-major-mode-segment))))
   (telephone-line-mode t))
 
 ;; ELDoc for Emacs Lisp, Common Lisp and Scheme
@@ -86,9 +86,9 @@
 (use-package magit
   :config
   (setq magit-git-global-arguments
-	(nconc magit-git-global-arguments
-	       '("-c" "color.ui=false"       ; disable color from git.exe
-		 "-c" "color.diff=false")))) ; this lets magit control the colors and you don't get escape characters
+  (nconc magit-git-global-arguments
+         '("-c" "color.ui=false"
+           "-c" "color.diff=false"))))
 
 ;; Paredit
 (use-package paredit
@@ -102,7 +102,7 @@
 (use-package company
   :config
   (setq company-idle-delay 0
-	company-minimum-prefix-lenght 3)
+        company-minimum-prefix-lenght 3)
   (global-company-mode t))
   
 ;; Which Key
@@ -116,7 +116,7 @@
   :config
   (global-undo-tree-mode)
   (setq undo-tree-visualizer-timestamps t
-	undo-tree-visualizer-diff t))
+        undo-tree-visualizer-diff t))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
@@ -146,9 +146,9 @@
 ;; values taken from DOOM-Emacs FAQ
 (eval-and-compile
   (add-hook 'emacs-startup-hook '(lambda ()
-				   (setq gc-cons-threshold 16777216
-					 gc-cons-percentage 0.1
-					 file-name-handler-alist temp--file-name-handler-alist))))
+           (setq gc-cons-threshold 16777216
+           gc-cons-percentage 0.1
+           file-name-handler-alist temp--file-name-handler-alist))))
 
 (setq initial-scratch-message (concat "Startup time: " (emacs-init-time)))
-(provide 'init)	 
+(provide 'init)
