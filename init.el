@@ -52,26 +52,6 @@
   (require 'use-package)
   (setq use-package-always-ensure t))
 
-;; All the icons
-(use-package all-the-icons)
-
-;; Telephone-line
-(use-package telephone-line
-  :config
-  (setq telephone-line-lhs
-   '((nil    . (telephone-line-window-number-segment))
-     (accent . (telephone-line-vc-segment
-                telephone-line-erc-modified-channels-segment
-                telephone-line-process-segment))
-     (nil    . (telephone-line-misc-info-segment
-                telephone-line-airline-position-segment))
-     (accent . (telephone-line-buffer-modified-segment))
-     (nil    . (telephone-line-buffer-name-segment))))
-  (setq telephone-line-rhs
-   '((accent . (telephone-line-minor-mode-segment))
-     (nil    . (telephone-line-major-mode-segment))))
-  (telephone-line-mode t))
-
 ;; ELDoc for Emacs Lisp, Common Lisp and Scheme
 (use-package "eldoc"
   :diminish eldoc-mode
@@ -128,6 +108,32 @@
 (use-package moe-theme
   :config
   (moe-dark))
+(eval-when-compile
+  ;; Theme
+  (use-package moe-theme
+    :config
+    (moe-dark))
+
+  ;; All the icons
+  (use-package all-the-icons)
+
+ ;; Telephone-line
+ (use-package telephone-line
+   :config
+   (setq telephone-line-lhs
+	 '((nil    . (telephone-line-window-number-segment))
+	   (accent . (telephone-line-vc-segment
+                      telephone-line-erc-modified-channels-segment
+                      telephone-line-process-segment))
+	   (nil    . (telephone-line-misc-info-segment
+                      telephone-line-airline-position-segment))
+	   (accent . (telephone-line-buffer-modified-segment))
+	   (nil    . (telephone-line-buffer-name-segment))))
+   (setq telephone-line-rhs
+	 '((accent . (telephone-line-minor-mode-segment))
+	   (nil    . (telephone-line-major-mode-segment))))
+   (telephone-line-mode t))
+ )
 
 ;; Below added by use-package?
 (custom-set-variables
