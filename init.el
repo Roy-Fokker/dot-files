@@ -20,6 +20,7 @@
       version-control nil          ; disable emacs version control
       column-number-mode t         ; display column number
       show-paren-delay 0           ; show matching immediately
+      indent-tabs-mode nil         ; don't use hard tabs
       )
 
 (set-language-environment "UTF-8")  ; Use UTF-8
@@ -63,13 +64,18 @@
    (lisp-interaction-mode . turn-on-eldoc-mode)
    (scheme-mode . turn-on-eldoc-mode)))
 
+
 ;; Magit
 (use-package magit
+  :defer t
+  :commands magit-get-top-dir
+  :bind
+  (("C-x g" . magit-status))
   :config
   (setq magit-git-global-arguments
-  (nconc magit-git-global-arguments
-         '("-c" "color.ui=false"
-           "-c" "color.diff=false"))))
+	(nconc magit-git-global-arguments
+	       '("-c" "color.ui=false"
+		 "-c" "color.diff=false"))))
 
 ;; Paredit
 (use-package paredit
