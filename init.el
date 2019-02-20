@@ -64,7 +64,12 @@
    (scheme-mode . turn-on-eldoc-mode)))
 
 ;; Magit
-(use-package magit)
+(use-package magit
+  :config
+  (setq magit-git-global-arguments
+	(nconc magit-git-global-arguments
+	       '("-c" "color.ui=false"       ; disable color from git.exe
+		 "-c" "color.diff=false")))) ; this lets magit control the colors and you don't get escape characters
 
 ;; Paredit
 (use-package paredit
