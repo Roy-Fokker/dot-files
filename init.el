@@ -152,10 +152,11 @@
 ;; Reset changed values to defaults
 ;; values taken from DOOM-Emacs FAQ
 (eval-and-compile
-  (add-hook 'emacs-startup-hook '(lambda ()
-           (setq gc-cons-threshold 16777216
-           gc-cons-percentage 0.1
-           file-name-handler-alist temp--file-name-handler-alist))))
+  (add-hook 'emacs-startup-hook
+	    '(lambda ()
+	       (setq gc-cons-threshold 16777216
+		     gc-cons-percentage 0.1
+		     file-name-handler-alist temp--file-name-handler-alist))))
 
 (setq initial-scratch-message (concat "Startup time: " (emacs-init-time)))
 (provide 'init)
