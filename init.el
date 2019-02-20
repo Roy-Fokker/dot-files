@@ -1,5 +1,5 @@
 (eval-and-compile
-  ;; Change GC threshold for duration of init
+  ;; Change GC threshold for duration of init, technique from DOOM Emacs FAQ
   ;; Reset at the end of this file
   (setq gc-cons-threshold 402653184
 	gc-cons-percentage 0.6))
@@ -9,23 +9,22 @@
 (defvar temp--file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 
+
 ;; Some defaults for emacs
-(setq-default inhibit-startup-message t)
+(setq-default inhibit-startup-message t) ; Disable emacs welcome screen
 
 (setq backup-directory-alist `(("." . "backups")) ; backup files in this directory
       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
       package-enable-at-startup nil ; do not load packages before start up
-      delete-by-moving-to-trash t ; delete moves to recycle bin
-      version-control nil      ; disable emacs version control
-      vc-make-backup-files nil
-      vc-handled-backends nil
-      column-number-mode t ; display column number
+      delete-by-moving-to-trash t  ; delete moves to recycle bin
+      version-control nil          ; disable emacs version control
+      column-number-mode t         ; display column number
       show-paren-delay 0           ; show matching immediately
       )
 
 (set-language-environment "UTF-8")  ; Use UTF-8
-(set-default-coding-systems 'utf-8)
-(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8) ; Use UTF-8
+(prefer-coding-system 'utf-8)       ; Use UTF-8
 (global-display-line-numbers-mode)  ; Display line-numbers in all buffers
 (global-hl-line-mode)               ; Highlight current line
 (menu-bar-mode -1)                  ; Hide menu bar
