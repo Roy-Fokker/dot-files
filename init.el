@@ -75,9 +75,9 @@
   (("C-x g" . magit-status))
   :config
   (setq magit-git-global-arguments
-	(nconc magit-git-global-arguments
-	       '("-c" "color.ui=false"
-		 "-c" "color.diff=false"))))
+  (nconc magit-git-global-arguments
+         '("-c" "color.ui=false"
+           "-c" "color.diff=false"))))
 
 ;; Paredit
 (use-package paredit
@@ -119,11 +119,11 @@
 ;; Sly
 (setq sly-lisp-implementations
       '((sbcl    ("sbcl"))
-	(ccl     ("ccl"))
-	(roswell ("ros" "run")))
+        (ccl     ("ccl"))
+        (roswell ("ros" "run")))
       sly-default-lisp (if (executable-find "sbcl")
-			   'sbcl
-			 'roswell))
+                           'sbcl
+                          'roswell))
 (use-package sly
   :defer t
   :requires (sly-quicklisp sly-autoload)
@@ -146,17 +146,17 @@
   (use-package telephone-line
     :config
     (setq telephone-line-lhs
-	  '((nil    . (telephone-line-window-number-segment))
-	    (accent . (telephone-line-vc-segment
+    '((nil    . (telephone-line-window-number-segment))
+      (accent . (telephone-line-vc-segment
                        telephone-line-erc-modified-channels-segment
                        telephone-line-process-segment))
-	    (nil    . (telephone-line-misc-info-segment
+      (nil    . (telephone-line-misc-info-segment
                        telephone-line-airline-position-segment))
-	    (accent . (telephone-line-buffer-modified-segment))
-	    (nil    . (telephone-line-buffer-name-segment))))
+      (accent . (telephone-line-buffer-modified-segment))
+      (nil    . (telephone-line-buffer-name-segment))))
     (setq telephone-line-rhs
-	  '((accent . (telephone-line-minor-mode-segment))
-	    (nil    . (telephone-line-major-mode-segment))))
+    '((accent . (telephone-line-minor-mode-segment))
+      (nil    . (telephone-line-major-mode-segment))))
     (telephone-line-mode t))
  )
 
@@ -178,10 +178,10 @@
 ;; values taken from DOOM-Emacs FAQ
 (eval-and-compile
   (add-hook 'emacs-startup-hook
-	    '(lambda ()
-	       (setq gc-cons-threshold 16777216
-		     gc-cons-percentage 0.1
-		     file-name-handler-alist temp--file-name-handler-alist))))
+            '(lambda ()
+               (setq gc-cons-threshold 16777216
+                     gc-cons-percentage 0.1
+                     file-name-handler-alist temp--file-name-handler-alist))))
 
 (setq initial-scratch-message (concat "Startup time: " (emacs-init-time)))
 (provide 'init)
