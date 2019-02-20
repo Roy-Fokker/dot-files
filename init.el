@@ -34,6 +34,7 @@
 (show-paren-mode t)                 ; Parenthesis highlighting
 (delete-selection-mode t)           ; Enable delete selection mode
 
+
 (eval-when-compile
   ;; package management
   (require 'package)
@@ -52,6 +53,7 @@
 
   (require 'use-package)
   (setq use-package-always-ensure t))
+
 
 ;; ELDoc for Emacs Lisp, Common Lisp and Scheme
 (use-package "eldoc"
@@ -85,17 +87,20 @@
    (emacs-lisp-mode . paredit-mode)
    (lisp-interaction-mode . paredit-mode)))
 
+
 ;; Company mode
 (use-package company
   :config
   (setq company-idle-delay 0
         company-minimum-prefix-lenght 3)
   (global-company-mode t))
-  
+
+
 ;; Which Key
 (use-package which-key
   :config
   (which-key-mode))
+
 
 ;; Undo Tree
 (use-package undo-tree
@@ -110,6 +115,7 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
+
 ;; Sly
 (use-package sly
   :defer t
@@ -121,6 +127,7 @@
   ((lisp-mode . sly-mode)
    (lisp-interaction-mode . sly-mode)))
 
+
 (eval-when-compile
   ;; Theme
   (use-package moe-theme
@@ -130,22 +137,22 @@
   ;; All the icons
   (use-package all-the-icons)
 
- ;; Telephone-line
- (use-package telephone-line
-   :config
-   (setq telephone-line-lhs
-	 '((nil    . (telephone-line-window-number-segment))
-	   (accent . (telephone-line-vc-segment
-                      telephone-line-erc-modified-channels-segment
-                      telephone-line-process-segment))
-	   (nil    . (telephone-line-misc-info-segment
-                      telephone-line-airline-position-segment))
-	   (accent . (telephone-line-buffer-modified-segment))
-	   (nil    . (telephone-line-buffer-name-segment))))
-   (setq telephone-line-rhs
-	 '((accent . (telephone-line-minor-mode-segment))
-	   (nil    . (telephone-line-major-mode-segment))))
-   (telephone-line-mode t))
+  ;; Telephone-line
+  (use-package telephone-line
+    :config
+    (setq telephone-line-lhs
+	  '((nil    . (telephone-line-window-number-segment))
+	    (accent . (telephone-line-vc-segment
+                       telephone-line-erc-modified-channels-segment
+                       telephone-line-process-segment))
+	    (nil    . (telephone-line-misc-info-segment
+                       telephone-line-airline-position-segment))
+	    (accent . (telephone-line-buffer-modified-segment))
+	    (nil    . (telephone-line-buffer-name-segment))))
+    (setq telephone-line-rhs
+	  '((accent . (telephone-line-minor-mode-segment))
+	    (nil    . (telephone-line-major-mode-segment))))
+    (telephone-line-mode t))
  )
 
 ;; Below added by use-package?
