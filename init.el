@@ -117,12 +117,17 @@
 
 
 ;; Sly
+(setq sly-lisp-implementations
+      '((sbcl    ("sbcl"))
+	(ccl     ("ccl"))
+	(roswell ("ros" "run")))
+      sly-default-lisp (if (executable-find "sbcl")
+			   'sbcl
+			 'roswell))
 (use-package sly
   :defer t
   :requires (sly-quicklisp sly-autoload)
-  :commands sly
-  :config
-  (setq inferior-lisp-program "ros -Q run")
+  :commands sly  
   :hook
   ((lisp-mode . sly-mode)
    (lisp-interaction-mode . sly-mode)))
