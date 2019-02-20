@@ -64,7 +64,8 @@
 		     telephone-line-process-segment))
 	  (nil    . (telephone-line-misc-info-segment
 		     telephone-line-airline-position-segment))
-	  (accent . (telephone-line-buffer-segment))))
+	  (accent . (telephone-line-buffer-modified-segment))
+	  (nil    . (telephone-line-buffer-name-segment))))
   (setq telephone-line-rhs
 	'((accent . (telephone-line-minor-mode-segment))
 	  (nil    . (telephone-line-major-mode-segment))))
@@ -150,5 +151,4 @@
 					 file-name-handler-alist temp--file-name-handler-alist))))
 
 (setq initial-scratch-message (concat "Startup time: " (emacs-init-time)))
-(provide 'init)
-		 
+(provide 'init)	 
