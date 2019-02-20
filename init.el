@@ -64,7 +64,12 @@
    (scheme-mode . turn-on-eldoc-mode)))
 
 ;; Magit
-(use-package magit)
+(use-package magit
+  :config
+  (setq magit-git-global-arguments
+	(nconc magit-git-global-arguments
+	       '("-c" "color.ui=false"
+		 "-c" "color.diff=false"))))
 
 ;; Paredit
 (use-package paredit
