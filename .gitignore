@@ -5,3 +5,4 @@
 !init.el
 !.gitignore
 !*.org
+!*.ps1
