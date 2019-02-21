@@ -1,0 +1,191 @@
+* Global Settings
+** Default
+#+BEGIN_SRC emacs-lisp
+(setq-default inhibit-startup-screen t ; Disable Emacs Welcome Screen
+              indent-tabs-mode nil     ; Don't use hard tabs
+              )
+#+END_SRC
+
+** General
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist `(("." . "backups"))    ; backup files in this directory
+      auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
+      package-enable-at-startup nil                  ; do not load packages before start up
+      delete-by-moving-to-trash t                    ; delete moves to recycle bin
+      version-control nil                            ; disable emacs version control
+      column-number-mode t                           ; display column number
+      show-paren-delay 0                             ; show matching immediately
+      scroll-conservatively 100                      ; scroll sensibly, don't jump around
+      )
+#+END_SRC
+
+** Editor
+#+BEGIN_SRC emacs-lisp
+(set-language-environment "UTF-8")  ; Use UTF-8
+(set-default-coding-systems 'utf-8) ; Use UTF-8
+(prefer-coding-system 'utf-8)       ; Use UTF-8
+(global-display-line-numbers-mode)  ; Display line-numbers in all buffers
+(global-hl-line-mode)               ; Highlight current line
+(menu-bar-mode -1)                  ; Hide menu bar
+(tool-bar-mode -1)                  ; Hide tool bar
+(scroll-bar-mode -1)                ; Hide scroll bar
+(show-paren-mode t)                 ; Parenthesis highlighting
+(delete-selection-mode t)           ; Enable delete selection mode
+#+END_SRC
+
+
+* Packages
+** Org
+*** TODO Org configuration and installation
+** ELDoc
+with hooks for Emacs Lisp, Common Lisp, and Scheme
+#+BEGIN_SRC emacs-lisp
+(use-package "eldoc"
+  :diminish eldoc-mode
+  :commands turn-on-eldoc-mode
+  :defer t
+  :hook
+  ((emacs-lisp-mode . turn-on-eldoc-mode)
+   (common-lisp-mode . turn-on-eldoc-mode)
+   (lisp-interaction-mode . turn-on-eldoc-mode)
+   (scheme-mode . turn-on-eldoc-mode)))
+#+END_SRC
+** Magit
+with config to disable git.exe color when called by magit
+also bind =magit-status= to =Ctrl+x g= combo
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :defer t
+  :commands magit-get-top-dir
+  :bind
+  (("C-x g" . magit-status))
+  :config
+  (setq magit-git-global-arguments
+  (nconc magit-git-global-arguments
+         '("-c" "color.ui=false"
+           "-c" "color.diff=false"))))
+#+END_SRC
+** ParEdit
+with hooks for Emacs Lisp, Common Lisp, and Scheme
+#+BEGIN_SRC emacs-lisp
+(use-package paredit
+  :hook
+  ((lisp-mode . paredit-mode)
+   (scheme-mode . paredit-mode)
+   (emacs-lisp-mode . paredit-mode)
+   (lisp-interaction-mode . paredit-mode)))
+#+END_SRC
+** Company
+enable it globally
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :config
+  (setq company-idle-delay 0
+        company-minimum-prefix-lenght 3)
+  (global-company-mode t))
+#+END_SRC
+** Which Key
+enable it globally
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :config
+  (which-key-mode))
+#+END_SRC
+** Undo Tree
+set to not show as minor-mode and enable globally
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :config
+  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-timestamps t
+        undo-tree-visualizer-diff t))
+#+END_SRC
+** Rainbow Delimiters
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+** Sly
+*** Sly Multiple List config and Setting default lisp based on if roswell is found
+#+BEGIN_SRC emacs-lisp
+(setq sly-lisp-implementations
+      '((sbcl    ("sbcl"))
+        (ccl     ("ccl"))
+        (roswell ("ros" "run")))
+      sly-default-lisp (if (executable-find "ros")
+                           'roswell
+                          'sbcl))
+#+END_SRC
+*** use package
+#+BEGIN_SRC emacs-lisp
+(use-package sly
+  :defer t
+  :requires (sly-quicklisp sly-autoload)
+  :commands sly
+  :hook
+  ((lisp-mode             . sly-mode)
+   (lisp-interaction-mode . sly-mode))
+#+END_SRC
+** Slime
+*** TODO Slime configuration and installation
+** Theme
+*** Spacemacs Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package spacemacs-theme
+    :defer t
+    :init
+    (load-theme 'spacemacs-dark t))
+#+END_SRC
+*** Moe Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package moe-theme
+    :config
+    (moe-dark))
+#+END_SRC
+*** All the Icons
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons)
+#+END_SRC
+*** Telephone Line
+#+BEGIN_SRC emacs-lisp
+  (use-package telephone-line
+    :config
+    (setq telephone-line-lhs
+          '((nil    . (telephone-line-window-number-segment))
+            (accent . (telephone-line-vc-segment
+                       telephone-line-erc-modified-channels-segment
+                       telephone-line-process-segment))
+            (nil    . (telephone-line-misc-info-segment
+                       telephone-line-airline-position-segment))
+            (accent . (telephone-line-buffer-modified-segment))
+            (nil    . (telephone-line-buffer-name-segment))))
+    (setq telephone-line-rhs
+          '((accent . (telephone-line-minor-mode-segment))
+            (nil    . (telephone-line-major-mode-segment))))
+    (telephone-line-mode t))
+#+END_SRC
+
+
+* Helper Functions
+** Load Config Org
+#+BEGIN_SRC emacs-lisp
+  (defun helper/config-open ()
+    (interactive)
+    (find-file "~/.emacs.d/emacs-config.org"))
+#+END_SRC
+** Reload init.el
+#+BEGIN_SRC emacs-lisp
+  (defun helper/config-reload ()
+    (interactive)
+    (org-babel-load-file (expand-file-name "~/.emacs.d/emacs-config.org")))
+#+END_SRC
+
+
+* Global Key Bindings
+** For Config Editing and Reloading
+#+BEGIN_SRC emacs-lisp
+  (global-set-key [(control f2)] 'helper/config-open)   ; Open emacs-config.org
+  (global-set-key [(control f5)] 'helper/config-reload) ; Reload emacs-config.org
+#+END_SRC

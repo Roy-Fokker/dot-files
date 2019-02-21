@@ -4,3 +4,4 @@
 # But not 
 !init.el
 !.gitignore
+!*.org
