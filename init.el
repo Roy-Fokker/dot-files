@@ -138,9 +138,13 @@
 
 (eval-when-compile
   ;; Theme
-  (use-package moe-theme
-    :config
-    (moe-dark))
+  ;; (use-package moe-theme
+  ;;   :config
+  ;;   (moe-dark))
+  (use-package spacemacs-theme
+    :defer t
+    :init
+    (load-theme 'spacemacs-dark t))
 
   ;; All the icons
   (use-package all-the-icons)
@@ -169,7 +173,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (sly-autoloads use-package))))
+ '(package-selected-packages (quote (spacemacs-theme sly-autoloads use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
