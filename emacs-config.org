@@ -64,6 +64,7 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
    (lisp-interaction-mode . turn-on-eldoc-mode)
    (scheme-mode . turn-on-eldoc-mode)))
 #+END_SRC
+
 ** Magit
 with config to disable git.exe color when called by magit
 also bind =magit-status= to =Ctrl+x g= combo
@@ -79,6 +80,7 @@ also bind =magit-status= to =Ctrl+x g= combo
          '("-c" "color.ui=false"
            "-c" "color.diff=false"))))
 #+END_SRC
+
 ** ParEdit
 with hooks for Emacs Lisp, Common Lisp, and Scheme
 #+BEGIN_SRC emacs-lisp
@@ -89,6 +91,7 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
    (emacs-lisp-mode . paredit-mode)
    (lisp-interaction-mode . paredit-mode)))
 #+END_SRC
+
 ** Company
 enable it globally
 #+BEGIN_SRC emacs-lisp
@@ -98,6 +101,7 @@ enable it globally
         company-minimum-prefix-lenght 3)
   (global-company-mode t))
 #+END_SRC
+
 ** Which Key
 enable it globally
 #+BEGIN_SRC emacs-lisp
@@ -105,6 +109,7 @@ enable it globally
   :config
   (which-key-mode))
 #+END_SRC
+
 ** Undo Tree
 set to not show as minor-mode and enable globally
 #+BEGIN_SRC emacs-lisp
@@ -115,12 +120,14 @@ set to not show as minor-mode and enable globally
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t))
 #+END_SRC
+
 ** Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
+
 ** Sly
 *** Sly Multiple List config and Setting default lisp based on if roswell is found
 #+BEGIN_SRC emacs-lisp
@@ -132,6 +139,7 @@ set to not show as minor-mode and enable globally
                            'roswell
                           'sbcl))
 #+END_SRC
+
 *** use package
 #+BEGIN_SRC emacs-lisp
 (use-package sly
@@ -142,8 +150,10 @@ set to not show as minor-mode and enable globally
   ((lisp-mode             . sly-mode)
    (lisp-interaction-mode . sly-mode))
 #+END_SRC
+
 ** Slime
 *** TODO Slime configuration and installation
+
 ** Theme
 *** Spacemacs Theme
 #+BEGIN_SRC emacs-lisp
@@ -152,16 +162,21 @@ set to not show as minor-mode and enable globally
     :init
     (load-theme 'spacemacs-dark t))
 #+END_SRC
+
 *** Moe Theme
+Using spacemacs theme now
 #+BEGIN_SRC emacs-lisp
   (use-package moe-theme
+    :disabled
     :config
     (moe-dark))
 #+END_SRC
+
 *** All the Icons
 #+BEGIN_SRC emacs-lisp
   (use-package all-the-icons)
 #+END_SRC
+
 *** Telephone Line
 #+BEGIN_SRC emacs-lisp
   (use-package telephone-line
