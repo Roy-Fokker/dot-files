@@ -148,7 +148,7 @@ set to not show as minor-mode and enable globally
   :commands sly
   :hook
   ((lisp-mode             . sly-mode)
-   (lisp-interaction-mode . sly-mode))
+   (lisp-interaction-mode . sly-mode)))
 #+END_SRC
 
 ** Slime
@@ -204,6 +204,7 @@ Using spacemacs theme now
     (interactive)
     (find-file "~/.emacs.d/emacs-config.org"))
 #+END_SRC
+
 ** Reload init.el
 #+BEGIN_SRC emacs-lisp
   (defun helper/config-reload ()
