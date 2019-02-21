@@ -19,6 +19,7 @@
 (eval-when-compile
   ;; package management
   (require 'package)
+
   ;; Where to look for packages
   (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
   (add-to-list 'package-archives '("elpa"  . "http://elpa.gnu.org/packages/") t)
