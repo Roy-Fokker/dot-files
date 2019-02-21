@@ -81,6 +81,7 @@
          '("-c" "color.ui=false"
            "-c" "color.diff=false"))))
 
+
 ;; Paredit
 (use-package paredit
   :hook
@@ -148,17 +149,17 @@
   (use-package telephone-line
     :config
     (setq telephone-line-lhs
-    '((nil    . (telephone-line-window-number-segment))
-      (accent . (telephone-line-vc-segment
+          '((nil    . (telephone-line-window-number-segment))
+            (accent . (telephone-line-vc-segment
                        telephone-line-erc-modified-channels-segment
                        telephone-line-process-segment))
-      (nil    . (telephone-line-misc-info-segment
+            (nil    . (telephone-line-misc-info-segment
                        telephone-line-airline-position-segment))
-      (accent . (telephone-line-buffer-modified-segment))
-      (nil    . (telephone-line-buffer-name-segment))))
+            (accent . (telephone-line-buffer-modified-segment))
+            (nil    . (telephone-line-buffer-name-segment))))
     (setq telephone-line-rhs
-    '((accent . (telephone-line-minor-mode-segment))
-      (nil    . (telephone-line-major-mode-segment))))
+          '((accent . (telephone-line-minor-mode-segment))
+            (nil    . (telephone-line-major-mode-segment))))
     (telephone-line-mode t))
  )
 
