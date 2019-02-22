@@ -66,6 +66,19 @@
     (org-mode . org-bullets-mode))
 #+END_SRC
 
+*** Code Block configuration
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-fontify-natively t
+        org-src-tab-acts-natively t)
+#+END_SRC
+
+*** Diminish org-indent
+#+BEGIN_SRC emacs-lisp
+  (use-package org-indent
+    :ensure nil
+    :diminish)
+#+END_SRC
+
 ** ELDoc
 with hooks for Emacs Lisp, Common Lisp, and Scheme
 #+BEGIN_SRC emacs-lisp
