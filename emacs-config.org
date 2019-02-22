@@ -45,6 +45,11 @@
 
 
 * Packages
+** Diminish
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish)
+#+END_SRC
+
 ** Org
 *** Add template for emacs-lisp blocks
 #+BEGIN_SRC emacs-lisp
@@ -115,9 +120,10 @@ enable it globally
 ** Which Key
 enable it globally
 #+BEGIN_SRC emacs-lisp
-(use-package which-key
-  :config
-  (which-key-mode))
+  (use-package which-key
+    :diminish which-key-mode
+    :config
+    (which-key-mode))
 #+END_SRC
 
 ** Undo Tree
