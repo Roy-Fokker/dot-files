@@ -145,23 +145,21 @@ enable it globally
 *** Org Mode specific configuration
 Doesn't seem to work properly :(
 #+BEGIN_SRC emacs-lisp
-  ;; (with-eval-after-load 'company
-  ;;   (defun org-keyword-backend (command &optional arg &rest ignored)
-  ;;     (interactive (list 'interactive))
-  ;;     (cl-case command
-  ;;       (interactive (company-begin-backend 'org-keyword-backend))
-  ;;       (prefix (and (eq major-mode 'org-mode)
-  ;;                    (cons (company-grab-line "^#\\+\\(\\w*\\)" 1)
-  ;;                          t)))
-  ;;       (candidates (mapcar #'upcase
-  ;;                           (cl-remove-if-not
-  ;;                            (lambda (c) (string-prefix-p arg c))
-  ;;                            (pcomplete-completions))))
-  ;;       (ignore-case t)
-  ;;       (duplicates t)))
-
-  ;;   (add-to-list 'company-backends 'org-keyword-backend)
-
+  (with-eval-after-load 'company
+    (defun org-keyword-backend (command &optional arg &rest ignored)
+      (interactive (list 'interactive))
+      (cl-case command
+        (interactive (company-begin-backend 'org-keyword-backend))
+        (prefix (and (eq major-mode 'org-mode)
+                     (cons (company-grab-line "^#\\+\\(\\w*\\)" 1) t)))
+        (candidates (mapcar #'upcase
+                            (cl-remove-if-not
+                             (lambda (c) (string-prefix-p arg c))
+                             (pcomplete-completions))))
+        (ignore-case t)
+        (duplicates t)))
+    (add-to-list 'company-backends 'org-keyword-backend)
+    )
   ;;   (defun add-pcomplete-to-capf ()
   ;;     (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
 
