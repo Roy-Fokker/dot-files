@@ -121,13 +121,71 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
 #+END_SRC
 
 ** Company
+*** Use Package and basic configuration
 enable it globally
 #+BEGIN_SRC emacs-lisp
-(use-package company
-  :config
-  (setq company-idle-delay 0
-        company-minimum-prefix-lenght 3)
-  (global-company-mode t))
+  (use-package company
+    :config
+    (setq company-idle-delay 0
+          company-minimum-prefix-lenght 3
+          company-show-numbers t)
+    (global-company-mode t))
+    ;; :bind
+    ;; (([C-tab]  . company-complete)
+    ;;  ([space]  . company-abort)
+    ;;  ([return] . nil)))
+#+END_SRC
+
+*** Backend configuration
+#+BEGIN_SRC emacs-lisp
+  ;; (with-eval-after-load 'company  
+  ;;   (add-to-list 'company-backends 'company-capf))
+#+END_SRC
+
+*** Org Mode specific configuration
+Doesn't seem to work properly :(
+#+BEGIN_SRC emacs-lisp
+  ;; (with-eval-after-load 'company
+  ;;   (defun org-keyword-backend (command &optional arg &rest ignored)
+  ;;     (interactive (list 'interactive))
+  ;;     (cl-case command
+  ;;       (interactive (company-begin-backend 'org-keyword-backend))
+  ;;       (prefix (and (eq major-mode 'org-mode)
+  ;;                    (cons (company-grab-line "^#\\+\\(\\w*\\)" 1)
+  ;;                          t)))
+  ;;       (candidates (mapcar #'upcase
+  ;;                           (cl-remove-if-not
+  ;;                            (lambda (c) (string-prefix-p arg c))
+  ;;                            (pcomplete-completions))))
+  ;;       (ignore-case t)
+  ;;       (duplicates t)))
+
+  ;;   (add-to-list 'company-backends 'org-keyword-backend)
+
+  ;;   (defun add-pcomplete-to-capf ()
+  ;;     (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+
+  ;;   (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
+  ;;   (add-hook 'org-mode-hook #'company-mode))
+#+END_SRC
+
+** YaSnippets
+*** Use Package
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :init
+    (yas-global-mode)
+    :config
+    (add-to-list 'yas-snippet-dirs "~/.emacs.d/yasnippet-snippets")
+    (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
+    (yas-reload-all)
+    :bind
+    ("M-/" . company-yasnippet));
+#+END_SRC
+
+*** Snippets
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets)
 #+END_SRC
 
 ** Which Key
