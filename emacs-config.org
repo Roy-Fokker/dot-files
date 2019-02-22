@@ -21,7 +21,7 @@
 
 ** Editor
 #+BEGIN_SRC emacs-lisp
-(set-language-environment "UTF-8")  ; Use UTF-8
+(set-language-environment 'utf-8)  ; Use UTF-8
 (set-default-coding-systems 'utf-8) ; Use UTF-8
 (prefer-coding-system 'utf-8)       ; Use UTF-8
 (global-display-line-numbers-mode)  ; Display line-numbers in all buffers
@@ -31,6 +31,11 @@
 (scroll-bar-mode -1)                ; Hide scroll bar
 (show-paren-mode t)                 ; Parenthesis highlighting
 (delete-selection-mode t)           ; Enable delete selection mode
+#+END_SRC
+
+** Font
+#+BEGIN_SRC emacs-lisp
+  (set-default-font "Source Code Pro 10")
 #+END_SRC
 
 
@@ -123,9 +128,9 @@ set to not show as minor-mode and enable globally
 
 ** Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters
-  :hook
-  (prog-mode . rainbow-delimiters-mode))
+  (use-package rainbow-delimiters
+    :hook
+    (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
 ** Sly
@@ -169,7 +174,7 @@ Using spacemacs theme now
   (use-package moe-theme
     :disabled
     :config
-    (moe-dark))
+    (load-theme 'moe-dark t))
 #+END_SRC
 
 *** All the Icons
@@ -219,3 +224,5 @@ Using spacemacs theme now
   (global-set-key [(control f2)] 'helper/config-open)   ; Open emacs-config.org
   (global-set-key [(control f5)] 'helper/config-reload) ; Reload emacs-config.org
 #+END_SRC
+
+
