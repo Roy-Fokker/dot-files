@@ -139,6 +139,40 @@ enable it globally
     (which-key-mode))
 #+END_SRC
 
+** Ivy
+*** Use package
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :diminish ivy-mode
+    :config
+    (ido-mode -1)
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t
+          ivy-count-format "%d/%d "
+          ivy-initial-inputs-alist nil
+          ivy-re-builders-alist '((t . ivy--regex-fuzzy))
+          ivy-extra-directories nil))
+#+END_SRC
+
+*** Sub package ivy-rich
+Richer =C-x b= buffer-switching Ivy Interface
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-rich
+    :after ivy
+    :config
+    (ivy-rich-mode))
+#+END_SRC
+
+** Counsel
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :config
+    (use-package smex)
+    (use-package flx)
+    :bind
+    (("M-j" . counsel-M-x)
+     ("C-o" . counsel-find-file)))
+#+END_SRC
 ** Undo Tree
 set to not show as minor-mode and enable globally
 #+BEGIN_SRC emacs-lisp
@@ -204,6 +238,18 @@ Using spacemacs theme now
 *** All the Icons
 #+BEGIN_SRC emacs-lisp
   (use-package all-the-icons)
+#+END_SRC
+
+optionally run function all-the-icons-install-fonts
+#+BEGIN_SRC emacs-lisp
+  ;; (all-the-icons-install-fonts)
+#+END_SRC
+
+ivy all the icons
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons-ivy
+    :config
+    (all-the-icons-ivy-setup))
 #+END_SRC
 
 *** Telephone Line
