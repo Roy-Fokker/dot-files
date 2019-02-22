@@ -122,28 +122,18 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
 
 ** Company
 *** Use Package and basic configuration
-enable it globally
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :config
     (setq company-idle-delay 0
           company-minimum-prefix-lenght 3
           company-show-numbers t)
-    (global-company-mode t))
-    ;; :bind
-    ;; (([C-tab]  . company-complete)
-    ;;  ([space]  . company-abort)
-    ;;  ([return] . nil)))
-#+END_SRC
-
-*** Backend configuration
-#+BEGIN_SRC emacs-lisp
-  ;; (with-eval-after-load 'company  
-  ;;   (add-to-list 'company-backends 'company-capf))
+    (global-company-mode t)
+    :bind
+    ("<C-tab>"  . company-complete))
 #+END_SRC
 
 *** Org Mode specific configuration
-Doesn't seem to work properly :(
 #+BEGIN_SRC emacs-lisp
   (with-eval-after-load 'company
     (defun org-keyword-backend (command &optional arg &rest ignored)
@@ -158,13 +148,7 @@ Doesn't seem to work properly :(
                              (pcomplete-completions))))
         (ignore-case t)
         (duplicates t)))
-    (add-to-list 'company-backends 'org-keyword-backend)
-    )
-  ;;   (defun add-pcomplete-to-capf ()
-  ;;     (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
-
-  ;;   (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
-  ;;   (add-hook 'org-mode-hook #'company-mode))
+    (add-to-list 'company-backends 'org-keyword-backend))
 #+END_SRC
 
 ** YaSnippets
