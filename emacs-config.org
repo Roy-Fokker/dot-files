@@ -127,11 +127,14 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
 *** Use Package and basic configuration
 #+BEGIN_SRC emacs-lisp
   (use-package company
+    :ensure t
+    :commands global-company-mode
+    :init
+    (global-company-mode t)
     :config
     (setq company-idle-delay 0
           company-minimum-prefix-lenght 3
           company-show-numbers t)
-    (global-company-mode t)
     :bind
     ("<C-tab>"  . company-complete))
 #+END_SRC
