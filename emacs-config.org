@@ -161,7 +161,6 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
     :init
     (yas-global-mode)
     :config
-    (add-to-list 'yas-snippet-dirs "~/.emacs.d/yasnippet-snippets")
     (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
     (yas-reload-all)
     :bind
