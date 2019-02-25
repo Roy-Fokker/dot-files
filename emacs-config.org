@@ -157,6 +157,15 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
     (add-to-list 'company-backends 'org-keyword-backend))
 #+END_SRC
 
+*** Company-Quickhelp 
+#+BEGIN_SRC emacs-lisp
+  (use-package company-quickhelp
+    :after company
+    :config
+    (company-quickhelp-mode t)
+    (setq company-quickhelp-delay 0.5))
+#+END_SRC
+
 ** YaSnippets
 *** Use Package
 #+BEGIN_SRC emacs-lisp
