@@ -376,6 +376,17 @@ ivy all the icons
         (when (file-writable-p frame-size-file)
           (write-file frame-size-file)))))
 #+END_SRC
+
+*** Load Geometry function
+#+BEGIN_SRC emacs-lisp
+  (defun emacs/load-framegeometry ()
+    "Loads ~/.emacs.d/framegeometry.el which should load \"
+     the previous frame's geometry."
+    (let ((frame-save-file (expand-file-name "~/.emacs.d/framegeometry.el")))
+      (when (file-readable-p frame-save-file)
+        (load-file frame-save-file))))
+#+END_SRC
+
 * Global Key Bindings
 ** For Config Editing and Reloading
 #+BEGIN_SRC emacs-lisp
