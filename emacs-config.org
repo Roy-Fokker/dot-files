@@ -387,6 +387,14 @@ ivy all the icons
         (load-file frame-save-file))))
 #+END_SRC
 
+** Hook into Emacs init and close 
+#+BEGIN_SRC emacs-lisp
+  (if window-system
+      (progn 
+        (add-hook 'kill-emacs-hook 'emacs/save-framegeometry)
+        (add-hook 'after-init-hook 'emacs/load-framegeometry)))
+#+END_SRC
+
 * Global Key Bindings
 ** For Config Editing and Reloading
 #+BEGIN_SRC emacs-lisp
