@@ -343,6 +343,39 @@ ivy all the icons
 #+END_SRC
 
 
+* Save and Load Windows/Frame Geometry
+** Save and Load Functions
+*** Save Geometry function
+#+BEGIN_SRC emacs-lisp
+  (defun emacs/save-framegeometry ()
+    "Get the current frame's geometry and saves to ~/.emacs.d/framegeometry."
+    (let ((frame-left      (frame-parameter (selected-frame) 'left))
+          (frame-top       (frame-parameter (selected-frame) 'top))
+          (frame-width     (frame-parameter (selected-frame) 'width))
+          (frame-height    (frame-parameter (selected-frame) 'height))
+          (frame-size-file (expand-file-name "~/.emacs.d/framegeometry.el")))
+
+      (when (not (number-or-marker-p frame-left))
+        (setq frame-left 0))
+      (when (not (number-or-marker-p frame-top))
+        (setq frame-top 0))
+      (when (not (number-or-marker-p frame-width))
+        (setq frame-width 800))
+      (when (not (number-or-marker-p frame-height))
+        (setq frame-height 600))
+
+      (with-temp-buffer
+        (insert
+         ";; This is the previous emacs frame's geometry.\n"
+         ";; Last generated " (current-time-string) ".\n"
+         "(setq initial-frame-alist\n"
+         "      '(" (format "(top . %d)\n" (max frame-top 0))
+         (format "        (left . %d)\n" (max frame-left 0))
+         (format "        (width . %d)\n" (max frame-width 0))
+         (format "        (height . %d)))\n" (max frame-height 0)))
+        (when (file-writable-p frame-size-file)
+          (write-file frame-size-file)))))
+#+END_SRC
 * Global Key Bindings
 ** For Config Editing and Reloading
 #+BEGIN_SRC emacs-lisp
