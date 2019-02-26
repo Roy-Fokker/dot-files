@@ -47,10 +47,14 @@
 
 
 * Packages
-
 ** Diminish
 #+BEGIN_SRC emacs-lisp
   (use-package diminish)
+#+END_SRC
+
+** Delight
+#+BEGIN_SRC emacs-lisp
+  (use-package delight)
 #+END_SRC
 
 ** Org
@@ -80,6 +84,11 @@
   (use-package org-indent
     :ensure nil
     :diminish)
+#+END_SRC
+
+*** Diminish orgsrc minor mode
+#+BEGIN_SRC emacs-lisp
+  (diminish 'org-src-mode)
 #+END_SRC
 
 ** ELDoc
