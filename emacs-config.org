@@ -124,12 +124,13 @@ also bind =magit-status= to =Ctrl+x g= combo
 ** ParEdit
 with hooks for Emacs Lisp, Common Lisp, and Scheme
 #+BEGIN_SRC emacs-lisp
-(use-package paredit
-  :hook
-  ((lisp-mode . paredit-mode)
-   (scheme-mode . paredit-mode)
-   (emacs-lisp-mode . paredit-mode)
-   (lisp-interaction-mode . paredit-mode)))
+  (use-package paredit
+    :delight "ⓟ"
+    :hook
+    ((lisp-mode . paredit-mode)
+     (scheme-mode . paredit-mode)
+     (emacs-lisp-mode . paredit-mode)
+     (lisp-interaction-mode . paredit-mode)))
 #+END_SRC
 
 ** Company
