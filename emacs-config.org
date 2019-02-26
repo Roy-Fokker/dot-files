@@ -137,6 +137,7 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
+    :delight "ⓒ"
     :commands global-company-mode
     :init
     (global-company-mode t)
@@ -179,18 +180,21 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
 *** Use Package
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :init
-    (yas-global-mode)
+    :delight (yas-minor-mode "ⓨ")
+    :commands (yas-global-mode yas-reload-all)
     :config
     (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
-    (yas-reload-all)
+    (yas-reload-all t)
+    (yas-global-mode t)
     :bind
-    ("M-/" . company-yasnippet));
+    ("M-/" . company-yasnippet))
 #+END_SRC
 
 *** Snippets
 #+BEGIN_SRC emacs-lisp
-  (use-package yasnippet-snippets)
+  (use-package yasnippet-snippets
+    :defer t
+    :after yasnippet)
 #+END_SRC
 
 ** Ivy
