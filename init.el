@@ -36,7 +36,7 @@
   (require 'use-package)
   (setq use-package-always-ensure t))
 
-(eval-and-compile
+(eval-when-compile
   ;; Tangle configuration
   (org-babel-load-file (expand-file-name "emacs-config.org" user-emacs-directory)))
 
