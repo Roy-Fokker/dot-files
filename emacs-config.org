@@ -197,6 +197,17 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
     :after yasnippet)
 #+END_SRC
 
+** Counsel
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :config
+    (use-package smex)
+    (use-package flx)
+    :bind
+    (("M-j" . counsel-M-x)
+     ("C-o" . counsel-find-file)))
+#+END_SRC
+
 ** Ivy
 *** Use package
 #+BEGIN_SRC emacs-lisp
@@ -228,17 +239,6 @@ enable it globally
     :diminish which-key-mode
     :config
     (which-key-mode))
-#+END_SRC
-
-** Counsel
-#+BEGIN_SRC emacs-lisp
-  (use-package counsel
-    :config
-    (use-package smex)
-    (use-package flx)
-    :bind
-    (("M-j" . counsel-M-x)
-     ("C-o" . counsel-find-file)))
 #+END_SRC
 
 ** Winum
