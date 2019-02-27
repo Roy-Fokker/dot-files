@@ -185,12 +185,11 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
     :commands (yas-global-mode yas-reload-all)
     :config
     (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
-    (yas-reload-all t)
-    (yas-global-mode t)
     :bind
     ("M-/" . company-yasnippet))
+  (yas-reload-all)
+  (yas-global-mode)
 #+END_SRC
-
 *** Snippets
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet-snippets
