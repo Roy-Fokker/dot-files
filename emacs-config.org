@@ -255,7 +255,7 @@ enable it globally
                 ("M-5" . winum-select-window-5)
                 ("M-6" . winum-select-window-6)
                 ("M-7" . winum-select-window-7)
-                ("M-8" . winum-select-window-8))  
+                ("M-8" . winum-select-window-8))
     :init
     (winum-mode t))
 #+END_SRC
@@ -359,8 +359,23 @@ ivy all the icons
   ;;   (telephone-line-mode t))
 #+END_SRC
 
+*** Spaceline
+#+BEGIN_SRC emacs-lisp
+    (use-package spaceline
+      :config
+      (setq powerline-default-separator 'arrow
+            powerline-height 20
+            spaceline-workspace-numbers-unicode t
+            spaceline-window-numbers-unicode nil
+            spaceline-separator-dir-left  '(left . right)
+            spaceline-separator-dir-right '(right . left)
+            )
+      (spaceline-spacemacs-theme)
+      (spaceline-toggle-battery-off)
+      (spaceline-toggle-hud-off)
+      (spaceline-toggle-workspace-number-on)
+      (spaceline-toggle-window-number-on))
 #+END_SRC
-
 
 * Helper Functions
 ** Load Config Org
@@ -436,5 +451,6 @@ ivy all the icons
   (global-set-key [(control f2)] 'helper/config-open)   ; Open emacs-config.org
   (global-set-key [(control f5)] 'helper/config-reload) ; Reload emacs-config.org
 #+END_SRC
+
 
 
