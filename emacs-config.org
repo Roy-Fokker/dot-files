@@ -28,9 +28,6 @@
 
 ** Editor
 #+BEGIN_SRC emacs-lisp
-  (set-language-environment 'utf-8)  ; Use UTF-8
-  (set-default-coding-systems 'utf-8) ; Use UTF-8
-  (prefer-coding-system 'utf-8)       ; Use UTF-8
   (global-display-line-numbers-mode)  ; Display line-numbers in all buffers
   (global-hl-line-mode)               ; Highlight current line
   (menu-bar-mode -1)                  ; Hide menu bar
@@ -40,6 +37,19 @@
   (delete-selection-mode t)           ; Enable delete selection mode
 #+END_SRC
 
+** UTF-8
+#+BEGIN_SRC emacs-lisp
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8-unix)
+  (set-default-coding-systems 'utf-8-unix)
+  (setq-default buffer-file-coding-system 'utf-8-unix
+                default-buffer-file-coding-system 'utf-8-unix)
+  (when (eq system-type 'windows-nt)
+    (set-clipboard-coding-system 'utf-16le-dos))
+#+END_SRC
 ** Font
 #+BEGIN_SRC emacs-lisp
   (set-default-font "Source Code Pro 10")
