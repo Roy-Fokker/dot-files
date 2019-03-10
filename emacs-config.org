@@ -23,6 +23,7 @@
         scroll-conservatively  most-positive-fixnum    ; scroll sensibly, don't jump around
         mouse-wheel-scroll-amount '(1 ((shift) . 1))   ; one line at a time
         mouse-wheel-follow-mouse t                     ; scroll window under mouse
+        find-file-visit-truename t                     ; find true path of a file
         )
 #+END_SRC
 
@@ -53,6 +54,7 @@
 ** Font
 #+BEGIN_SRC emacs-lisp
   (set-default-font "Source Code Pro 10")
+  (setq inhibit-compacting-font-caches t)
 #+END_SRC
 
 
@@ -372,22 +374,34 @@ ivy all the icons
 
 *** Spaceline
 #+BEGIN_SRC emacs-lisp
-    (use-package spaceline
-      :config
-      (setq powerline-default-separator 'arrow
-            powerline-height 20
-            spaceline-workspace-numbers-unicode t
-            spaceline-window-numbers-unicode nil
-            spaceline-separator-dir-left  '(left . right)
-            spaceline-separator-dir-right '(right . left)
-            )
-      (spaceline-spacemacs-theme)
-      (spaceline-toggle-battery-off)
-      (spaceline-toggle-hud-off)
-      (spaceline-toggle-workspace-number-on)
-      (spaceline-toggle-window-number-on))
+  ;; (use-package spaceline
+  ;;   :config
+  ;;   (setq powerline-default-separator 'arrow
+  ;;         powerline-height 20
+  ;;         spaceline-workspace-numbers-unicode t
+  ;;         spaceline-window-numbers-unicode nil
+  ;;         spaceline-separator-dir-left  '(left . right)
+  ;;         spaceline-separator-dir-right '(right . left)
+  ;;         )
+  ;;   (spaceline-spacemacs-theme)
+  ;;   (spaceline-toggle-battery-off)
+  ;;   (spaceline-toggle-hud-off)
+  ;;   (spaceline-toggle-workspace-number-on)
+  ;;   (spaceline-toggle-window-number-on))
 #+END_SRC
 
+*** Doom-Modeline
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-modeline
+    :hook
+    (after-init . doom-modeline-mode)
+    :config
+    (setq doom-modeline-icon t
+          doom-modeline-major-mode-icon t
+          doom-modeline-major-mode-color-icon t
+          doom-modeline-minor-modes t
+          doom-modeline-buffer-file-name-style 'file-name))
+#+END_SRC
 * Helper Functions
 ** Load Config Org
 #+BEGIN_SRC emacs-lisp
