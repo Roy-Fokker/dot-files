@@ -230,7 +230,8 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
           ivy-count-format "%d/%d "
           ivy-initial-inputs-alist nil
           ivy-re-builders-alist '((t . ivy--regex-fuzzy))
-          ivy-extra-directories nil))
+          ivy-extra-directories nil
+          ivy-height 20))
 #+END_SRC
 
 *** Sub package ivy-rich
