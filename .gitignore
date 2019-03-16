@@ -6,3 +6,4 @@
 !.gitignore
 !*.org
 !*.ps1
+!.bash*
