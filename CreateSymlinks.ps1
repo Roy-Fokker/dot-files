@@ -31,6 +31,8 @@ if ($myWindowsPrincipal.IsInRole($adminRole)) {
 
 	New-SymLink -FileName .\init.el -TargetDir $emacsHomeDir
 	New-SymLink -FileName .\emacs-config.org -TargetDir $emacsHomeDir
+
+	New-SymLink -FileName .\.bashrc -TargetDir $env:APPDATA
 } else {
 	Write-Error "This script requires Admin Privileges"
 }
