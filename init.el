@@ -4,6 +4,8 @@
   (setq gc-cons-threshold 2147483648 ; set gc threshold to 2GiB
         gc-cons-percentage 0.6))
 
+;; ------------------------------------------------------------------
+
 ;; file handler check is not needed during start up
 ;; reset at the end of this file
 (defvar startup/file-name-handler-alist file-name-handler-alist)
@@ -12,10 +14,100 @@
 (defun startup/reset-gc-and-file-handler ()
   (setq gc-cons-threshold 536870912  ; set gc threshold to 0.5GiB
         gc-cons-percentage 0.1
-        file-name-handler-alist startup/file-name-handler-alist)
-  )
+        file-name-handler-alist startup/file-name-handler-alist))
 
+;; ------------------------------------------------------------------
 
+(setq-default inhibit-startup-screen t) ; Disable Emacs Welcome Screen
+
+(setq backup-directory-alist         `(("." . "backups"))    ; backup files in this directory
+      auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
+      package-enable-at-startup nil                  ; do not load packages before start up
+      delete-by-moving-to-trash t                    ; delete moves to recycle bin
+;;      version-control nil                            ; disable emacs version control
+      column-number-mode t                           ; display column number
+      show-paren-delay 0                             ; show matching immediately
+      scroll-conservatively  most-positive-fixnum    ; scroll sensibly, don't jump around
+      mouse-wheel-scroll-amount '(1 ((shift) . 1))   ; one line at a time
+      mouse-wheel-follow-mouse t                     ; scroll window under mouse
+      find-file-visit-truename t                     ; find true path of a file
+      )
+
+;; ------------------------------------------------------------------
+
+(global-display-line-numbers-mode)  ; Display line-numbers in all buffers
+(global-hl-line-mode)               ; Highlight current line
+(menu-bar-mode -1)                  ; Hide menu bar
+(tool-bar-mode -1)                  ; Hide tool bar
+(scroll-bar-mode -1)                ; Hide scroll bar
+(show-paren-mode t)                 ; Parenthesis highlighting
+(delete-selection-mode t)           ; Enable delete selection mode
+
+;; ------------------------------------------------------------------
+;; Set utf-8 as default text system
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
+(setq-default buffer-file-coding-system 'utf-8-unix
+              default-buffer-file-coding-system 'utf-8-unix)
+(when (eq system-type 'windows-nt)
+  (set-clipboard-coding-system 'utf-16le-dos))
+
+;; ------------------------------------------------------------------
+;; set font
+(set-default-font "Source Code Pro 10")
+(setq inhibit-compacting-font-caches t)
+
+;; ------------------------------------------------------------------
+;; All the logic to save and load frame size and location
+(eval-when-compile
+  ;; Save Frame size and location
+  (defun emacs/save-framegeometry ()
+    "Get the current frame's geometry and saves to ~/.emacs.d/framegeometry."
+    (let ((frame-left      (frame-parameter (selected-frame) 'left))
+          (frame-top       (frame-parameter (selected-frame) 'top))
+          (frame-width     (frame-parameter (selected-frame) 'width))
+          (frame-height    (frame-parameter (selected-frame) 'height))
+          (frame-size-file (expand-file-name "~/.emacs.d/framegeometry.el")))
+
+      (when (not (number-or-marker-p frame-left))
+	(setq frame-left 0))
+      (when (not (number-or-marker-p frame-top))
+	(setq frame-top 0))
+      (when (not (number-or-marker-p frame-width))
+	(setq frame-width 800))
+      (when (not (number-or-marker-p frame-height))
+	(setq frame-height 600))
+
+      (with-temp-buffer
+	(insert
+	 ";; This is the previous emacs frame's geometry.\n"
+	 ";; Last generated " (current-time-string) ".\n"
+	 "(setq initial-frame-alist\n"
+	 "      '(" (format "(top . %d)\n" (max frame-top 0))
+	 (format "        (left . %d)\n" (max frame-left 0))
+	 (format "        (width . %d)\n" (max frame-width 0))
+	 (format "        (height . %d)))\n" (max frame-height 0)))
+	(when (file-writable-p frame-size-file)
+          (write-file frame-size-file)))))
+
+  ;; Load Frame Geometry
+  (defun emacs/load-framegeometry ()
+    "Loads ~/.emacs.d/framegeometry.el which should load the previous frame's geometry."
+    (let ((frame-save-file (expand-file-name "~/.emacs.d/framegeometry.el")))
+      (when (file-readable-p frame-save-file)
+	(load-file frame-save-file))))
+
+  ;; Hook into emacs kill and init
+  (if window-system
+      (progn 
+        (add-hook 'kill-emacs-hook 'emacs/save-framegeometry)
+        (add-hook 'after-init-hook 'emacs/load-framegeometry))))
+
+;; ------------------------------------------------------------------
 (eval-when-compile
   ;; package management
   (require 'package)
@@ -26,39 +118,125 @@
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
   ;; initialize package
-  (package-initialize)
-
-  ;; enable 'use-package'
-  (unless (package-installed-p 'use-package) ; check if it's already installed
-          (package-refresh-contents)      ; update package archive
-          (package-install 'use-package)) ; install the most recent version of use-package
-
-  (require 'use-package)
-  (setq use-package-always-ensure t))
+  (package-initialize))
 
 (eval-when-compile
-  ;; Tangle configuration
-  (org-babel-load-file (expand-file-name "emacs-config.org" user-emacs-directory)))
+  ;; - All-the-icons --------------------------------------------------
+  (require 'all-the-icons))
 
+(eval-when-compile
+  ;; - Doom-ModeLine --------------------------------------------------
+  (require 'doom-modeline)
+  (doom-modeline 1)
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-minor-modes t)
+  (add-hook 'after-init-hook 'doom-modeline-mode))
 
-;; Below added by use-package?
+(eval-when-compile
+  ;; - Rainbow-Delimiters ---------------------------------------------
+  (require 'rainbow-delimiters)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(eval-when-compile
+  ;; - WINUM ----------------------------------------------------------
+  (setq winum-keymap
+	(let ((map (make-sparse-keymap)))
+	  (define-key map (kbd "C-`") 'winum-select-window-by-number)
+	  (define-key map (kbd "C-²") 'winum-select-window-by-number)
+	  (define-key map (kbd "M-0") 'winum-select-window-0-or-10)
+	  (define-key map (kbd "M-1") 'winum-select-window-1)
+	  (define-key map (kbd "M-2") 'winum-select-window-2)
+	  (define-key map (kbd "M-3") 'winum-select-window-3)
+	  (define-key map (kbd "M-4") 'winum-select-window-4)
+	  (define-key map (kbd "M-5") 'winum-select-window-5)
+	  (define-key map (kbd "M-6") 'winum-select-window-6)
+	  (define-key map (kbd "M-7") 'winum-select-window-7)
+	  (define-key map (kbd "M-8") 'winum-select-window-8)
+	  map))
+  (require 'winum)
+  (winum-mode))
+
+(eval-when-compile
+  ;; - Which-Key ------------------------------------------------------
+  (require 'which-key)
+  (which-key-mode))
+
+(eval-when-compile
+  ;; - Auto-Complete --------------------------------------------------
+  (require 'auto-complete)
+  (ac-config-default))
+
+(eval-when-compile
+  ;; - YaSnippers -----------------------------------------------------
+  (require 'yasnippet)
+  (yas-global-mode 1))
+
+(eval-when-compile
+  ;; - Paredit --------------------------------------------------------
+  (require 'paredit)
+  (add-hook 'lisp-mode-hook             'paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
+  (add-hook 'scheme-mode                'paredit-mode)
+  (add-hook 'emacs-lisp-mode            'paredit-mode))
+
+;; - Magit ----------------------------------------------------------
+;; (require 'magit)
+;; (global-set-key (kbd "C-x g") 'magit-status)
+;; (setq magit-git-global-arguments
+;;       (nconc magit-git-global-arguments
+;;              '("-c" "color.ui=false"
+;;                "-c" "color.diff=false")))
+
+;; ------------------------------------------------------------------
+;; ------------------------------------------------------------------
+
+(eval-when-compile
+  ;; - LISP Specific --------------------------------------------------
+  (setq slime-lisp-implementations
+	'((sbcl ("sbcl"))
+	  (ccl ("ccl"))
+	  (roswell ("ros" "run")))
+	slime-default-lisp (if (executable-find "ros")
+			       'roswell
+			     'sbcl))
+  (require 'slime)
+  (slime-setup '(slime-fancy))
+
+  (require 'ac-slime)
+  (add-hook 'slime-mode-hook      'set-up-slime-ac)
+  (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'slime-repl-mode)))
+
+;; ------------------------------------------------------------------
+;; ------------------------------------------------------------------
+;; Reset changed values to defaults
+;; values taken from DOOM-Emacs FAQ
+(eval-and-compile
+  (add-hook 'emacs-startup-hook 'startup/reset-gc-and-file-handler))
+
+;; ------------------------------------------------------------------
+(setq initial-scratch-message (concat "Startup time: " (emacs-init-time)))
+(provide 'init)
+
+;; ------------------------------------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (doom-modeline use-package))))
+ '(custom-enabled-themes (quote (dracula)))
+ '(custom-safe-themes
+   (quote
+    ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+ '(package-selected-packages
+   (quote
+    (ac-slime slime yasnippet-snippets yasnippet paredit auto-complete which-key winum rainbow-delimiters doom-modeline dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-;; Reset changed values to defaults
-;; values taken from DOOM-Emacs FAQ
-(eval-and-compile
-  (add-hook 'emacs-startup-hook 'startup/reset-gc-and-file-handler))
-
-(setq initial-scratch-message (concat "Startup time: " (emacs-init-time)))
-(provide 'init)

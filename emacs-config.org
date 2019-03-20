@@ -111,10 +111,10 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
     :commands turn-on-eldoc-mode
     :defer t
     :hook
-    ((emacs-lisp-mode . turn-on-eldoc-mode)
-     (common-lisp-mode . turn-on-eldoc-mode)
+    ((emacs-lisp-mode       . turn-on-eldoc-mode)
+     (common-lisp-mode      . turn-on-eldoc-mode)
      (lisp-interaction-mode . turn-on-eldoc-mode)
-     (scheme-mode . turn-on-eldoc-mode)))
+     (scheme-mode           . turn-on-eldoc-mode)))
 #+END_SRC
 
 ** Magit
@@ -139,9 +139,9 @@ with hooks for Emacs Lisp, Common Lisp, and Scheme
   (use-package paredit
     :delight "ⓟ"
     :hook
-    ((lisp-mode . paredit-mode)
-     (scheme-mode . paredit-mode)
-     (emacs-lisp-mode . paredit-mode)
+    ((lisp-mode             . paredit-mode)
+     (scheme-mode           . paredit-mode)
+     (emacs-lisp-mode       . paredit-mode)
      (lisp-interaction-mode . paredit-mode)))
 #+END_SRC
 
@@ -293,7 +293,7 @@ set to not show as minor-mode and enable globally
 #+END_SRC
 
 ** Sly
-*** Sly Multiple List config and Setting default lisp based on if roswell is found
+*** Sly Multiple Lisp config and Setting default lisp based on if roswell is found
 #+BEGIN_SRC emacs-lisp
   (setq sly-lisp-implementations
         '((sbcl    ("sbcl"))
@@ -307,16 +307,44 @@ set to not show as minor-mode and enable globally
 *** use package
 #+BEGIN_SRC emacs-lisp
   (use-package sly
+    :delight (sly-mode "(S)")
     :defer t
     :requires (sly-quicklisp sly-autoload)
-    :commands sly
+    :commands (sly sly-mode sly-editing-mode)
     :hook
-    ((lisp-mode             . sly-mode)
+    ((lisp-mode             . sly-editing-mode)
      (lisp-interaction-mode . sly-mode)))
 #+END_SRC
 
 ** Slime
-*** TODO Slime configuration and installation
+*** Slime multiple lisp configuration
+#+BEGIN_SRC emacs-lisp
+  ;; (setq slime-lisp-implementations
+  ;;       '((sbcl    ("sbcl"))
+  ;;         (ccl     ("ccl"))
+  ;;         (roswell ("ros" "run")))
+  ;;       slime-default-lisp (if (executable-find "ros")
+  ;;                            'roswell
+  ;;                          'sbcl))
+#+END_SRC
+*** Add Slime-Company
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package slime-company
+  ;;   :commands (slime-company))
+#+END_SRC
+*** use package
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package slime
+  ;;   :delight (slime-mode "(S)")
+  ;;   :commands (slime slime-lisp-mode-hook)
+  ;;   :config
+  ;;   (setq slime-net-coding-system 'utf-8-unix
+  ;;         slime-contribs '(slime-fancy
+  ;;                          slime-company))
+  ;;   :hook
+  ;;   ((lisp-mode             . slime-mode)
+  ;;    (lisp-interaction-mode . slime-mode)))
+#+END_SRC
 
 ** Theme
 *** Spacemacs Theme
@@ -402,6 +430,7 @@ ivy all the icons
           doom-modeline-minor-modes t
           doom-modeline-buffer-file-name-style 'file-name))
 #+END_SRC
+
 * Helper Functions
 ** Load Config Org
 #+BEGIN_SRC emacs-lisp

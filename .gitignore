@@ -2,7 +2,7 @@
 *
 
 # But not 
-!init.el
+!init*.el
 !.gitignore
 !*.org
 !*.ps1
