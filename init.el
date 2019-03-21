@@ -135,6 +135,26 @@
   (add-hook 'after-init-hook 'doom-modeline-mode))
 
 (eval-when-compile
+  ;; - Ivy Counsel Swiper ---------------------------------------------
+  (setq ivy-use-virtual-buffers t
+	ivy-count-format "%d/%d "
+	ivy-initial-input-alist nil
+	ivy-re-builders-alist '((t . ivy--regex-fuzzy))
+	ivy-height 20)
+  
+  (require 'ivy)
+  (ivy-mode)
+
+  (require 'ivy-rich)
+  (ivy-rich-mode)
+
+  (require 'counsel)
+
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file))
+
+(eval-when-compile
   ;; - Rainbow-Delimiters ---------------------------------------------
   (require 'rainbow-delimiters)
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
@@ -176,10 +196,19 @@
 (eval-when-compile
   ;; - Paredit --------------------------------------------------------
   (require 'paredit)
+  (add-hook 'emacs-lisp-mode-hook       'paredit-mode)
   (add-hook 'lisp-mode-hook             'paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
-  (add-hook 'scheme-mode                'paredit-mode)
-  (add-hook 'emacs-lisp-mode            'paredit-mode))
+  (add-hook 'scheme-mode-hook           'paredit-mode))
+
+(eval-when-compile
+  ;; - eldoc ----------------------------------------------------------
+  (require 'eldoc)
+  (add-hook 'scheme-mode-hook           'turn-on-eldoc-mode)
+  (add-hook 'emacs-lisp-mode-hook       'turn-on-eldoc-mode)
+  (add-hook 'lisp-mode-hook             'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode))
+
 
 ;; - Magit ----------------------------------------------------------
 ;; (require 'magit)
@@ -202,7 +231,7 @@
 			       'roswell
 			     'sbcl))
   (require 'slime)
-  (slime-setup '(slime-fancy))
+  (slime-setup '(slime-fancy slime-quicklisp slime-asdf))
 
   (require 'ac-slime)
   (add-hook 'slime-mode-hook      'set-up-slime-ac)
@@ -233,7 +262,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (ac-slime slime yasnippet-snippets yasnippet paredit auto-complete which-key winum rainbow-delimiters doom-modeline dracula-theme))))
+    (counsel ivy ac-slime slime yasnippet-snippets yasnippet paredit auto-complete which-key winum rainbow-delimiters doom-modeline dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
