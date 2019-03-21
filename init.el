@@ -128,10 +128,10 @@
   ;; - Doom-ModeLine --------------------------------------------------
   (require 'doom-modeline)
   (doom-modeline 1)
-  (setq doom-modeline-icon t)
-  (setq doom-modeline-major-mode-icon t)
-  (setq doom-modeline-major-mode-color-icon t)
-  (setq doom-modeline-minor-modes t)
+  (setq doom-modeline-icon t
+        doom-modeline-major-mode-icon t
+        doom-modeline-major-mode-color-icon t
+        doom-modeline-minor-modes t)
   (add-hook 'after-init-hook 'doom-modeline-mode))
 
 (eval-when-compile
@@ -141,7 +141,7 @@
 	ivy-initial-input-alist nil
 	ivy-re-builders-alist '((t . ivy--regex-fuzzy))
 	ivy-height 20)
-  
+
   (require 'ivy)
   (ivy-mode)
 
@@ -149,6 +149,9 @@
   (ivy-rich-mode)
 
   (require 'counsel)
+
+  (require 'all-the-icons-ivy)
+  (all-the-icons-ivy-setup)
 
   (global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
@@ -220,7 +223,6 @@
 
 ;; ------------------------------------------------------------------
 ;; ------------------------------------------------------------------
-
 (eval-when-compile
   ;; - LISP Specific --------------------------------------------------
   (setq slime-lisp-implementations
@@ -241,6 +243,8 @@
 
 ;; ------------------------------------------------------------------
 ;; ------------------------------------------------------------------
+
+
 ;; Reset changed values to defaults
 ;; values taken from DOOM-Emacs FAQ
 (eval-and-compile
@@ -262,7 +266,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (counsel ivy ac-slime slime yasnippet-snippets yasnippet paredit auto-complete which-key winum rainbow-delimiters doom-modeline dracula-theme))))
+    (all-the-icons-ivy counsel ivy ac-slime slime yasnippet-snippets yasnippet paredit auto-complete which-key winum rainbow-delimiters doom-modeline dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
