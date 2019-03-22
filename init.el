@@ -247,6 +247,22 @@
   (eval-after-load "auto-complete"
     '(add-to-list 'ac-modes 'slime-repl-mode))
 
+  ;; - Sly ---------------------------------------------------------
+  ;; (if nil   ; Not currently used... Need better way to switch between
+  ;; 	    ; sly and slime
+  ;;     (progn
+  ;; 	(setq sly-lisp-implementations my/lisp-implementations
+  ;; 	      sly-default-lisp my/default-lisp)
+
+  ;; 	(require 'sly)
+  ;; 	(require 'sly-autoload)
+  ;; 	(require 'sly-quicklisp)
+  ;; 	(require 'ac-sly)
+  ;; 	(add-hook 'lisp-mode-hook        'sly-editing-mode)
+  ;; 	(add-hook 'lisp-interaction-mode 'sly-mode)
+  ;; 	(add-hook 'sly-mode-hook 'set-up-sly-ac)
+  ;; 	(eval-after-load "auto-complete"
+  ;; 	  '(add-to-list 'ac-modes 'sly-mrepl-mode))))
   )
 ;; ------------------------------------------------------------------
 ;; ------------------------------------------------------------------
