@@ -222,16 +222,22 @@
 ;;                "-c" "color.diff=false")))
 
 ;; ------------------------------------------------------------------
+;; Common Lisp Specific
 ;; ------------------------------------------------------------------
 (eval-when-compile
-  ;; - LISP Specific --------------------------------------------------
-  (setq slime-lisp-implementations
+  ;; - Lisp Implementations ----------------------------------------
+  (setq my/lisp-implementations
 	'((sbcl ("sbcl"))
 	  (ccl ("ccl"))
 	  (roswell ("ros" "run")))
-	slime-default-lisp (if (executable-find "ros")
+	my/default-lisp (if (executable-find "ros")
 			       'roswell
 			     'sbcl))
+
+  ;; - SLIME --------------------------------------------------------
+  (setq slime-lisp-implementations my/lisp-implementations
+	slime-default-lisp my/default-lisp)
+  
   (require 'slime)
   (slime-setup '(slime-fancy slime-quicklisp slime-asdf))
 
@@ -239,8 +245,9 @@
   (add-hook 'slime-mode-hook      'set-up-slime-ac)
   (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
   (eval-after-load "auto-complete"
-    '(add-to-list 'ac-modes 'slime-repl-mode)))
+    '(add-to-list 'ac-modes 'slime-repl-mode))
 
+  )
 ;; ------------------------------------------------------------------
 ;; ------------------------------------------------------------------
 
