@@ -265,8 +265,7 @@
    (quote
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
-   (quote
-    (all-the-icons-ivy counsel ivy ac-slime slime yasnippet-snippets yasnippet paredit auto-complete which-key winum rainbow-delimiters doom-modeline dracula-theme))))
+   ()))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
