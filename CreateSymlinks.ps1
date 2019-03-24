@@ -10,6 +10,7 @@ if ($myWindowsPrincipal.IsInRole($adminRole)) {
 	$srcDir = (Get-Location).Path
 	$emacsAppDataDir = Join-Path -Path $env:APPDATA -ChildPath ".emacs.d"
 	$emacsHomeDir = Join-Path -Path (Resolve-Path ~).Path -ChildPath ".emacs.d"
+	$nvimHomeDir = Join-Path -Path (Resolve-Path ~).Path -ChildPath "AppData\Local\nvim"
 
 	function New-SymLink {
 	param (
@@ -33,6 +34,8 @@ if ($myWindowsPrincipal.IsInRole($adminRole)) {
 	New-SymLink -FileName .\emacs-config.org -TargetDir $emacsHomeDir
 
 	New-SymLink -FileName .\.bashrc -TargetDir $env:APPDATA
+
+	New-SymLink -FileName .\init.vim -TargetDir $nvimHomeDir
 } else {
 	Write-Error "This script requires Admin Privileges"
 }
