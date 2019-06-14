@@ -160,7 +160,10 @@
 (eval-when-compile
   ;; - Rainbow-Delimiters ---------------------------------------------
   (require 'rainbow-delimiters)
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  (add-hook 'prog-mode-hook             'rainbow-delimiters-mode)
+  (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'slime-repl-mode-hook       'rainbow-delimiters-mode)
+  )
 
 (eval-when-compile
   ;; - WINUM ----------------------------------------------------------
@@ -202,7 +205,9 @@
   (add-hook 'emacs-lisp-mode-hook       'paredit-mode)
   (add-hook 'lisp-mode-hook             'paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
-  (add-hook 'scheme-mode-hook           'paredit-mode))
+  (add-hook 'scheme-mode-hook           'paredit-mode)
+  (add-hook 'slime-repl-mode-hook       'paredit-mode)
+  )
 
 (eval-when-compile
   ;; - eldoc ----------------------------------------------------------
@@ -210,7 +215,9 @@
   (add-hook 'scheme-mode-hook           'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook       'turn-on-eldoc-mode)
   (add-hook 'lisp-mode-hook             'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode))
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'slime-repl-mode-hook       'turn-on-eldoc-mode)
+  )
 
 
 ;; - Magit ----------------------------------------------------------
