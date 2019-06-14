@@ -223,13 +223,14 @@
   )
 
 
-;; - Magit ----------------------------------------------------------
-;; (require 'magit)
-;; (global-set-key (kbd "C-x g") 'magit-status)
-;; (setq magit-git-global-arguments
-;;       (nconc magit-git-global-arguments
-;;              '("-c" "color.ui=false"
-;;                "-c" "color.diff=false")))
+(eval-when-compile
+  ;; - Magit ----------------------------------------------------------
+  (require 'magit)
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (setq magit-git-global-arguments
+	(nconc magit-git-global-arguments
+	       '("-c" "color.ui=false"
+		 "-c" "color.diff=false"))))
 
 ;; ------------------------------------------------------------------
 ;; Common Lisp Specific
