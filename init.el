@@ -163,6 +163,7 @@
   (add-hook 'prog-mode-hook             'rainbow-delimiters-mode)
   (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'slime-repl-mode-hook       'rainbow-delimiters-mode)
+  ;; (add-hook 'geiser-repl-mode-hook      'rainbow-delimiters-mode)
   )
 
 (eval-when-compile
@@ -207,6 +208,7 @@
   (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
   (add-hook 'scheme-mode-hook           'paredit-mode)
   (add-hook 'slime-repl-mode-hook       'paredit-mode)
+  ;; (add-hook 'geiser-repl-mode-hook      'paredit-mode)
   )
 
 (eval-when-compile
@@ -217,6 +219,7 @@
   (add-hook 'lisp-mode-hook             'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'slime-repl-mode-hook       'turn-on-eldoc-mode)
+  ;; (add-hook 'geiser-repl-mode-hook      'turn-on-eldoc-mode)
   )
 
 
@@ -278,7 +281,17 @@
 ;; ------------------------------------------------------------------
 (eval-when-compile
   ;; - Racket-Mode --------------------------------------------------
-  
+  ;; (require 'geiser)
+  ;; (setq geiser-active-implementations '(racket))
+  ;; (defun geiser-save ()
+  ;;   (interactive)
+  ;;   (geiser-repl--write-input-ring))
+
+  ;; (require 'ac-geiser)
+  ;; (add-hook 'geiser-mode-hook 'ac-geiser-setup)
+  ;; (add-hook 'geiser-repl-mode-hook 'ac-geiser-setup)
+  ;; (eval-after-load "auto-complete"
+  ;;   '(add-to-list 'ac-modes 'geiser-repl-mode))
   )
 
 ;; ------------------------------------------------------------------
