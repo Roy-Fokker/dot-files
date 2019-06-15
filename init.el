@@ -284,17 +284,13 @@
 ;; ------------------------------------------------------------------
 (eval-when-compile
   ;; - Racket-Mode --------------------------------------------------
-  ;; (require 'geiser)
-  ;; (setq geiser-active-implementations '(racket))
-  ;; (defun geiser-save ()
-  ;;   (interactive)
-  ;;   (geiser-repl--write-input-ring))
-
-  ;; (require 'ac-geiser)
-  ;; (add-hook 'geiser-mode-hook 'ac-geiser-setup)
-  ;; (add-hook 'geiser-repl-mode-hook 'ac-geiser-setup)
-  ;; (eval-after-load "auto-complete"
-  ;;   '(add-to-list 'ac-modes 'geiser-repl-mode))
+  (setq my/default-scheme '(racket))
+  (setq geiser-active-implementations my/default-scheme)
+  
+  (require 'geiser)
+  (defun geiser-save ()
+    (interactive)
+    (geiser-repl--write-input-ring))
   )
 
 ;; ------------------------------------------------------------------
