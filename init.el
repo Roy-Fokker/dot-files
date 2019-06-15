@@ -191,9 +191,19 @@
   (which-key-mode))
 
 (eval-when-compile
-  ;; - Auto-Complete --------------------------------------------------
-  (require 'auto-complete)
-  (ac-config-default))
+  ;; - Company-Mode ---------------------------------------------------
+  (require 'company)
+  (add-hook 'after-init-hook 'global-company-mode)
+
+  (setq company-idle-delay 0
+	company-minimum-prefix-length 2
+	company-selection-wrap-around t
+	)  
+  (company-tng-configure-default)
+
+  (require 'company-quickhelp)
+  (company-quickhelp-mode)
+  )
 
 (eval-when-compile
   ;; - YaSnippers -----------------------------------------------------
@@ -250,13 +260,8 @@
 	slime-default-lisp my/default-lisp)
   
   (require 'slime)
-  (slime-setup '(slime-fancy slime-quicklisp slime-asdf))
+  (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf))
 
-  (require 'ac-slime)
-  (add-hook 'slime-mode-hook      'set-up-slime-ac)
-  (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-  (eval-after-load "auto-complete"
-    '(add-to-list 'ac-modes 'slime-repl-mode))
 
   ;; - Sly ---------------------------------------------------------
   ;; (if nil   ; Not currently used... Need better way to switch between
@@ -268,12 +273,9 @@
   ;; 	(require 'sly)
   ;; 	(require 'sly-autoload)
   ;; 	(require 'sly-quicklisp)
-  ;; 	(require 'ac-sly)
+
   ;; 	(add-hook 'lisp-mode-hook        'sly-editing-mode)
   ;; 	(add-hook 'lisp-interaction-mode 'sly-mode)
-  ;; 	(add-hook 'sly-mode-hook 'set-up-sly-ac)
-  ;; 	(eval-after-load "auto-complete"
-  ;; 	  '(add-to-list 'ac-modes 'sly-mrepl-mode))))
   )
 
 ;; ------------------------------------------------------------------
