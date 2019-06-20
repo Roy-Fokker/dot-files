@@ -106,7 +106,8 @@
   (if window-system
       (progn 
         (add-hook 'kill-emacs-hook 'emacs/save-framegeometry)
-        (add-hook 'after-init-hook 'emacs/load-framegeometry))))
+        (add-hook 'after-init-hook 'emacs/load-framegeometry)
+	)))
 
 ;; ------------------------------------------------------------------
 (eval-when-compile
