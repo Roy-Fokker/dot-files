@@ -257,6 +257,9 @@
 			    'roswell
 			  'sbcl))
 
+  ;; - Common Lisp Snippets -----------------------------------------
+  (require 'common-lisp-snippets)
+  
   ;; - SLIME --------------------------------------------------------
   (setq slime-lisp-implementations my/lisp-implementations
 	slime-default-lisp my/default-lisp)
