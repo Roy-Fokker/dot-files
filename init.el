@@ -164,7 +164,7 @@
   (add-hook 'prog-mode-hook             'rainbow-delimiters-mode)
   (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'slime-repl-mode-hook       'rainbow-delimiters-mode)
-  ;; (add-hook 'geiser-repl-mode-hook      'rainbow-delimiters-mode)
+  (add-hook 'geiser-repl-mode-hook      'rainbow-delimiters-mode)
   )
 
 (eval-when-compile
@@ -220,7 +220,7 @@
   (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
   (add-hook 'scheme-mode-hook           'paredit-mode)
   (add-hook 'slime-repl-mode-hook       'paredit-mode)
-  ;; (add-hook 'geiser-repl-mode-hook      'paredit-mode)
+  (add-hook 'geiser-repl-mode-hook      'paredit-mode)
   )
 
 (eval-when-compile
@@ -231,7 +231,7 @@
   (add-hook 'lisp-mode-hook             'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'slime-repl-mode-hook       'turn-on-eldoc-mode)
-  ;; (add-hook 'geiser-repl-mode-hook      'turn-on-eldoc-mode)
+  (add-hook 'geiser-repl-mode-hook      'turn-on-eldoc-mode)
   )
 
 
