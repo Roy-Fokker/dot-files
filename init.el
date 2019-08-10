@@ -123,6 +123,11 @@
   (package-initialize))
 
 (eval-when-compile
+  ;; - Dracula-theme --------------------------------------------------
+  (require 'dracula-theme))
+
+
+(eval-when-compile
   ;; - All-the-icons --------------------------------------------------
   (require 'all-the-icons))
 
