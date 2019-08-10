@@ -238,6 +238,9 @@
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'slime-repl-mode-hook       'turn-on-eldoc-mode)
   (add-hook 'geiser-repl-mode-hook      'turn-on-eldoc-mode)
+
+  (require 'eldoc-overlay)
+  (global-eldoc-overlay-mode 1)
   )
 
 
