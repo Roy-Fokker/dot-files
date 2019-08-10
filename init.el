@@ -215,6 +215,11 @@
 (eval-when-compile
   ;; - YaSnippers -----------------------------------------------------
   (require 'yasnippet)
+  (require 'yasnippet-snippets)
+  
+  ;; - Common Lisp Snippets -----------------------------------------
+  (require 'common-lisp-snippets)
+  
   (yas-global-mode 1)
   )
 
@@ -265,9 +270,6 @@
 	my/default-lisp (if (executable-find "ros")
 			    'roswell
 			  'sbcl))
-
-  ;; - Common Lisp Snippets -----------------------------------------
-  (require 'common-lisp-snippets)
   
   ;; - SLIME --------------------------------------------------------
   (setq slime-lisp-implementations my/lisp-implementations
