@@ -9,3 +9,4 @@
 !.bash*
 !.vim*
 !*.vim
+!*.sh
