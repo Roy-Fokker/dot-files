@@ -24,7 +24,6 @@
       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
       package-enable-at-startup nil                  ; do not load packages before start up
       delete-by-moving-to-trash t                    ; delete moves to recycle bin
-;;      version-control nil                            ; disable emacs version control
       column-number-mode t                           ; display column number
       show-paren-delay 0                             ; show matching immediately
       scroll-conservatively  most-positive-fixnum    ; scroll sensibly, don't jump around
@@ -248,6 +247,15 @@
   (global-eldoc-overlay-mode 1)
   )
 
+(eval-when-compile
+  ;; - org mode -------------------------------------------------------
+  (require 'org)
+  (require 'htmlize)
+  (require 'org-bullets)
+  (require 'org-cua-dwim)
+
+  (org-bullets-mode 1)
+  )
 
 (eval-when-compile
   ;; - Magit ----------------------------------------------------------
@@ -334,7 +342,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (yasnippet-snippets winum which-key slime-company rainbow-delimiters paredit magit ivy-rich geiser eldoc-overlay dracula-theme doom-modeline counsel company-quickhelp common-lisp-snippets all-the-icons-ivy))))
+    ())))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
