@@ -270,7 +270,11 @@
 ;; - Org Mode -------------------------------------------------------
 (use-package org
   :mode (("\\.org$" . org-mode))
-  :ensure org-plus-contrib)
+  :ensure org-plus-contrib
+  :config
+  (setq org-support-shift-select t
+	org-use-sub-superscripts '{}
+	org-export-with-sub-superscripts '{}))
 
 (use-package org-bullets
   :ensure t
