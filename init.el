@@ -1,14 +1,9 @@
-(eval-and-compile
-  ;; Change GC threshold for duration of init, technique from DOOM Emacs FAQ
-  ;; Reset at the end of this file
-  (setq gc-cons-threshold 2147483648 ; set gc threshold to 2GiB
-        gc-cons-percentage 0.6))
-
 ;; ------------------------------------------------------------------
+;; Change GC threshold for duration of init, technique from DOOM Emacs FAQ
+(setq gc-cons-threshold 2147483648               ; set gc threshold to 2GiB
+      gc-cons-percentage 0.6)
 
-;; file handler check is not needed during start up
-;; reset at the end of this file
-(defvar startup/file-name-handler-alist file-name-handler-alist)
+(defvar startup/file-name-handler-alist file-name-handler-alist) ; file handler check is not needed during start up
 (setq file-name-handler-alist nil)
 
 (defun startup/reset-gc-and-file-handler ()
@@ -17,23 +12,29 @@
         file-name-handler-alist startup/file-name-handler-alist))
 
 ;; ------------------------------------------------------------------
+;; Reset changed values to defaults
+;; values taken from DOOM-Emacs FAQ
+(add-hook 'after-init-hook 'startup/reset-gc-and-file-handler)
 
-(setq-default inhibit-startup-screen t) ; Disable Emacs Welcome Screen
-
-(setq backup-directory-alist         `(("." . "backups"))    ; backup files in this directory
+;; ------------------------------------------------------------------
+;; Set defaults for emacs variables
+(setq inhibit-startup-screen t                        ; Disable Emacs Welcome Screen
+      backup-directory-alist `(("." . "backups"))     ; backup files in this directory
+      custom-file "~/.emacs.d/.emacs-custom.el"       ; save all machine specific settings here
       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
-      package-enable-at-startup nil                  ; do not load packages before start up
-      delete-by-moving-to-trash t                    ; delete moves to recycle bin
-      column-number-mode t                           ; display column number
-      show-paren-delay 0                             ; show matching immediately
-      scroll-conservatively  most-positive-fixnum    ; scroll sensibly, don't jump around
-      mouse-wheel-scroll-amount '(1 ((shift) . 1))   ; one line at a time
-      mouse-wheel-follow-mouse t                     ; scroll window under mouse
-      find-file-visit-truename t                     ; find true path of a file
+      package-enable-at-startup nil                   ; do not load packages before start up
+      delete-by-moving-to-trash t                     ; delete moves to recycle bin
+      column-number-mode t                            ; display column number
+      show-paren-delay 0                              ; show matching immediately
+      scroll-conservatively  most-positive-fixnum     ; scroll sensibly, don't jump around
+      mouse-wheel-scroll-amount '(1 ((shift) . 1))    ; one line at a time
+      mouse-wheel-follow-mouse t                      ; scroll window under mouse
+      find-file-visit-truename t                      ; find true path of a file
+      gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3" ; fix for bug 
       )
 
 ;; ------------------------------------------------------------------
-
+;; enable some convinence behaviours 
 (global-display-line-numbers-mode)  ; Display line-numbers in all buffers
 (global-hl-line-mode)               ; Highlight current line
 (menu-bar-mode -1)                  ; Hide menu bar
@@ -109,243 +110,212 @@
 	)))
 
 ;; ------------------------------------------------------------------
+;; Configure Package Archives
+(require 'package) ; package management
+
+;; Don't load any packages by default
+(setq package-enable-at-startup nil)
+
+;; Where to look for packages
+(add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("elpa"  . "http://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+(package-initialize) ;; initialize package.el
+
+;; install use-package if it's not present
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; compile it
 (eval-when-compile
-  ;; package management
-  (require 'package)
+  (require 'use-package))
 
-  ;; Where to look for packages
-  (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
-  (add-to-list 'package-archives '("elpa"  . "http://elpa.gnu.org/packages/") t)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+;; - Dracula Theme --------------------------------------------------
+(use-package dracula-theme
+  :ensure t
+  :init
+  (load-theme 'dracula t))
 
-  ;; initialize package
-  (package-initialize))
+;; - All the icons --------------------------------------------------
+(use-package all-the-icons
+  :ensure t)
 
-(eval-when-compile
-  ;; - Dracula-theme --------------------------------------------------
-  (require 'dracula-theme))
-
-
-(eval-when-compile
-  ;; - All-the-icons --------------------------------------------------
-  (require 'all-the-icons))
-
-(eval-when-compile
-  ;; - Doom-ModeLine --------------------------------------------------
-  (require 'doom-modeline)
-  (doom-modeline 1)
+;; - Doom Modeline --------------------------------------------------
+(use-package doom-modeline
+  :ensure t
+  :init
   (setq doom-modeline-icon t
         doom-modeline-major-mode-icon t
         doom-modeline-major-mode-color-icon t
         doom-modeline-minor-modes t)
-  (add-hook 'after-init-hook 'doom-modeline-mode))
+  :hook (after-init . doom-modeline-mode))
 
-(eval-when-compile
-  ;; - Ivy Counsel Swiper ---------------------------------------------
-  (setq ivy-use-virtual-buffers t
-	ivy-count-format "%d/%d "
+;; - Smex Ivy Counsel Swiper Hydra ----------------------------------
+
+(use-package smex
+  :ensure t)
+
+(use-package ivy
+  :ensure t
+  :init
+  (setq ivy-use-virtual-buffer t
+	ivy-count-format "%d%d "
 	ivy-initial-input-alist nil
 	ivy-re-builders-alist '((t . ivy--regex-fuzzy))
 	ivy-height 20)
+  :hook (after-init . ivy-mode))
 
-  (require 'ivy)
-  (ivy-mode)
+(use-package all-the-icons-ivy
+  :ensure t
+  :config
+  (all-the-icons-ivy-setup))
 
-  (require 'ivy-rich)
-  (ivy-rich-mode)
+(use-package ivy-rich
+  :ensure t
+  :hook (after-init . ivy-rich-mode))
 
-  (require 'counsel)
+(use-package counsel
+  :ensure t
+  :bind (("M-x" . counsel-M-x)
+	 ("C-x C-f" . counsel-find-file)))
 
-  (require 'all-the-icons-ivy)
-  (all-the-icons-ivy-setup)
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)))
 
-  (global-set-key (kbd "C-s") 'swiper)
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file))
+(use-package ivy-hydra
+  :ensure t)
 
-(eval-when-compile
-  ;; - Rainbow-Delimiters ---------------------------------------------
-  (require 'rainbow-delimiters)
-  (add-hook 'prog-mode-hook             'rainbow-delimiters-mode)
-  (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'slime-repl-mode-hook       'rainbow-delimiters-mode)
-  (add-hook 'geiser-repl-mode-hook      'rainbow-delimiters-mode)
-  )
+;; - Which Key ------------------------------------------------------
+(use-package which-key
+  :ensure t
+  :hook (after-init . which-key-mode))
 
-(eval-when-compile
-  ;; - WINUM ----------------------------------------------------------
-  (setq winum-keymap
-	(let ((map (make-sparse-keymap)))
-	  (define-key map (kbd "C-`") 'winum-select-window-by-number)
-	  (define-key map (kbd "C-²") 'winum-select-window-by-number)
-	  (define-key map (kbd "M-0") 'winum-select-window-0-or-10)
-	  (define-key map (kbd "M-1") 'winum-select-window-1)
-	  (define-key map (kbd "M-2") 'winum-select-window-2)
-	  (define-key map (kbd "M-3") 'winum-select-window-3)
-	  (define-key map (kbd "M-4") 'winum-select-window-4)
-	  (define-key map (kbd "M-5") 'winum-select-window-5)
-	  (define-key map (kbd "M-6") 'winum-select-window-6)
-	  (define-key map (kbd "M-7") 'winum-select-window-7)
-	  (define-key map (kbd "M-8") 'winum-select-window-8)
-	  map))
-  (require 'winum)
-  (winum-mode))
+;; - Rainbow Delimiters ---------------------------------------------
+(use-package rainbow-delimiters
+  :ensure t
+  :hook ((prog-mode             . rainbow-delimiters-mode)
+	 (lisp-interaction-mode . rainbow-delimiters-mode)
+	 (slime-repl-mode       . rainbow-delimiters-mode)
+	 (geiser-repl-mode      . rainbow-delimiters-mode)))
 
-(eval-when-compile
-  ;; - Which-Key ------------------------------------------------------
-  (require 'which-key)
-  (which-key-mode))
+;; - WiNum ----------------------------------------------------------
+(use-package winum
+  :ensure t
+  :bind (("C-`" . winum-select-window-by-number)
+	 ("M-0" . winum-select-window-0-or-10)
+	 ("M-1" . winum-select-window-1)
+	 ("M-2" . winum-select-window-2)
+	 ("M-3" . winum-select-window-3)
+	 ("M-4" . winum-select-window-4)
+	 ("M-5" . winum-select-window-5)
+	 ("M-6" . winum-select-window-6)
+	 ("M-7" . winum-select-window-7)
+	 ("M-8" . winum-select-window-8))
+  :hook (after-init . winum-mode))
 
-(eval-when-compile
-  ;; - Company-Mode ---------------------------------------------------
-  (require 'company)
-  (add-hook 'after-init-hook 'global-company-mode)
-
+;; - Company Mode ---------------------------------------------------
+(use-package company
+  :ensure t
+  :config
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
-	company-selection-wrap-around t
-	)  
+	company-selection-wrap-around t)
   (company-tng-configure-default)
+  :hook (after-init . global-company-mode))
 
-  (require 'company-quickhelp)
-  (company-quickhelp-mode)
-  )
+(use-package company-quickhelp
+  :ensure t
+  :config
+  (company-quickhelp-mode))
 
-(eval-when-compile
-  ;; - YaSnippers -----------------------------------------------------
-  (require 'yasnippet)
-  (require 'yasnippet-snippets)
-  
-  ;; - Common Lisp Snippets -----------------------------------------
-  (require 'common-lisp-snippets)
-  
-  (yas-global-mode 1)
-  )
+;; - YA Snippets ----------------------------------------------------
+(use-package yasnippet
+  :ensure t
+  :config
+  (use-package yasnippet-snippets
+    :ensure t)
+  (use-package common-lisp-snippets
+    :ensure t)
+  :hook (after-init . yas-global-mode))
 
-(eval-when-compile
-  ;; - Paredit --------------------------------------------------------
-  (require 'paredit)
-  (add-hook 'emacs-lisp-mode-hook       'paredit-mode)
-  (add-hook 'lisp-mode-hook             'paredit-mode)
-  (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
-  (add-hook 'scheme-mode-hook           'paredit-mode)
-  (add-hook 'slime-repl-mode-hook       'paredit-mode)
-  (add-hook 'geiser-repl-mode-hook      'paredit-mode)
-  )
+;; - ParEdit --------------------------------------------------------
+(use-package paredit
+  :ensure t
+  :hook ((emacs-lisp-mode       . paredit-mode)
+	 (lisp-mode             . paredit-mode)
+	 (lisp-interaction-mode . paredit-mode)
+	 (scheme-mode           . paredit-mode)
+	 (slime-repl-mode       . paredit-mode)
+	 (geiser-repl-mode      . paredit-mode)
+	 (prog-mode             . paredit-mode)))
 
-(eval-when-compile
-  ;; - eldoc ----------------------------------------------------------
-  (require 'eldoc)
-  (add-hook 'scheme-mode-hook           'turn-on-eldoc-mode)
-  (add-hook 'emacs-lisp-mode-hook       'turn-on-eldoc-mode)
-  (add-hook 'lisp-mode-hook             'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'slime-repl-mode-hook       'turn-on-eldoc-mode)
-  (add-hook 'geiser-repl-mode-hook      'turn-on-eldoc-mode)
+;; - El Doc ---------------------------------------------------------
+(use-package eldoc
+  :ensure t
+  :hook ((emacs-lisp-mode       . turn-on-eldoc-mode)
+	 (lisp-mode             . turn-on-eldoc-mode)
+	 (lisp-interaction-mode . turn-on-eldoc-mode)
+	 (scheme-mode           . turn-on-eldoc-mode)
+	 (slime-repl-mode       . turn-on-eldoc-mode)
+	 (geiser-repl-mode      . turn-on-eldoc-mode)
+	 (prog-mode             . turn-on-eldoc-mode)))
 
-  (require 'eldoc-overlay)
-  (global-eldoc-overlay-mode 1)
-  )
+(use-package eldoc-overlay
+  :ensure t
+  :hook (after-init . global-eldoc-overlay-mode))
 
-(eval-when-compile
-  ;; - org mode -------------------------------------------------------
-  (require 'org)
-  (require 'htmlize)
-  (require 'org-bullets)
-  (require 'org-cua-dwim)
+;; - Org Mode -------------------------------------------------------
+(use-package org
+  :mode (("\\.org$" . org-mode))
+  :ensure org-plus-contrib)
 
-  (org-bullets-mode 1)
-  )
+(use-package org-bullets
+  :ensure t
+  :hook (org-mode . org-bullets-mode))
 
-(eval-when-compile
-  ;; - Magit ----------------------------------------------------------
-  (require 'magit)
-  (global-set-key (kbd "C-x g") 'magit-status)
+(use-package htmlize
+  :ensure t)
+
+;; - Magit ----------------------------------------------------------
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status))
+  :config
   (setq magit-git-global-arguments
 	(nconc magit-git-global-arguments
 	       '("-c" "color.ui=false"
 		 "-c" "color.diff=false"))))
 
-;; ------------------------------------------------------------------
-;; Common Lisp Specific
-;; ------------------------------------------------------------------
-(eval-when-compile
-  ;; - Lisp Implementations ----------------------------------------
-  (setq my/lisp-implementations
-	'((sbcl ("sbcl"))
-	  (ccl ("ccl"))
-	  (roswell ("ros" "run")))
-	my/default-lisp (if (executable-find "ros")
-			    'roswell
-			  'sbcl))
-  
-  ;; - SLIME --------------------------------------------------------
+;; - Common Lisp ----------------------------------------------------
+;; ---- Implementations ---------------------------------------------
+(setq my/lisp-implementations                     ; Which Common Lisp are installed
+      '((sbcl ("sbcl"))
+	(ccl ("ccl"))
+	(roswell ("ros" "run")))
+      my/default-lisp (if (executable-find "ros") ; Find one to use as default
+			  'roswell
+			'sbcl))
+
+;; ---- Slime -------------------------------------------------------
+(use-package slime
+  :ensure slime-company 
+  :config
   (setq slime-lisp-implementations my/lisp-implementations
 	slime-default-lisp my/default-lisp)
-  
-  (require 'slime)
-  (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf))
+  (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
 
+;; - Racket ---------------------------------------------------------
+;; ---- Implementations ---------------------------------------------
+(setq my/default-scheme '(racket))
 
-  ;; - Sly ---------------------------------------------------------
-  ;; (if nil   ; Not currently used... Need better way to switch between
-  ;; 	    ; sly and slime
-  ;;     (progn
-  ;; 	(setq sly-lisp-implementations my/lisp-implementations
-  ;; 	      sly-default-lisp my/default-lisp)
+;; ---- Geiser ------------------------------------------------------
+(use-package geiser
+  :ensure t
+  :config
+  (setq geiser-active-implementations my/default-scheme))
 
-  ;; 	(require 'sly)
-  ;; 	(require 'sly-autoload)
-  ;; 	(require 'sly-quicklisp)
+(setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
-  ;; 	(add-hook 'lisp-mode-hook        'sly-editing-mode)
-  ;; 	(add-hook 'lisp-interaction-mode 'sly-mode)
-  )
-
-;; ------------------------------------------------------------------
-;; ------------------------------------------------------------------
-;; Racket Specific
-;; ------------------------------------------------------------------
-(eval-when-compile
-  ;; - Racket-Mode --------------------------------------------------
-  (setq my/default-scheme '(racket))
-  (setq geiser-active-implementations my/default-scheme)
-  
-  (require 'geiser)
-  (defun geiser-save ()
-    (interactive)
-    (geiser-repl--write-input-ring))
-  )
-
-;; ------------------------------------------------------------------
-;; ------------------------------------------------------------------
-
-
-;; Reset changed values to defaults
-;; values taken from DOOM-Emacs FAQ
-(eval-and-compile
-  (add-hook 'emacs-startup-hook 'startup/reset-gc-and-file-handler))
-
-;; ------------------------------------------------------------------
-(setq initial-scratch-message (concat "Startup time: " (emacs-init-time)))
-(provide 'init)
-
-;; ------------------------------------------------------------------
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (dracula)))
- '(custom-safe-themes
-   (quote
-    ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
- '(package-selected-packages
-   (quote
-    ())))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
