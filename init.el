@@ -160,8 +160,8 @@
 (use-package ivy
   :ensure t
   :init
-  (setq ivy-use-virtual-buffer t
-	ivy-count-format "%d%d "
+  (setq ivy-use-virtual-buffers t
+	ivy-count-format "(%d/%d) "
 	ivy-initial-input-alist nil
 	ivy-re-builders-alist '((t . ivy--regex-fuzzy))
 	ivy-height 20)
