@@ -63,6 +63,16 @@
 (setq inhibit-compacting-font-caches t)
 
 ;; ------------------------------------------------------------------
+;; Load custom file if it exist
+(eval-when-compile
+  (defun emacs/load-custom-file ()
+    (when (file-exists-p custom-file)
+      (load custom-file)))
+  
+  (if window-system
+      (add-hook 'after-init-hook 'emacs/load-custom-file)))
+
+;; ------------------------------------------------------------------
 ;; All the logic to save and load frame size and location
 (eval-when-compile
   ;; Save Frame size and location
