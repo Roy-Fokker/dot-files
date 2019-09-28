@@ -42,7 +42,11 @@
 (scroll-bar-mode -1)                ; Hide scroll bar
 (show-paren-mode t)                 ; Parenthesis highlighting
 (delete-selection-mode t)           ; Enable delete selection mode
-(cua-mode)                          ; Enable CUA mode
+(cua-mode t)                        ; Enable CUA mode
+
+;; set some keybindings
+(global-set-key (kbd "<C-tab>") 'switch-to-next-buffer)
+(global-set-key (kbd "<C-S-tab>") 'switch-to-prev-buffer)
 
 ;; ------------------------------------------------------------------
 ;; Set utf-8 as default text system
