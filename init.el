@@ -331,5 +331,6 @@
   :config
   (setq geiser-active-implementations my/default-scheme))
 
+;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
