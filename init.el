@@ -1,3 +1,9 @@
+;;; init.el --- Init file for emacs -*- lexical-binding: t -*-
+;;; Commentary:
+;; This file bootstraps the configuration of Emacs
+
+;;; Code:
+
 ;; ------------------------------------------------------------------
 ;; Change GC threshold for duration of init, technique from DOOM Emacs FAQ
 (setq gc-cons-threshold 2147483648               ; set gc threshold to 2GiB
@@ -7,6 +13,7 @@
 (setq file-name-handler-alist nil)
 
 (defun startup/reset-gc-and-file-handler ()
+  "Reset the gc and file handler values."
   (setq gc-cons-threshold 536870912  ; set gc threshold to 0.5GiB
         gc-cons-percentage 0.1
         file-name-handler-alist startup/file-name-handler-alist))
@@ -252,6 +259,10 @@
   :config
   (global-flycheck-mode))
 
+(use-package flycheck-popup-tip
+  :ensure t
+  :hook (flycheck-mode . flycheck-popup-tip-mode))
+
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
   :ensure t
@@ -316,11 +327,13 @@
 
 ;; - Common Lisp ----------------------------------------------------
 ;; ---- Implementations ---------------------------------------------
+(defvar my/lisp-implementations nil "List of default Lisp implementations.")
+(defvar my/default-lisp nil "Default Lisp implementation to use.")
 (setq my/lisp-implementations                     ; Which Common Lisp are installed
-      '((sbcl ("sbcl"))
+	  '((sbcl ("sbcl"))
 		(ccl ("ccl"))
 		(roswell ("ros" "run")))
-      my/default-lisp (if (executable-find "ros") ; Find one to use as default
+	  my/default-lisp (if (executable-find "ros") ; Find one to use as default
 						  'roswell
 						'sbcl))
 
@@ -334,6 +347,7 @@
 
 ;; - Racket ---------------------------------------------------------
 ;; ---- Implementations ---------------------------------------------
+(defvar my/default-scheme nil "Default Scheme implementation to use.")
 (setq my/default-scheme '(racket))
 
 ;; ---- Geiser ------------------------------------------------------
@@ -345,3 +359,5 @@
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
+(provide 'init)
+;;; init.el ends here
