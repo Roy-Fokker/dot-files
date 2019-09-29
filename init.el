@@ -18,23 +18,24 @@
 
 ;; ------------------------------------------------------------------
 ;; Set defaults for emacs variables
-(setq inhibit-startup-screen t                        ; Disable Emacs Welcome Screen
-      backup-directory-alist `(("." . "backups"))     ; backup files in this directory
-      custom-file "~/.emacs.d/.emacs-custom.el"       ; save all machine specific settings here
-      auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
-      package-enable-at-startup nil                   ; do not load packages before start up
-      delete-by-moving-to-trash t                     ; delete moves to recycle bin
-      column-number-mode t                            ; display column number
-      show-paren-delay 0                              ; show matching immediately
-      scroll-conservatively  most-positive-fixnum     ; scroll sensibly, don't jump around
-      mouse-wheel-scroll-amount '(1 ((shift) . 1))    ; one line at a time
-      mouse-wheel-follow-mouse t                      ; scroll window under mouse
-      find-file-visit-truename t                      ; find true path of a file
-      gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3" ; fix for bug 
-      )
+(setq-default inhibit-startup-screen t                        ; Disable Emacs Welcome Screen
+			  backup-directory-alist `(("." . "backups"))     ; backup files in this directory
+			  custom-file "~/.emacs.d/.emacs-custom.el"       ; save all machine specific settings here
+			  auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
+			  package-enable-at-startup nil                   ; do not load packages before start up
+			  delete-by-moving-to-trash t                     ; delete moves to recycle bin
+			  column-number-mode t                            ; display column number
+			  show-paren-delay 0                              ; show matching immediately
+			  scroll-conservatively  most-positive-fixnum     ; scroll sensibly, don't jump around
+			  mouse-wheel-scroll-amount '(1 ((shift) . 1))    ; one line at a time
+			  mouse-wheel-follow-mouse t                      ; scroll window under mouse
+			  find-file-visit-truename t                      ; find true path of a file
+			  gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3" ; fix for bug
+			  tab-width 4
+			  )
 
 ;; ------------------------------------------------------------------
-;; enable some convinence behaviours 
+;; enable some convinence behaviours
 (global-display-line-numbers-mode)  ; Display line-numbers in all buffers
 (global-hl-line-mode)               ; Highlight current line
 (menu-bar-mode -1)                  ; Hide menu bar
@@ -63,7 +64,7 @@
 
 ;; ------------------------------------------------------------------
 ;; set font
-(set-default-font "Source Code Pro 10")
+(set-frame-font "Source Code Pro 10")
 (setq inhibit-compacting-font-caches t)
 
 ;; ------------------------------------------------------------------
@@ -118,7 +119,7 @@
 
   ;; Hook into emacs kill and init
   (if window-system
-      (progn 
+      (progn
         (add-hook 'kill-emacs-hook 'emacs/save-framegeometry)
         (add-hook 'after-init-hook 'emacs/load-framegeometry)
 	)))
@@ -175,10 +176,10 @@
   :ensure t
   :init
   (setq ivy-use-virtual-buffers t
-	ivy-count-format "(%d/%d) "
-	ivy-initial-input-alist nil
-	ivy-re-builders-alist '((t . ivy--regex-fuzzy))
-	ivy-height 20)
+		ivy-count-format "(%d/%d) "
+		ivy-initial-input-alist nil
+		ivy-re-builders-alist '((t . ivy--regex-fuzzy))
+		ivy-height 20)
   :hook (after-init . ivy-mode))
 
 (use-package all-the-icons-ivy
@@ -193,7 +194,7 @@
 (use-package counsel
   :ensure t
   :bind (("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file)))
+		 ("C-x C-f" . counsel-find-file)))
 
 (use-package swiper
   :ensure t
@@ -211,23 +212,23 @@
 (use-package rainbow-delimiters
   :ensure t
   :hook ((prog-mode             . rainbow-delimiters-mode)
-	 (lisp-interaction-mode . rainbow-delimiters-mode)
-	 (slime-repl-mode       . rainbow-delimiters-mode)
-	 (geiser-repl-mode      . rainbow-delimiters-mode)))
+		 (lisp-interaction-mode . rainbow-delimiters-mode)
+		 (slime-repl-mode       . rainbow-delimiters-mode)
+		 (geiser-repl-mode      . rainbow-delimiters-mode)))
 
 ;; - WiNum ----------------------------------------------------------
 (use-package winum
   :ensure t
   :bind (("C-`" . winum-select-window-by-number)
-	 ("M-0" . winum-select-window-0-or-10)
-	 ("M-1" . winum-select-window-1)
-	 ("M-2" . winum-select-window-2)
-	 ("M-3" . winum-select-window-3)
-	 ("M-4" . winum-select-window-4)
-	 ("M-5" . winum-select-window-5)
-	 ("M-6" . winum-select-window-6)
-	 ("M-7" . winum-select-window-7)
-	 ("M-8" . winum-select-window-8))
+		 ("M-0" . winum-select-window-0-or-10)
+		 ("M-1" . winum-select-window-1)
+		 ("M-2" . winum-select-window-2)
+		 ("M-3" . winum-select-window-3)
+		 ("M-4" . winum-select-window-4)
+		 ("M-5" . winum-select-window-5)
+		 ("M-6" . winum-select-window-6)
+		 ("M-7" . winum-select-window-7)
+		 ("M-8" . winum-select-window-8))
   :hook (after-init . winum-mode))
 
 ;; - Company Mode ---------------------------------------------------
@@ -235,8 +236,8 @@
   :ensure t
   :config
   (setq company-idle-delay 0
-	company-minimum-prefix-length 2
-	company-selection-wrap-around t)
+		company-minimum-prefix-length 2
+		company-selection-wrap-around t)
   (company-tng-configure-default)
   :hook (after-init . global-company-mode))
 
@@ -244,6 +245,12 @@
   :ensure t
   :config
   (company-quickhelp-mode))
+
+;; - Flycheck -------------------------------------------------------
+(use-package flycheck
+  :ensure t
+  :config
+  (global-flycheck-mode))
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
@@ -259,12 +266,12 @@
 (use-package paredit
   :ensure t
   :hook ((emacs-lisp-mode       . paredit-mode)
-	 (lisp-mode             . paredit-mode)
-	 (lisp-interaction-mode . paredit-mode)
-	 (scheme-mode           . paredit-mode)
-	 (slime-repl-mode       . paredit-mode)
-	 (geiser-repl-mode      . paredit-mode)
-	 (prog-mode             . paredit-mode)))
+		 (lisp-mode             . paredit-mode)
+		 (lisp-interaction-mode . paredit-mode)
+		 (scheme-mode           . paredit-mode)
+		 (slime-repl-mode       . paredit-mode)
+		 (geiser-repl-mode      . paredit-mode)
+		 (prog-mode             . paredit-mode)))
 
 ;; - El Doc ---------------------------------------------------------
 (use-package eldoc
@@ -287,8 +294,8 @@
   :ensure org-plus-contrib
   :config
   (setq org-support-shift-select t
-	org-use-sub-superscripts '{}
-	org-export-with-sub-superscripts '{}))
+		org-use-sub-superscripts '{}
+		org-export-with-sub-superscripts '{}))
 
 (use-package org-bullets
   :ensure t
@@ -305,24 +312,24 @@
   (setq magit-git-global-arguments
 	(nconc magit-git-global-arguments
 	       '("-c" "color.ui=false"
-		 "-c" "color.diff=false"))))
+			 "-c" "color.diff=false"))))
 
 ;; - Common Lisp ----------------------------------------------------
 ;; ---- Implementations ---------------------------------------------
 (setq my/lisp-implementations                     ; Which Common Lisp are installed
       '((sbcl ("sbcl"))
-	(ccl ("ccl"))
-	(roswell ("ros" "run")))
+		(ccl ("ccl"))
+		(roswell ("ros" "run")))
       my/default-lisp (if (executable-find "ros") ; Find one to use as default
-			  'roswell
-			'sbcl))
+						  'roswell
+						'sbcl))
 
 ;; ---- Slime -------------------------------------------------------
 (use-package slime
-  :ensure slime-company 
+  :ensure slime-company
   :config
   (setq slime-lisp-implementations my/lisp-implementations
-	slime-default-lisp my/default-lisp)
+		slime-default-lisp my/default-lisp)
   (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
 
 ;; - Racket ---------------------------------------------------------
