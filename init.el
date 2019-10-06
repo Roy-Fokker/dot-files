@@ -356,6 +356,13 @@
   :config
   (setq geiser-active-implementations my/default-scheme))
 
+;; - C++ ------------------------------------------------------------
+(use-package cmake-mode
+  :ensure t
+  :mode ("CMakeLists.txt" ".cmake")
+  :hook (cmake-mode . (lambda ()
+						(add-to-list 'company-backends 'company-cmake))))
+
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
