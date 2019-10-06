@@ -363,6 +363,11 @@
   :hook (cmake-mode . (lambda ()
 						(add-to-list 'company-backends 'company-cmake))))
 
+;; - Markdown -------------------------------------------------------
+(use-package markdown-mode
+  :ensure markdown-mode+
+  :mode (".markdown" ".md"))
+
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
