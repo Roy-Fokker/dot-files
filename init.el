@@ -358,7 +358,7 @@
 
 ;; - C++ ------------------------------------------------------------
 (use-package cmake-mode
-  :ensure t
+  :ensure cmake-font-lock
   :mode ("CMakeLists.txt" ".cmake")
   :hook (cmake-mode . (lambda ()
 						(add-to-list 'company-backends 'company-cmake))))
