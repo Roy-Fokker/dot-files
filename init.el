@@ -357,7 +357,7 @@
   :config
   (setq geiser-active-implementations my/default-scheme))
 
-;; - C++ ------------------------------------------------------------
+;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
   :ensure cmake-font-lock
   :mode ("CMakeLists.txt" ".cmake")
