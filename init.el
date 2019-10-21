@@ -319,12 +319,12 @@
 ;; - Magit ----------------------------------------------------------
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status))
-  :config
-  (setq magit-git-global-arguments
-	(nconc magit-git-global-arguments
-	       '("-c" "color.ui=false"
-			 "-c" "color.diff=false"))))
+  :bind (("C-x g" . magit-status)))
+;; :config
+;; (setq magit-git-global-arguments
+;; 	  (nconc magit-git-global-arguments
+;; 			 '("-c" "color.ui=false"
+;; 			   "-c" "color.diff=false")))
 
 ;; - Common Lisp ----------------------------------------------------
 ;; ---- Implementations ---------------------------------------------
