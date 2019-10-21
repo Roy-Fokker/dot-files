@@ -289,12 +289,12 @@
 (use-package eldoc
   :ensure t
   :hook ((emacs-lisp-mode       . turn-on-eldoc-mode)
-	 (lisp-mode             . turn-on-eldoc-mode)
-	 (lisp-interaction-mode . turn-on-eldoc-mode)
-	 (scheme-mode           . turn-on-eldoc-mode)
-	 (slime-repl-mode       . turn-on-eldoc-mode)
-	 (geiser-repl-mode      . turn-on-eldoc-mode)
-	 (prog-mode             . turn-on-eldoc-mode)))
+		 (lisp-mode             . turn-on-eldoc-mode)
+		 (lisp-interaction-mode . turn-on-eldoc-mode)
+		 (scheme-mode           . turn-on-eldoc-mode)
+		 (slime-repl-mode       . turn-on-eldoc-mode)
+		 (geiser-repl-mode      . turn-on-eldoc-mode)
+		 (prog-mode             . turn-on-eldoc-mode)))
 
 (use-package eldoc-overlay
   :ensure t
