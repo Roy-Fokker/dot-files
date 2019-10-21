@@ -271,6 +271,7 @@
     :ensure t)
   (use-package common-lisp-snippets
     :ensure t)
+  (yas-reload-all)
   :hook (after-init . yas-global-mode))
 
 ;; - ParEdit --------------------------------------------------------
