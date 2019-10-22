@@ -10,21 +10,29 @@ if ($myWindowsPrincipal.IsInRole($adminRole)) {
 	$srcDir = (Get-Location).Path
 	$emacsAppDataDir = Join-Path -Path $env:APPDATA -ChildPath ".emacs.d"
 	$emacsHomeDir = Join-Path -Path (Resolve-Path ~).Path -ChildPath ".emacs.d"
-	$nvimHomeDir = Join-Path -Path (Resolve-Path ~).Path -ChildPath "AppData\Local\nvim"
+#	$nvimHomeDir = Join-Path -Path (Resolve-Path ~).Path -ChildPath "AppData\Local\nvim"
+
+	if (! (Test-Path $emacsAppDataDir)) {
+		New-Item -ItemType Directory -Path $emacsAppDataDir
+	}
+
+	if (! (Test-Path $emacsHomeDir)) {
+		New-Item -ItemType Directory -Path $emacsHomeDir
+	}
 
 	function New-SymLink {
-	param (
-		$FileName,
-		$TargetDir
-	)
-	$srcFile = Join-Path -Path $srcDir -ChildPath $FileName
-	$tgtFile = Join-Path -Path $targetDir -ChildPath $FileName
+		param (
+			$FileName,
+			$TargetDir
+		)
+		$srcFile = Join-Path -Path $srcDir -ChildPath $FileName
+		$tgtFile = Join-Path -Path $targetDir -ChildPath $FileName
 
-	if (Test-Path $tgtFile) {
-		Write-Error "File already exists! [$tgtFile]"
-	} else {
-		New-Item -ItemType SymbolicLink -Path $tgtFile -Value $srcFile
-	}
+		if (Test-Path $tgtFile) {
+			Write-Error "File already exists! [$tgtFile]"
+		} else {
+			New-Item -ItemType SymbolicLink -Path $tgtFile -Value $srcFile
+		}
 	}
 
 	New-SymLink -FileName .\init.el -TargetDir $emacsAppDataDir
@@ -35,7 +43,7 @@ if ($myWindowsPrincipal.IsInRole($adminRole)) {
 
 	New-SymLink -FileName .\.bashrc -TargetDir $env:APPDATA
 
-	New-SymLink -FileName .\init.vim -TargetDir $nvimHomeDir
+#	New-SymLink -FileName .\init.vim -TargetDir $nvimHomeDir
 } else {
 	Write-Error "This script requires Admin Privileges"
 }

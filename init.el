@@ -37,9 +37,12 @@
 			  mouse-wheel-scroll-amount '(1 ((shift) . 1))    ; one line at a time
 			  mouse-wheel-follow-mouse t                      ; scroll window under mouse
 			  find-file-visit-truename t                      ; find true path of a file
-			  gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3" ; fix for bug
 			  tab-width 4
 			  )
+
+;; Below is required to run emacs if installed via Msys2
+;; (setq-default gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3" ; fix for bug
+;; 			  )
 
 ;; ------------------------------------------------------------------
 ;; enable some convinence behaviours
@@ -368,6 +371,11 @@
 (use-package markdown-mode
   :ensure markdown-mode+
   :mode (".markdown" ".md"))
+
+;; - Language Server Protocol Mode ----------------------------------
+;; (use-package lsp-mode
+;;   :ensure t
+;;  )
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
