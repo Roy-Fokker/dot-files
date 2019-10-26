@@ -230,7 +230,7 @@
 (use-package winum
   :ensure t
   :bind (("C-`" . winum-select-window-by-number)
-		 ("M-0" . winum-select-window-0-or-10)
+		 ;; ("M-0" . winum-select-window-0-or-10)
 		 ("M-1" . winum-select-window-1)
 		 ("M-2" . winum-select-window-2)
 		 ("M-3" . winum-select-window-3)
@@ -240,6 +240,31 @@
 		 ("M-7" . winum-select-window-7)
 		 ("M-8" . winum-select-window-8))
   :hook (after-init . winum-mode))
+
+;; - Treemacs -------------------------------------------------------
+(use-package treemacs
+  :ensure t
+  :defer t
+  :config
+  (setq treemacs-python-executable "python.exe")
+  :bind
+  (:map global-map
+		("M-0"       . treemacs-select-window)
+		("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+		("<f8>"      . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-icons-dired
+  :after treemacs dired
+  :ensure t
+  :config (treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after treemacs magit
+  :ensure t)
 
 ;; - Company Mode ---------------------------------------------------
 (use-package company
