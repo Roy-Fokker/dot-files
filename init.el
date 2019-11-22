@@ -37,7 +37,8 @@
 			  mouse-wheel-scroll-amount '(1 ((shift) . 1))    ; one line at a time
 			  mouse-wheel-follow-mouse t                      ; scroll window under mouse
 			  find-file-visit-truename t                      ; find true path of a file
-			  tab-width 4
+			  tab-width 4                                     ; force tab to be 4 spaces
+			  w32-get-true-file-attributes nil                ; wonder if this helps with freezing
 			  )
 
 ;; Below is required to run emacs if installed via Msys2
