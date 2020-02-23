@@ -328,16 +328,6 @@
 		 (geiser-repl-mode      . turn-on-eldoc-mode)
 		 (prog-mode             . turn-on-eldoc-mode)))
 
-(use-package eldoc-overlay
-  :ensure t
-  :hook ((emacs-lisp-mode       . eldoc-overlay-mode)
-		 (lisp-mode             . eldoc-overlay-mode)
-		 (lisp-interaction-mode . eldoc-overlay-mode)
-		 (scheme-mode           . eldoc-overlay-mode)
-		 (slime-repl-mode       . eldoc-overlay-mode)
-		 (geiser-repl-mode      . eldoc-overlay-mode)
-		 (prog-mode             . eldoc-overlay-mode)))
-
 ;; - Org Mode -------------------------------------------------------
 (use-package org
   :mode (("\\.org$" . org-mode))
