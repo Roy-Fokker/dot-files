@@ -385,6 +385,11 @@
   :config
   (setq geiser-active-implementations my/default-scheme))
 
+;; ---- Racket-Mode -------------------------------------------------
+;; (use-package racket-mode
+;;   :ensure t
+;;   :mode ("\\.rkt[dl]?\\'" . racket-mode))
+
 ;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
   :ensure cmake-font-lock
