@@ -41,10 +41,6 @@
 			  w32-get-true-file-attributes nil                ; wonder if this helps with freezing
 			  )
 
-;; Below is required to run emacs if installed via Msys2
-;; (setq-default gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3" ; fix for bug
-;; 			  )
-
 ;; ------------------------------------------------------------------
 ;; enable some convinence behaviours
 (global-display-line-numbers-mode)  ; Display line-numbers in all buffers
@@ -348,11 +344,6 @@
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)))
-;; :config
-;; (setq magit-git-global-arguments
-;; 	  (nconc magit-git-global-arguments
-;; 			 '("-c" "color.ui=false"
-;; 			   "-c" "color.diff=false")))
 
 ;; - Common Lisp ----------------------------------------------------
 ;; ---- Implementations ---------------------------------------------
@@ -385,10 +376,6 @@
   :config
   (setq geiser-active-implementations my/default-scheme))
 
-;; ---- Racket-Mode -------------------------------------------------
-;; (use-package racket-mode
-;;   :ensure t
-;;   :mode ("\\.rkt[dl]?\\'" . racket-mode))
 
 ;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
@@ -403,9 +390,6 @@
   :mode (".markdown" ".md"))
 
 ;; - Language Server Protocol Mode ----------------------------------
-;; (use-package lsp-mode
-;;   :ensure t
-;;  )
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
