@@ -385,13 +385,20 @@
 
 ;; - Markdown -------------------------------------------------------
 (use-package markdown-mode
-  :ensure markdown-mode+
-  :mode (".markdown" ".md"))
+  :ensure t
+  :mode (("\\.md\\'"       . markdown-mode)
+		 ("\\.markdown\\'" . markdown-mode))
+  :init (setq-default markdown-hide-markup t))
 
 ;; - Language Server Protocol Mode ----------------------------------
+
+
+;; - Python ---------------------------------------------------------
+
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
 (provide 'init)
 ;;; init.el ends here
+
