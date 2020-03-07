@@ -185,9 +185,9 @@
 (use-package ivy
   :ensure t
   :init
+  (setq-default ivy-initial-input-alist nil)
   (setq ivy-use-virtual-buffers t
 		ivy-count-format "(%d/%d) "
-		ivy-initial-input-alist nil
 		ivy-re-builders-alist '((t . ivy--regex-fuzzy))
 		ivy-height 20)
   :hook (after-init . ivy-mode))
@@ -329,9 +329,9 @@
   :mode (("\\.org$" . org-mode))
   :ensure org-plus-contrib
   :config
-  (setq org-support-shift-select t
-		org-use-sub-superscripts '{}
-		org-export-with-sub-superscripts '{}))
+  (setq-default org-support-shift-select t
+				org-use-sub-superscripts '{}
+				org-export-with-sub-superscripts '{}))
 
 (use-package org-bullets
   :ensure t
@@ -374,8 +374,7 @@
 (use-package geiser
   :ensure t
   :config
-  (setq geiser-active-implementations my/default-scheme))
-
+  (setq-default geiser-active-implementations my/default-scheme))
 
 ;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
