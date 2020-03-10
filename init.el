@@ -129,7 +129,24 @@
       (progn
         (add-hook 'kill-emacs-hook 'emacs/save-framegeometry)
         (add-hook 'after-init-hook 'emacs/load-framegeometry)
-	)))
+		)))
+
+;; -----------------------------------------------------------------
+;; Helper functions to reload init.el when modified
+(eval-when-compile
+  ;; Open init file for emacs
+  (defun emacs/open-init-file ()
+	(interactive)
+	(find-file user-init-file))
+
+  ;; Reload init file
+  (defun emacs/reload-init-file ()
+	(interactive)
+	(load user-init-file))
+
+  ;; Set some global key bindings to invoke above two functions
+  (global-set-key [(control f2)] 'emacs/open-init-file)
+  (global-set-key [(control f5)] 'emacs/reload-init-file))
 
 ;; ------------------------------------------------------------------
 ;; Configure Package Archives
