@@ -1,0 +1,67 @@
+#+TITLE: Dot File Readme
+#+AUTHOR: Neel Raiyani
+#+STARTUP: content indent
+#+KEYWORDS: readme
+
+* Emacs Configuration
+Running the script below will create a symlink'ed file in 
+user's home directory. Usually =%APPDATA%\.emacs.d=
+
+Must be run in Admin Mode CMD shell
+#+begin_src shell
+  powershell -File ./CreateSymlinks.ps1
+#+end_src
+
+=.emacs-config.org= is not used. All the config is now managed
+via =init.el=.
+
+* Windows Terminal
+Setting up MSys2 in Windows Terminal use following
+#+begin_src js
+  {
+	  "acrylicOpacity": 0.75,
+	  "closeOnExit": true,
+	  "colorScheme": "Solarized Dark",
+	  "commandline": "E:\\msys2\\msys2_shell.cmd -defterm -no-start -mingw64",
+	  "cursorColor": "#FFFFFF",
+	  "cursorShape": "bar",
+	  "fontFace": "Cascadia Code",
+	  "fontSize": 10,
+	  "guid": "{09dc5eef-6840-4050-ae69-21e55e6a2e63}",
+	  "historySize": 9001,
+	  "icon": "ms-appdata:///roaming/msys2.ico",
+	  "name": "MSYS2 64",
+	  "padding": "0, 0, 0, 0",
+	  "snapOnInput": true,
+	  "useAcrylic": true
+  }
+#+end_src
+
+The ~commandline~ variable can be anyone one of following
+where ~%MSYS2_DIR%~ is path to where Msys2 x64 is installed.
+#+begin_src shell
+  # For MSys2 MinGW x64
+  %MSYS2_DIR%/msys2_shell.cmd -defterm -no-start -mingw64
+
+  # For MSys2 MinGW x32
+  %MSYS2_DIR%/msys2_shell.cmd -defterm -no-start -mingw32
+
+  # For MSys2
+  %MSYS2_DIR%/msys2_shell.cmd -defterm -no-start -msys2
+#+end_src
+
+* VIM Configuration
+VIM configuration is empty. Haven't figured it out yet.
+Both =.vimrc= and =init.vim= are empty.
+
+* Magit.sh
+This will launch Emacs with just Magit. It's pretty ugly.
+
+* Org Mode output style
+=notes-style.org= is to style the output from emacs org-mode.
+Mostly for HTML styling.
+
+* BASH
+=.bashrc= just style colours in bash console, mostly to override
+stupid ones default windows-bash uses.  
+Setup by =CreateSymlinks.ps1= as well.

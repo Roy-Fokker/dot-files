@@ -407,6 +407,10 @@
 		 ("\\.markdown\\'" . markdown-mode))
   :init (setq-default markdown-hide-markup t))
 
+;; - Powershell -----------------------------------------------------
+(use-package powershell
+  :ensure t)
+
 ;; - Language Server Protocol Mode ----------------------------------
 
 
