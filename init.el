@@ -6,7 +6,7 @@
 
 ;; ------------------------------------------------------------------
 ;; Change GC threshold for duration of init, technique from DOOM Emacs FAQ
-(setq gc-cons-threshold 2147483648               ; set gc threshold to 2GiB
+(setq gc-cons-threshold (* 2 1000 1000)     ; set gc threshold to 2GiB
       gc-cons-percentage 0.6)
 
 (defvar startup/file-name-handler-alist file-name-handler-alist) ; file handler check is not needed during start up
@@ -14,20 +14,26 @@
 
 (defun startup/reset-gc-and-file-handler ()
   "Reset the gc and file handler values."
-  (setq gc-cons-threshold 536870912  ; set gc threshold to 0.5GiB
+  (setq gc-cons-threshold (* 5 100 1000)  ; set gc threshold to 0.5GiB
         gc-cons-percentage 0.1
-        file-name-handler-alist startup/file-name-handler-alist))
+        file-name-handler-alist startup/file-name-handler-alist)
+  (garbage-collect)
+  t)
 
 ;; ------------------------------------------------------------------
 ;; Reset changed values to defaults
 ;; values taken from DOOM-Emacs FAQ
 (add-hook 'after-init-hook 'startup/reset-gc-and-file-handler)
 
+;; Tell emacs to garbage collect on focus lost
+(add-hook 'focus-out-hook #'garbage-collect)
+
 ;; ------------------------------------------------------------------
 ;; Set defaults for emacs variables
 (setq-default inhibit-startup-screen t                        ; Disable Emacs Welcome Screen
 			  backup-directory-alist `(("." . "backups"))     ; backup files in this directory
-			  custom-file "~/.emacs.d/.emacs-custom.el"       ; save all machine specific settings here
+			  custom-file (expand-file-name ".emacs-custom.el"; save all machine specific settings here
+											user-emacs-directory)
 			  auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
 			  package-enable-at-startup nil                   ; do not load packages before start up
 			  delete-by-moving-to-trash t                     ; delete moves to recycle bin
@@ -39,6 +45,8 @@
 			  find-file-visit-truename t                      ; find true path of a file
 			  tab-width 4                                     ; force tab to be 4 spaces
 			  w32-get-true-file-attributes nil                ; wonder if this helps with freezing
+			  help-window-select t                            ; Focus on new help windows when opened
+			  use-package-always-ensure t                     ; Tell use-package to always download missing packages
 			  )
 
 ;; ------------------------------------------------------------------
@@ -51,6 +59,7 @@
 (show-paren-mode t)                 ; Parenthesis highlighting
 (delete-selection-mode t)           ; Enable delete selection mode
 (cua-mode t)                        ; Enable CUA mode
+(fset 'yes-or-no-p 'y-or-n-p)       ; Change yes/no prompt to y/n
 
 ;; set some keybindings
 (global-set-key (kbd "<C-tab>") 'switch-to-next-buffer)
@@ -62,17 +71,18 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8-unix)
-(set-default-coding-systems 'utf-8-unix)
-(setq-default buffer-file-coding-system 'utf-8-unix
-              default-buffer-file-coding-system 'utf-8-unix)
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8
+              default-buffer-file-coding-system 'utf-8)
 (when (eq system-type 'windows-nt)
   (set-clipboard-coding-system 'utf-16le-dos))
 
 ;; ------------------------------------------------------------------
 ;; set font
-(set-frame-font "Source Code Pro 10")
 (setq inhibit-compacting-font-caches t)
+(set-face-attribute 'default nil :font "Source Code Pro")
+(set-fontset-font t 'latin "Noto Sans")
 
 ;; ------------------------------------------------------------------
 ;; Load custom file if it exist
@@ -355,7 +365,8 @@
   :hook (org-mode . org-bullets-mode))
 
 (use-package htmlize
-  :ensure t)
+;;  :ensure t
+  )
 
 ;; - Magit ----------------------------------------------------------
 (use-package magit
@@ -409,13 +420,29 @@
 
 ;; - Powershell -----------------------------------------------------
 (use-package powershell
-  :ensure t)
+  :ensure t
+  :mode (("\\.ps1\\'" . powershell-mode)))
 
 ;; - Language Server Protocol Mode ----------------------------------
 
 
 ;; - Python ---------------------------------------------------------
 
+
+;; - IRC ------------------------------------------------------------
+(use-package erc
+  :ensure t
+  :config
+  (add-to-list 'erc-modules 'notifications)
+  (add-to-list 'erc-modules 'spelling)
+  (erc-services-mode 1)
+  (erc-update-modules))
+(use-package erc-hl-nicks
+  :ensure t
+  :after erc)
+(use-package erc-image
+  :ensure t
+  :after erc)
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
