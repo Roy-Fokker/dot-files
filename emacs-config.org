@@ -3,32 +3,120 @@
 #+STARTUP: content indent
 #+KEYWORDS: config emacs init
 
-* Global Settings
-** Default
-#+BEGIN_SRC emacs-lisp
-  (setq-default inhibit-startup-screen t ; Disable Emacs Welcome Screen
-                indent-tabs-mode nil     ; Don't use hard tabs
+* Tangle Org on Save
+Generate ~emacs-config.el~ as soon as this org file is saved.
+This save doing it at emacs load time.
+
+Function to invoke when saving
+#+begin_src elisp
+  (defun my/tangle-org-save ()
+    (when (string= buffer-file-name
+                   (expand-filename "emacs-config.org" 
+                                    user-emacs-directory))
+      (org-babel-tangle)))
+#+end_src
+
+Hook into Emacs on-save trigger
+#+begin_src elisp
+  (add-hook 'after-save-hook 'my/tangle-org-save)
+#+end_src
+* Global Defaults
+** Garbage Collection
+Change GC threshold for duration of initialization,
+technique from DOOM Emacs FAQ.
+#+begin_src elisp
+  (setq gc-cons-threshold  (* 2 1000 1000)
+        gc-cons-percentage 0.6)
+#+end_src
+
+File handler check is not needed during startup. 
+Save the current file handler so we can reset it later
+#+begin_src elisp
+  (defvar startup/file-name-handler-alist file-name-handler-alist)
+  (setq file-name-handler-alist nil)
+#+end_src
+
+Function to reset both garbage collection threshold and file handler
+#+begin_src elisp
+    (defun startup/reset-gc-and-file-handler ()
+      (setq gc-cons-threshold  (* 5 100 1000)
+            gc-cons-percentage 0.1
+            file-name-handler-alist startup/file-name-handler-alist)
+      (garbage-collect)
+      t)
+#+end_src
+
+After Emacs finishes initialization call above function.
+#+begin_src elisp
+  (add-hook 'after-init-hook 'startup/reset-gc-and-file-handler)
+#+end_src
+
+Garbage Collect on losing focus.
+#+begin_src elisp
+  (add-hook 'focus-out-hook #'garbage-collect)
+#+end_src
+
+** Better Defaults
+Set basic default variables for emacs to make it more usable
+#+begin_src elisp
+  (setq-default inhibit-startup-screen t                        ; Disable Emacs Welcome Screen
+                backup-directory-alist `(("." . "backups"))     ; backup files in this directory
+                custom-file (expand-file-name ".emacs-custom.el"; save all machine specific settings here
+                                              user-emacs-directory)
+                auto-save-file-name-transforms '((".*"          ; transform backup file names
+                                                  "~/.emacs.d/auto-save-list/" t))
+                package-enable-at-startup nil                   ; do not load packages before start up
+                delete-by-moving-to-trash t                     ; delete moves to recycle bin
+                column-number-mode t                            ; display column number
+                show-paren-delay 0                              ; show matching immediately
+                scroll-conservatively most-positive-fixnum      ; scroll sensibly, don't jump around
+                mouse-wheel-scroll-amount '(1 ((shift) . 1))    ; one line at a time
+                mouse-wheel-follow-mouse t                      ; scroll window under mouse
+                find-file-visit-truename t                      ; find true path of a file
+                tab-width 4                                     ; force tab to be 4 spaces
+                w32-get-true-file-attributes nil                ; wonder if this helps with freezing
+                help-window-select t                            ; Focus on new help windows when opened
+                use-package-always-ensure t                     ; Tell use-package to always download missing packages
                 )
-#+END_SRC
+#+end_src
 
-** General
-#+BEGIN_SRC emacs-lisp
-  (setq backup-directory-alist `(("." . "backups"))    ; backup files in this directory
-        auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ; transform backup file names
-        package-enable-at-startup nil                  ; do not load packages before start up
-        delete-by-moving-to-trash t                    ; delete moves to recycle bin
-        version-control nil                            ; disable emacs version control
-        column-number-mode t                           ; display column number
-        show-paren-delay 0                             ; show matching immediately
-        scroll-conservatively  most-positive-fixnum    ; scroll sensibly, don't jump around
-        mouse-wheel-scroll-amount '(1 ((shift) . 1))   ; one line at a time
-        mouse-wheel-follow-mouse t                     ; scroll window under mouse
-        find-file-visit-truename t                     ; find true path of a file
-        )
-#+END_SRC
+** Load Custom File
+Load custom file if it exists. It will hold machine specific settings
+#+begin_src elisp
+  (defun emacs/load-custom-file ()
+    (when (file-exists-p custom-file)
+      (load custom-file)))
 
-** Editor
-#+BEGIN_SRC emacs-lisp
+  (if window-system
+      (add-hook 'after-init-hook 'emacs/load-custom-file))
+#+end_src
+
+** Text Encoding
+Tell emacs to use utf-8 as default text system
+#+begin_src elisp
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (setq-default buffer-file-coding-system 'utf-8
+                default-buffer-file-coding-system 'utf-8)
+  (when (eq system-type 'windows-nt)
+    (set-clipboard-coding-system 'utf-16le-dos))
+#+end_src
+
+** Editor Font
+Default font to use
+#+begin_src elisp
+  (setq inhibit-compacting-font-caches t)
+  (set-face-attribute 'default nil :font "Source Code Pro")
+  (set-fontset-font t 'latin "Noto Sans")
+#+end_src
+
+* Globally Enabled Modes
+Enable some convincence behaviours
+#+begin_src elisp
   (global-display-line-numbers-mode)  ; Display line-numbers in all buffers
   (global-hl-line-mode)               ; Highlight current line
   (menu-bar-mode -1)                  ; Hide menu bar
@@ -36,428 +124,28 @@
   (scroll-bar-mode -1)                ; Hide scroll bar
   (show-paren-mode t)                 ; Parenthesis highlighting
   (delete-selection-mode t)           ; Enable delete selection mode
-#+END_SRC
+  (cua-mode t)                        ; Enable CUA mode
+  (fset 'yes-or-no-p 'y-or-n-p)       ; Change yes/no prompt to y/n
+#+end_src
 
-** UTF-8
-#+BEGIN_SRC emacs-lisp
-  (setq locale-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8-unix)
-  (set-default-coding-systems 'utf-8-unix)
-  (setq-default buffer-file-coding-system 'utf-8-unix
-                default-buffer-file-coding-system 'utf-8-unix)
-  (when (eq system-type 'windows-nt)
-    (set-clipboard-coding-system 'utf-16le-dos))
-#+END_SRC
-** Font
-#+BEGIN_SRC emacs-lisp
-  (set-default-font "Source Code Pro 10")
-  (setq inhibit-compacting-font-caches t)
-#+END_SRC
+* Global Keybindings
+Keybinding to use regardless of current mode.
+Doesn't always work, but when it does is consistent with CUA patterns
+#+begin_src elisp
+(global-set-key (kbd "<C-tab>") 'switch-to-next-buffer)
+(global-set-key (kbd "<C-S-tab>") 'switch-to-prev-buffer)
+#+end_src
 
-
-* Packages
-** Diminish
-#+BEGIN_SRC emacs-lisp
-  (use-package diminish)
-#+END_SRC
-
-** Delight
-#+BEGIN_SRC emacs-lisp
-  (use-package delight)
-#+END_SRC
-
-** Org
-*** Add template for emacs-lisp blocks
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'org-structure-template-alist
-               '("sel" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
-#+END_SRC
-
-*** Improve the display of bullet points
-#+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :defer t
-    :after org
-    :hook
-    (org-mode . org-bullets-mode))
-#+END_SRC
-
-*** Code Block configuration
-#+BEGIN_SRC emacs-lisp
-  (setq org-src-fontify-natively t
-        org-src-tab-acts-natively t)
-#+END_SRC
-
-*** Diminish org-indent
-#+BEGIN_SRC emacs-lisp
-  (use-package org-indent
-    :ensure nil
-    :diminish)
-#+END_SRC
-
-*** Diminish orgsrc minor mode
-#+BEGIN_SRC emacs-lisp
-  (diminish 'org-src-mode)
-#+END_SRC
-
-** ELDoc
-with hooks for Emacs Lisp, Common Lisp, and Scheme
-#+BEGIN_SRC emacs-lisp
-  (use-package "eldoc"
-    :diminish eldoc-mode
-    :commands turn-on-eldoc-mode
-    :defer t
-    :hook
-    ((emacs-lisp-mode       . turn-on-eldoc-mode)
-     (common-lisp-mode      . turn-on-eldoc-mode)
-     (lisp-interaction-mode . turn-on-eldoc-mode)
-     (scheme-mode           . turn-on-eldoc-mode)))
-#+END_SRC
-
-** Magit
-with config to disable git.exe color when called by magit
-also bind =magit-status= to =Ctrl+x g= combo
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :defer t
-    :commands magit-get-top-dir
-    :bind
-    (("C-x g" . magit-status))
-    :config
-    (setq magit-git-global-arguments
-    (nconc magit-git-global-arguments
-           '("-c" "color.ui=false"
-             "-c" "color.diff=false"))))
-#+END_SRC
-
-** ParEdit
-with hooks for Emacs Lisp, Common Lisp, and Scheme
-#+BEGIN_SRC emacs-lisp
-  (use-package paredit
-    :delight "ⓟ"
-    :hook
-    ((lisp-mode             . paredit-mode)
-     (scheme-mode           . paredit-mode)
-     (emacs-lisp-mode       . paredit-mode)
-     (lisp-interaction-mode . paredit-mode)))
-#+END_SRC
-
-** Company
-*** Use Package and basic configuration
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :ensure t
-    :delight "ⓒ"
-    :commands global-company-mode
-    :init
-    (global-company-mode t)
-    :config
-    (setq company-idle-delay 0
-          company-minimum-prefix-lenght 3
-          company-show-numbers t)
-    :bind
-    ("<C-tab>"  . company-complete))
-#+END_SRC
-
-*** Org Mode specific configuration
-#+BEGIN_SRC emacs-lisp
-  (with-eval-after-load 'company
-    (defun org-keyword-backend (command &optional arg &rest ignored)
-      (interactive (list 'interactive))
-      (cl-case command
-        (interactive (company-begin-backend 'org-keyword-backend))
-        (prefix (and (eq major-mode 'org-mode)
-                     (cons (company-grab-line "^#\\+\\(\\w*\\)" 1) t)))
-        (candidates (mapcar #'upcase
-                            (cl-remove-if-not
-                             (lambda (c) (string-prefix-p arg c))
-                             (pcomplete-completions))))
-        (ignore-case t)
-        (duplicates t)))
-    (add-to-list 'company-backends 'org-keyword-backend))
-#+END_SRC
-
-*** Company-Quickhelp 
-#+BEGIN_SRC emacs-lisp
-  (use-package company-quickhelp
-    :after company
-    :config
-    (company-quickhelp-mode t)
-    (setq company-quickhelp-delay 0.5))
-#+END_SRC
-
-** YaSnippets
-*** Use Package
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :delight (yas-minor-mode "ⓨ")
-    :commands (yas-global-mode yas-reload-all)
-    :config
-    (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
-    :bind
-    ("M-/" . company-yasnippet))
-  (yas-reload-all)
-  (yas-global-mode)
-#+END_SRC
-*** Snippets
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet-snippets
-    :defer t
-    :after yasnippet)
-#+END_SRC
-
-** Counsel
-#+BEGIN_SRC emacs-lisp
-  (use-package counsel
-    :config
-    (use-package smex)
-    (use-package flx)
-    :bind
-    (("M-j" . counsel-M-x)
-     ("C-o" . counsel-find-file)))
-#+END_SRC
-
-** Ivy
-*** Use package
-#+BEGIN_SRC emacs-lisp
-  (use-package ivy
-    :diminish ivy-mode
-    :config
-    (ido-mode -1)
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t
-          ivy-count-format "%d/%d "
-          ivy-initial-inputs-alist nil
-          ivy-re-builders-alist '((t . ivy--regex-fuzzy))
-          ivy-extra-directories nil
-          ivy-height 20))
-#+END_SRC
-
-*** Sub package ivy-rich
-Richer =C-x b= buffer-switching Ivy Interface, with icons and colors
-#+BEGIN_SRC emacs-lisp
-  (use-package ivy-rich
-    :after ivy
-    :config
-    (ivy-rich-mode))
-#+END_SRC
-
-** Which Key
-enable it globally
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :diminish which-key-mode
-    :config
-    (which-key-mode))
-#+END_SRC
-
-** Winum
-#+BEGIN_SRC emacs-lisp
-  (use-package winum
-    :commands winum-mode
-    :bind (:map winum-keymap
-                ("C-`" . winum-select-window-by-number)
-                ("M-0" . winum-select-window-0-or-10)
-                ("M-1" . winum-select-window-1)
-                ("M-2" . winum-select-window-2)
-                ("M-3" . winum-select-window-3)
-                ("M-4" . winum-select-window-4)
-                ("M-5" . winum-select-window-5)
-                ("M-6" . winum-select-window-6)
-                ("M-7" . winum-select-window-7)
-                ("M-8" . winum-select-window-8))
-    :init
-    (winum-mode t))
-#+END_SRC
-
-** Undo Tree
-set to not show as minor-mode and enable globally
-#+BEGIN_SRC emacs-lisp
-  (use-package undo-tree
-    ;:diminish undo-tree-mode
-    :delight "(↩)"
-    :config
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t
-          undo-tree-visualizer-diff t))
-#+END_SRC
-
-** Rainbow Delimiters
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-    :hook
-    (prog-mode . rainbow-delimiters-mode))
-#+END_SRC
-
-** Sly
-*** Sly Multiple Lisp config and Setting default lisp based on if roswell is found
-#+BEGIN_SRC emacs-lisp
-  (setq sly-lisp-implementations
-        '((sbcl    ("sbcl"))
-          (ccl     ("ccl"))
-          (roswell ("ros" "run")))
-        sly-default-lisp (if (executable-find "ros")
-                             'roswell
-                           'sbcl))
-#+END_SRC
-
-*** use package
-#+BEGIN_SRC emacs-lisp
-  (use-package sly
-    :delight (sly-mode "(S)")
-    :defer t
-    :requires (sly-quicklisp sly-autoload)
-    :commands (sly sly-mode sly-editing-mode)
-    :hook
-    ((lisp-mode             . sly-editing-mode)
-     (lisp-interaction-mode . sly-mode)))
-#+END_SRC
-
-** Slime
-*** Slime multiple lisp configuration
-#+BEGIN_SRC emacs-lisp
-  ;; (setq slime-lisp-implementations
-  ;;       '((sbcl    ("sbcl"))
-  ;;         (ccl     ("ccl"))
-  ;;         (roswell ("ros" "run")))
-  ;;       slime-default-lisp (if (executable-find "ros")
-  ;;                            'roswell
-  ;;                          'sbcl))
-#+END_SRC
-*** Add Slime-Company
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package slime-company
-  ;;   :commands (slime-company))
-#+END_SRC
-*** use package
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package slime
-  ;;   :delight (slime-mode "(S)")
-  ;;   :commands (slime slime-lisp-mode-hook)
-  ;;   :config
-  ;;   (setq slime-net-coding-system 'utf-8-unix
-  ;;         slime-contribs '(slime-fancy
-  ;;                          slime-company))
-  ;;   :hook
-  ;;   ((lisp-mode             . slime-mode)
-  ;;    (lisp-interaction-mode . slime-mode)))
-#+END_SRC
-
-** Theme
-*** Spacemacs Theme
-#+BEGIN_SRC emacs-lisp
-  (use-package spacemacs-theme
-    :defer t
-    :init
-    (load-theme 'spacemacs-dark t))
-#+END_SRC
-
-*** Moe Theme
-Using spacemacs theme now
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package moe-theme
-  ;;   :disabled
-  ;;   :config
-  ;;   (load-theme 'moe-dark t))
-#+END_SRC
-
-*** All the Icons
-#+BEGIN_SRC emacs-lisp
-  (use-package all-the-icons)
-#+END_SRC
-
-optionally run function all-the-icons-install-fonts
-#+BEGIN_SRC emacs-lisp
-  ;; (all-the-icons-install-fonts)
-#+END_SRC
-
-ivy all the icons
-#+BEGIN_SRC emacs-lisp
-  (use-package all-the-icons-ivy
-    :config
-    (all-the-icons-ivy-setup))
-#+END_SRC
-
-*** Telephone Line
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package telephone-line
-  ;;   :config
-  ;;   (setq telephone-line-lhs
-  ;;         '((nil    . (telephone-line-window-number-segment))
-  ;;           (accent . (telephone-line-vc-segment
-  ;;                      telephone-line-erc-modified-channels-segment
-  ;;                      telephone-line-process-segment))
-  ;;           (nil    . (telephone-line-misc-info-segment
-  ;;                      telephone-line-airline-position-segment))
-  ;;           (accent . (telephone-line-buffer-modified-segment))
-  ;;           (nil    . (telephone-line-buffer-name-segment))))
-  ;;   (setq telephone-line-rhs
-  ;;         '((accent . (telephone-line-minor-mode-segment))
-  ;;           (nil    . (telephone-line-major-mode-segment))))
-  ;;   (telephone-line-mode t))
-#+END_SRC
-
-*** Spaceline
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package spaceline
-  ;;   :config
-  ;;   (setq powerline-default-separator 'arrow
-  ;;         powerline-height 20
-  ;;         spaceline-workspace-numbers-unicode t
-  ;;         spaceline-window-numbers-unicode nil
-  ;;         spaceline-separator-dir-left  '(left . right)
-  ;;         spaceline-separator-dir-right '(right . left)
-  ;;         )
-  ;;   (spaceline-spacemacs-theme)
-  ;;   (spaceline-toggle-battery-off)
-  ;;   (spaceline-toggle-hud-off)
-  ;;   (spaceline-toggle-workspace-number-on)
-  ;;   (spaceline-toggle-window-number-on))
-#+END_SRC
-
-*** Doom-Modeline
-#+BEGIN_SRC emacs-lisp
-  (use-package doom-modeline
-    :hook
-    (after-init . doom-modeline-mode)
-    :config
-    (setq doom-modeline-icon t
-          doom-modeline-major-mode-icon t
-          doom-modeline-major-mode-color-icon t
-          doom-modeline-minor-modes t
-          doom-modeline-buffer-file-name-style 'file-name))
-#+END_SRC
-
-* Helper Functions
-** Load Config Org
-#+BEGIN_SRC emacs-lisp
-  (defun helper/config-open ()
-    (interactive)
-    (find-file "~/.emacs.d/emacs-config.org"))
-#+END_SRC
-
-** Reload init.el
-#+BEGIN_SRC emacs-lisp
-  (defun helper/config-reload ()
-    (interactive)
-    (org-babel-load-file (expand-file-name "~/.emacs.d/emacs-config.org")))
-#+END_SRC
-
-
-* Save and Load Windows/Frame Geometry
-** Save and Load Functions
-*** Save Geometry function
-#+BEGIN_SRC emacs-lisp
+* Frame Geometry Functions
+** Save
+Function to save Window geometry and location.
+#+begin_src elisp
   (defun emacs/save-framegeometry ()
-    "Get the current frame's geometry and saves to ~/.emacs.d/framegeometry."
     (let ((frame-left      (frame-parameter (selected-frame) 'left))
           (frame-top       (frame-parameter (selected-frame) 'top))
           (frame-width     (frame-parameter (selected-frame) 'width))
           (frame-height    (frame-parameter (selected-frame) 'height))
-          (frame-size-file (expand-file-name "~/.emacs.d/framegeometry.el")))
+          (frame-size-file (expand-file-name "framegeometry.el" user-emacs-directory)))
 
       (when (not (number-or-marker-p frame-left))
         (setq frame-left 0))
@@ -479,32 +167,94 @@ ivy all the icons
          (format "        (height . %d)))\n" (max frame-height 0)))
         (when (file-writable-p frame-size-file)
           (write-file frame-size-file)))))
-#+END_SRC
-
-*** Load Geometry function
-#+BEGIN_SRC emacs-lisp
+#+end_src
+** Load
+Function to load Window geometry and location.
+#+begin_src elisp
   (defun emacs/load-framegeometry ()
-    "Loads ~/.emacs.d/framegeometry.el which should load \"
-     the previous frame's geometry."
-    (let ((frame-save-file (expand-file-name "~/.emacs.d/framegeometry.el")))
+    (let ((frame-save-file (expand-file-name "framegeometry.el"
+                                             user-emacs-directory)))
       (when (file-readable-p frame-save-file)
         (load-file frame-save-file))))
-#+END_SRC
-
-** Hook into Emacs init and close 
-#+BEGIN_SRC emacs-lisp
+#+end_src
+** Hooks
+Tell emacs to run the above functions based on trigger.
+But only if it is run as GUI Window mode.
+#+begin_src elisp
   (if window-system
-      (progn 
+      (progn
         (add-hook 'kill-emacs-hook 'emacs/save-framegeometry)
-        (add-hook 'after-init-hook 'emacs/load-framegeometry)))
-#+END_SRC
+        (add-hook 'after-init-hook 'emacs/load-framegeometry)
+        )))
+#+end_src
 
-* Global Key Bindings
-** For Config Editing and Reloading
-#+BEGIN_SRC emacs-lisp
-  (global-set-key [(control f2)] 'helper/config-open)   ; Open emacs-config.org
-  (global-set-key [(control f5)] 'helper/config-reload) ; Reload emacs-config.org
-#+END_SRC
+* Quick Load Configuration Org file
+** Load to Edit
+#+begin_src elisp
+  (defun emacs/open-init-file ()
+    (interactive)
+    (find-file (expand-file-name "emacs-config.org"
+                                 user-emacs-directory))
+#+end_src
+** Execute updated configuration
+Reload init file
+#+begin_src elisp
+  (defun emacs/reload-init-file ()
+    (interactive)
+    (load user-init-file))
+#+end_src
+** Keybindings
+Set some global key bindings to invoke above two functions
+#+begin_src elisp
+  (global-set-key [(control f2)] 'emacs/open-init-file)
+  (global-set-key [(control f5)] 'emacs/reload-init-file))
+#+end_src
 
+* Editor Theme
+** Theme
+** Icons
+** Modeline
+
+* Common Packages
+** Which Key
+** Rainbow Brackets
+** Window Number/Switcher
+** Project Tree
+** File, Buffer and Search
+
+* Programming Assistance
+** Auto completion
+** Linter
+** Snippets
+** Brackets Balancer
+** Documentation
+
+* Org Mode
+
+* Git Porceline
+
+* Language Server
+** LSP
+** DAP
+
+* Common Lisp
+** Implementations List
+** Interaction Mode
+
+* Scheme
+** Implementations List
+** Interaction Mode
+
+* C and C++
+** CMake
+** {Other things}??
+
+* Python
+
+* Markdown
+
+* Powershell
+
+* IRC
 
 
