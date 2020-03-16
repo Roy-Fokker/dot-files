@@ -3,6 +3,13 @@
 #+STARTUP: content indent
 #+KEYWORDS: config emacs init
 
+* Reference Links
+- [[https://github.com/rememberYou/.emacs.d/blob/master/config.org][rememberYou]]
+- [[https://github.com/jwiegley/dot-emacs/blob/master/init.el][J Wiegley]]
+- [[https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org][dotEmacs]]
+- [[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/][Jonathan Abennett]]
+- [[https://github.com/rubensts/.emacs.d][Rubensts]]
+
 * Tangle Org on Save
 Generate ~emacs-config.el~ as soon as this org file is saved.
 This save doing it at emacs load time.
