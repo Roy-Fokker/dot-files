@@ -400,6 +400,13 @@
 
 ;; - IRC ------------------------------------------------------------
 (use-package erc
+  :delight "ε "
+  :custom
+  (erc-fill-function 'erc-fill-static)
+  (erc-fill-static-center 20)
+  (erc-header-line-format nil)
+  (erc-insert-timestamp-function 'erc-insert-timestamp-left)
+  (erc-prompt (format "%19s" ">"))
   :config
   (add-to-list 'erc-modules 'notifications)
   (add-to-list 'erc-modules 'spelling)
