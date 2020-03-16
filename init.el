@@ -183,17 +183,14 @@
 
 ;; - Dracula Theme --------------------------------------------------
 (use-package dracula-theme
-  :ensure t
   :init
   (load-theme 'dracula t))
 
 ;; - All the icons --------------------------------------------------
-(use-package all-the-icons
-  :ensure t)
+(use-package all-the-icons)
 
 ;; - Doom Modeline --------------------------------------------------
 (use-package doom-modeline
-  :ensure t
   :init
   (setq doom-modeline-icon (display-graphic-p)
         doom-modeline-major-mode-icon t
@@ -205,12 +202,9 @@
   :hook (after-init . doom-modeline-mode))
 
 ;; - Smex Ivy Counsel Swiper Hydra ----------------------------------
-
-(use-package smex
-  :ensure t)
+(use-package smex)
 
 (use-package ivy
-  :ensure t
   :init
   (setq-default ivy-initial-input-alist nil)
   (setq ivy-use-virtual-buffers t
@@ -220,34 +214,27 @@
   :hook (after-init . ivy-mode))
 
 (use-package all-the-icons-ivy
-  :ensure t
   :config
   (all-the-icons-ivy-setup))
 
 (use-package ivy-rich
-  :ensure t
   :hook (after-init . ivy-rich-mode))
 
 (use-package counsel
-  :ensure t
   :bind (("M-x" . counsel-M-x)
 		 ("C-x C-f" . counsel-find-file)))
 
 (use-package swiper
-  :ensure t
   :bind (("C-s" . swiper)))
 
-(use-package ivy-hydra
-  :ensure t)
+(use-package ivy-hydra)
 
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
-  :ensure t
   :hook (after-init . which-key-mode))
 
 ;; - Rainbow Delimiters ---------------------------------------------
 (use-package rainbow-delimiters
-  :ensure t
   :hook ((prog-mode             . rainbow-delimiters-mode)
 		 (lisp-interaction-mode . rainbow-delimiters-mode)
 		 (slime-repl-mode       . rainbow-delimiters-mode)
@@ -255,7 +242,6 @@
 
 ;; - WiNum ----------------------------------------------------------
 (use-package winum
-  :ensure t
   :bind (("C-`" . winum-select-window-by-number)
 		 ;; ("M-0" . winum-select-window-0-or-10)
 		 ("M-1" . winum-select-window-1)
@@ -270,7 +256,6 @@
 
 ;; - Treemacs -------------------------------------------------------
 (use-package treemacs
-  :ensure t
   :defer t
   :config
   (setq treemacs-python-executable "python.exe")
@@ -286,16 +271,13 @@
 
 (use-package treemacs-icons-dired
   :after treemacs dired
-  :ensure t
   :config (treemacs-icons-dired-mode))
 
 (use-package treemacs-magit
-  :after treemacs magit
-  :ensure t)
+  :after treemacs magit)
 
 ;; - Company Mode ---------------------------------------------------
 (use-package company
-  :ensure t
   :config
   (setq company-idle-delay 0
 		company-minimum-prefix-length 2
@@ -304,23 +286,19 @@
   :hook (after-init . global-company-mode))
 
 (use-package company-quickhelp
-  :ensure t
   :config
   (company-quickhelp-mode))
 
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
-  :ensure t
   :config
   (global-flycheck-mode))
 
 (use-package flycheck-popup-tip
-  :ensure t
   :hook (flycheck-mode . flycheck-popup-tip-mode))
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
-  :ensure t
   :config
   (use-package yasnippet-snippets
     :ensure t)
@@ -331,7 +309,6 @@
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
-  :ensure t
   :hook ((emacs-lisp-mode       . paredit-mode)
 		 (lisp-mode             . paredit-mode)
 		 (lisp-interaction-mode . paredit-mode)
@@ -342,7 +319,6 @@
 
 ;; - El Doc ---------------------------------------------------------
 (use-package eldoc
-  :ensure t
   :hook ((emacs-lisp-mode       . turn-on-eldoc-mode)
 		 (lisp-mode             . turn-on-eldoc-mode)
 		 (lisp-interaction-mode . turn-on-eldoc-mode)
@@ -361,16 +337,12 @@
 				org-export-with-sub-superscripts '{}))
 
 (use-package org-bullets
-  :ensure t
   :hook (org-mode . org-bullets-mode))
 
-(use-package htmlize
-;;  :ensure t
-  )
+(use-package htmlize)
 
 ;; - Magit ----------------------------------------------------------
 (use-package magit
-  :ensure t
   :bind (("C-x g" . magit-status)))
 
 ;; - Common Lisp ----------------------------------------------------
@@ -400,7 +372,6 @@
 
 ;; ---- Geiser ------------------------------------------------------
 (use-package geiser
-  :ensure t
   :config
   (setq-default geiser-active-implementations my/default-scheme))
 
@@ -413,14 +384,12 @@
 
 ;; - Markdown -------------------------------------------------------
 (use-package markdown-mode
-  :ensure t
   :mode (("\\.md\\'"       . markdown-mode)
 		 ("\\.markdown\\'" . markdown-mode))
   :init (setq-default markdown-hide-markup t))
 
 ;; - Powershell -----------------------------------------------------
 (use-package powershell
-  :ensure t
   :mode (("\\.ps1\\'" . powershell-mode)))
 
 ;; - Language Server Protocol Mode ----------------------------------
@@ -431,17 +400,14 @@
 
 ;; - IRC ------------------------------------------------------------
 (use-package erc
-  :ensure t
   :config
   (add-to-list 'erc-modules 'notifications)
   (add-to-list 'erc-modules 'spelling)
   (erc-services-mode 1)
   (erc-update-modules))
 (use-package erc-hl-nicks
-  :ensure t
   :after erc)
 (use-package erc-image
-  :ensure t
   :after erc)
 
 ;; ------------------------------------------------------------------
