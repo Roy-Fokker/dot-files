@@ -297,6 +297,19 @@
 (use-package flycheck-popup-tip
   :hook (flycheck-mode . flycheck-popup-tip-mode))
 
+;; - Flyspell -------------------------------------------------------
+(use-package flyspell
+  :config
+  (setq ispell-program-name "aspell")
+  :hook ((prog-mode     . flyspell-prog-mode)
+		 (org-mode      . flyspell-mode)
+		 (text-mode     . flyspell-mode)
+		 (markdown-mode . flyspell-mode)))
+
+(use-package flyspell-popup
+  :bind (:map flyspell-mode-map
+			  ("C-." . flyspell-popup-correct)))
+
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
   :config
