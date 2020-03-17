@@ -3,13 +3,14 @@
 #+STARTUP: content indent
 #+KEYWORDS: config emacs init
 
+
 * Reference Links
 - [[https://github.com/rememberYou/.emacs.d/blob/master/config.org][rememberYou]]
 - [[https://github.com/jwiegley/dot-emacs/blob/master/init.el][J Wiegley]]
 - [[https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org][dotEmacs]]
 - [[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/][Jonathan Abennett]]
 - [[https://github.com/rubensts/.emacs.d][Rubensts]]
-
+  
 * Tangle Org on Save
 Generate ~emacs-config.el~ as soon as this org file is saved.
 This save doing it at emacs load time.
@@ -219,15 +220,113 @@ Set some global key bindings to invoke above two functions
 
 * Editor Theme
 ** Theme
+Using Dracula theme. 
+#+begin_src elisp
+  (use-package dracula-theme
+    :init
+    (load-theme 'dracula t))
+#+end_src
 ** Icons
+All the icons package. Not sure if it's used
+#+begin_src elisp
+  (use-package all-the-icons)
+#+end_src
 ** Modeline
+Theme the mode line using Doom Emacs's modeline package.
+#+begin_src elisp
+  (use-package doom-modeline
+    :init
+    (setq doom-modeline-icon (display-graphic-p)
+          doom-modeline-major-mode-icon t
+          doom-modeline-major-mode-color-icon t
+          doom-modeline-minor-modes t)
+    :custom-face
+    (doom-modeline-bar ((t (:background "#bd93f9"))))
+    (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
+    :hook (after-init . doom-modeline-mode))
+#+end_src
 
 * Common Packages
 ** Which Key
+#+begin_src elisp
+  (use-package which-key
+    :hook (after-init . which-key-mode))
+#+end_src
 ** Rainbow Brackets
+#+begin_src elisp
+  (use-package rainbow-delimiters
+    :hook ((prog-mode             . rainbow-delimiters-mode)
+           (lisp-interaction-mode . rainbow-delimiters-mode)
+           (slime-repl-mode       . rainbow-delimiters-mode)
+           (geiser-repl-mode      . rainbow-delimiters-mode)))
+#+end_src
 ** Window Number/Switcher
+#+begin_src elisp
+  (use-package winum
+    :bind (("C-`" . winum-select-window-by-number)
+           ;; ("M-0" . winum-select-window-0-or-10)
+           ("M-1" . winum-select-window-1)
+           ("M-2" . winum-select-window-2)
+           ("M-3" . winum-select-window-3)
+           ("M-4" . winum-select-window-4)
+           ("M-5" . winum-select-window-5)
+           ("M-6" . winum-select-window-6)
+           ("M-7" . winum-select-window-7)
+           ("M-8" . winum-select-window-8))
+    :hook (after-init . winum-mode))
+#+end_src
 ** Project Tree
+#+begin_src elisp
+  (use-package treemacs
+    :defer t
+    :config'
+    (setq treemacs-python-executable "python.exe")
+    :bind
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("<f8>"      . treemacs)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag)))
+
+  (use-package treemacs-icons-dired
+    :after treemacs dired
+    :config (treemacs-icons-dired-mode))
+
+  (use-package treemacs-magit
+    :after treemacs magit)
+#+end_src
 ** File, Buffer and Search
+#+begin_src elisp
+  (use-package smex)
+
+  (use-package ivy
+    :init
+    (setq-default ivy-initial-input-alist nil)
+    (setq ivy-use-virtual-buffers t
+          ivy-count-format "(%d/%d) "
+          ivy-re-builders-alist '((t . ivy--regex-fuzzy))
+          ivy-height 20)
+    :hook (after-init . ivy-mode))
+
+  (use-package all-the-icons-ivy
+    :config
+    (all-the-icons-ivy-setup))
+
+  (use-package ivy-rich
+    :hook (after-init . ivy-rich-mode))
+
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x)
+           ("C-x C-f" . counsel-find-file)))
+
+  (use-package swiper
+    :bind (("C-s" . swiper)))
+
+  (use-package ivy-hydra)
+#+end_src
 
 * Programming Assistance
 ** Auto completion

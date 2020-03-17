@@ -14,7 +14,7 @@
 
 (defun startup/reset-gc-and-file-handler ()
   "Reset the gc and file handler values."
-  (setq gc-cons-threshold (* 5 100 1000)  ; set gc threshold to 0.5GiB
+  (setq gc-cons-threshold (* 1 1000 1000)  ; set gc threshold to 0.5GiB
         gc-cons-percentage 0.1
         file-name-handler-alist startup/file-name-handler-alist)
   (garbage-collect)
@@ -81,8 +81,10 @@
 ;; ------------------------------------------------------------------
 ;; set font
 (setq inhibit-compacting-font-caches t)
-(set-face-attribute 'default nil :font "Source Code Pro")
+(set-face-attribute 'default nil :font "Cascadia Code")
 (set-fontset-font t 'latin "Noto Sans")
+(set-face-attribute 'mode-line nil :family "Segoe UI Symbol" :height 100)
+(set-face-attribute 'mode-line-inactive nil :family "Segoe UI Symbol" :height 100)
 
 ;; ------------------------------------------------------------------
 ;; Load custom file if it exist
@@ -181,6 +183,9 @@
 (eval-when-compile
   (require 'use-package))
 
+;; - Delighted ------------------------------------------------------
+(use-package delight)
+
 ;; - Dracula Theme --------------------------------------------------
 (use-package dracula-theme
   :init
@@ -205,6 +210,7 @@
 (use-package smex)
 
 (use-package ivy
+  :delight "֏ "
   :init
   (setq-default ivy-initial-input-alist nil)
   (setq ivy-use-virtual-buffers t
@@ -231,6 +237,7 @@
 
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
+  :delight
   :hook (after-init . which-key-mode))
 
 ;; - Rainbow Delimiters ---------------------------------------------
@@ -278,6 +285,7 @@
 
 ;; - Company Mode ---------------------------------------------------
 (use-package company
+  :delight "ⓒ"
   :config
   (setq company-idle-delay 0
 		company-minimum-prefix-length 2
@@ -291,6 +299,7 @@
 
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
+  :delight "(c) "
   :config
   (global-flycheck-mode))
 
@@ -298,30 +307,34 @@
   :hook (flycheck-mode . flycheck-popup-tip-mode))
 
 ;; - Flyspell -------------------------------------------------------
-(use-package flyspell
-  :config
-  (setq ispell-program-name "aspell")
-  :hook ((prog-mode     . flyspell-prog-mode)
-		 (org-mode      . flyspell-mode)
-		 (text-mode     . flyspell-mode)
-		 (markdown-mode . flyspell-mode)))
+;; (use-package flyspell
+;;   :delight "(s) "
+;;   :config
+;;   (setq ispell-program-name "aspell")
+;;   :hook ((prog-mode     . flyspell-prog-mode)
+;; 		 (org-mode      . flyspell-mode)
+;; 		 (text-mode     . flyspell-mode)
+;; 		 (markdown-mode . flyspell-mode)))
 
-(use-package flyspell-popup
-  :bind (:map flyspell-mode-map
-			  ("C-." . flyspell-popup-correct)))
+;; (use-package flyspell-popup
+;;   :bind (:map flyspell-mode-map
+;; 			  ("C-." . flyspell-popup-correct)))
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
+  :delight "(y) "
   :config
   (use-package yasnippet-snippets
     :ensure t)
   (use-package common-lisp-snippets
     :ensure t)
+  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
   (yas-reload-all)
   :hook (after-init . yas-global-mode))
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
+  :delight "(p) "
   :hook ((emacs-lisp-mode       . paredit-mode)
 		 (lisp-mode             . paredit-mode)
 		 (lisp-interaction-mode . paredit-mode)
@@ -332,6 +345,7 @@
 
 ;; - El Doc ---------------------------------------------------------
 (use-package eldoc
+  :delight "(d) "
   :hook ((emacs-lisp-mode       . turn-on-eldoc-mode)
 		 (lisp-mode             . turn-on-eldoc-mode)
 		 (lisp-interaction-mode . turn-on-eldoc-mode)
