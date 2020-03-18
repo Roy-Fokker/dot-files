@@ -183,270 +183,81 @@
 (eval-when-compile
   (require 'use-package))
 
-;; - Delighted ------------------------------------------------------
-(use-package delight)
 
-;; - Dracula Theme --------------------------------------------------
-(use-package dracula-theme
-  :init
-  (load-theme 'dracula t))
 
-;; - All the icons --------------------------------------------------
-(use-package all-the-icons)
-
-;; - Doom Modeline --------------------------------------------------
-(use-package doom-modeline
-  :init
-  (setq doom-modeline-icon (display-graphic-p)
-        doom-modeline-major-mode-icon t
-        doom-modeline-major-mode-color-icon t
-        doom-modeline-minor-modes t)
-  :custom-face
-  (doom-modeline-bar ((t (:background "#bd93f9"))))
-  (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
-  :hook (after-init . doom-modeline-mode))
-
-;; - Smex Ivy Counsel Swiper Hydra ----------------------------------
-(use-package smex)
 
 (use-package ivy
-  :delight "֏ "
   :init
   (setq-default ivy-initial-input-alist nil)
   (setq ivy-use-virtual-buffers t
-		ivy-count-format "(%d/%d) "
-		ivy-re-builders-alist '((t . ivy--regex-fuzzy))
-		ivy-height 20)
   :hook (after-init . ivy-mode))
 
-(use-package all-the-icons-ivy
-  :config
-  (all-the-icons-ivy-setup))
 
 (use-package ivy-rich
   :hook (after-init . ivy-rich-mode))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
-		 ("C-x C-f" . counsel-find-file)))
 
 (use-package swiper
   :bind (("C-s" . swiper)))
 
-(use-package ivy-hydra)
-
-;; - Which Key ------------------------------------------------------
-(use-package which-key
-  :delight
-  :hook (after-init . which-key-mode))
-
-;; - Rainbow Delimiters ---------------------------------------------
-(use-package rainbow-delimiters
-  :hook ((prog-mode             . rainbow-delimiters-mode)
-		 (lisp-interaction-mode . rainbow-delimiters-mode)
-		 (slime-repl-mode       . rainbow-delimiters-mode)
-		 (geiser-repl-mode      . rainbow-delimiters-mode)))
-
 ;; - WiNum ----------------------------------------------------------
 (use-package winum
   :bind (("C-`" . winum-select-window-by-number)
-		 ;; ("M-0" . winum-select-window-0-or-10)
-		 ("M-1" . winum-select-window-1)
-		 ("M-2" . winum-select-window-2)
-		 ("M-3" . winum-select-window-3)
-		 ("M-4" . winum-select-window-4)
-		 ("M-5" . winum-select-window-5)
-		 ("M-6" . winum-select-window-6)
-		 ("M-7" . winum-select-window-7)
-		 ("M-8" . winum-select-window-8))
   :hook (after-init . winum-mode))
 
-;; - Treemacs -------------------------------------------------------
-(use-package treemacs
-  :defer t
   :config
-  (setq treemacs-python-executable "python.exe")
-  :bind
-  (:map global-map
-		("M-0"       . treemacs-select-window)
-		("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-		("<f8>"      . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
-
-(use-package treemacs-icons-dired
-  :after treemacs dired
-  :config (treemacs-icons-dired-mode))
-
-(use-package treemacs-magit
-  :after treemacs magit)
-
-;; - Company Mode ---------------------------------------------------
 (use-package company
-  :delight "ⓒ"
   :config
-  (setq company-idle-delay 0
-		company-minimum-prefix-length 2
-		company-selection-wrap-around t)
-  (company-tng-configure-default)
-  :hook (after-init . global-company-mode))
 
 (use-package company-quickhelp
-  :config
-  (company-quickhelp-mode))
 
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
-  :delight "(c) "
-  :config
-  (global-flycheck-mode))
-
-(use-package flycheck-popup-tip
-  :hook (flycheck-mode . flycheck-popup-tip-mode))
-
-;; - Flyspell -------------------------------------------------------
-;; (use-package flyspell
-;;   :delight "(s) "
-;;   :config
-;;   (setq ispell-program-name "aspell")
-;;   :hook ((prog-mode     . flyspell-prog-mode)
-;; 		 (org-mode      . flyspell-mode)
-;; 		 (text-mode     . flyspell-mode)
-;; 		 (markdown-mode . flyspell-mode)))
-
-;; (use-package flyspell-popup
-;;   :bind (:map flyspell-mode-map
-;; 			  ("C-." . flyspell-popup-correct)))
-
-;; - YA Snippets ----------------------------------------------------
-(use-package yasnippet
-  :delight "(y) "
-  :config
-  (use-package yasnippet-snippets
-    :ensure t)
-  (use-package common-lisp-snippets
-    :ensure t)
-  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
-  (yas-reload-all)
-  :hook (after-init . yas-global-mode))
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
   :delight "(p) "
-  :hook ((emacs-lisp-mode       . paredit-mode)
-		 (lisp-mode             . paredit-mode)
-		 (lisp-interaction-mode . paredit-mode)
-		 (scheme-mode           . paredit-mode)
-		 (slime-repl-mode       . paredit-mode)
-		 (geiser-repl-mode      . paredit-mode)
-		 (prog-mode             . paredit-mode)))
+
+
+;; - All the icons --------------------------------------------------
+
+;; - Doom Modeline --------------------------------------------------
+
+;; - Treemacs -------------------------------------------------------
+
+;; - Flyspell -------------------------------------------------------
 
 ;; - El Doc ---------------------------------------------------------
-(use-package eldoc
-  :delight "(d) "
-  :hook ((emacs-lisp-mode       . turn-on-eldoc-mode)
-		 (lisp-mode             . turn-on-eldoc-mode)
-		 (lisp-interaction-mode . turn-on-eldoc-mode)
-		 (scheme-mode           . turn-on-eldoc-mode)
-		 (slime-repl-mode       . turn-on-eldoc-mode)
-		 (geiser-repl-mode      . turn-on-eldoc-mode)
-		 (prog-mode             . turn-on-eldoc-mode)))
 
 ;; - Org Mode -------------------------------------------------------
-(use-package org
-  :mode (("\\.org$" . org-mode))
-  :ensure org-plus-contrib
-  :config
-  (setq-default org-support-shift-select t
-				org-use-sub-superscripts '{}
-				org-export-with-sub-superscripts '{}))
-
-(use-package org-bullets
-  :hook (org-mode . org-bullets-mode))
-
-(use-package htmlize)
-
-;; - Magit ----------------------------------------------------------
-(use-package magit
-  :bind (("C-x g" . magit-status)))
 
 ;; - Common Lisp ----------------------------------------------------
 ;; ---- Implementations ---------------------------------------------
-(defvar my/lisp-implementations nil "List of default Lisp implementations.")
 (defvar my/default-lisp nil "Default Lisp implementation to use.")
-(setq my/lisp-implementations                     ; Which Common Lisp are installed
-	  '((sbcl ("sbcl"))
-		(ccl ("ccl"))
-		(roswell ("ros" "run")))
-	  my/default-lisp (if (executable-find "ros") ; Find one to use as default
-						  'roswell
-						'sbcl))
-
-;; ---- Slime -------------------------------------------------------
-(use-package slime
-  :ensure slime-company
-  :config
-  (setq slime-lisp-implementations my/lisp-implementations
-		slime-default-lisp my/default-lisp)
-  (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
+(setq my/default-lisp 'sbcl)
 
 ;; - Racket ---------------------------------------------------------
 ;; ---- Implementations ---------------------------------------------
 (defvar my/default-scheme nil "Default Scheme implementation to use.")
 (setq my/default-scheme '(racket))
 
-;; ---- Geiser ------------------------------------------------------
-(use-package geiser
-  :config
-  (setq-default geiser-active-implementations my/default-scheme))
-
 ;; - CMake ----------------------------------------------------------
-(use-package cmake-mode
-  :ensure cmake-font-lock
-  :mode ("CMakeLists.txt" ".cmake")
-  :hook (cmake-mode . (lambda ()
-						(add-to-list 'company-backends 'company-cmake))))
 
 ;; - Markdown -------------------------------------------------------
-(use-package markdown-mode
-  :mode (("\\.md\\'"       . markdown-mode)
-		 ("\\.markdown\\'" . markdown-mode))
-  :init (setq-default markdown-hide-markup t))
 
 ;; - Powershell -----------------------------------------------------
-(use-package powershell
-  :mode (("\\.ps1\\'" . powershell-mode)))
 
 ;; - Language Server Protocol Mode ----------------------------------
 
-
 ;; - Python ---------------------------------------------------------
 
-
 ;; - IRC ------------------------------------------------------------
-(use-package erc
-  :delight "ε "
-  :custom
-  (erc-fill-function 'erc-fill-static)
-  (erc-fill-static-center 20)
-  (erc-header-line-format nil)
-  (erc-insert-timestamp-function 'erc-insert-timestamp-left)
-  (erc-prompt (format "%19s" ">"))
-  :config
-  (add-to-list 'erc-modules 'notifications)
-  (add-to-list 'erc-modules 'spelling)
-  (erc-services-mode 1)
-  (erc-update-modules))
-(use-package erc-hl-nicks
-  :after erc)
-(use-package erc-image
-  :after erc)
+
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
 (provide 'init)
 ;;; init.el ends here
-
