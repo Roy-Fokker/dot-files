@@ -1,25 +1,111 @@
+;;; -*- lexical-binding: t; -*-
+;;; init.el --- Init file for emacs
 ;;; Commentary:
 ;; This file bootstraps the configuration of Emacs
 
 ;;; Code:
 
+;; - Garbage Collection setting -------------------------------------
+;; Techniques borrowed from DOOM Emacs FAQ
 
+(defvar *my/init-file-name-handler-alist* file-name-handler-alist "Save file name handler till startup is done.")
 
+(defun my/defer-garbage-collection ()
+  "Function to defer garbage collection."
+  (setq gc-cons-threshold most-positive-fixnum
+	gc-cons-percentage 0.6))
 
+(defun my/restore-garbage-collection ()
+  "Function to restore garbage collection."
+  (run-at-time 1 nil
+	       (lambda ()
+		 (setq gc-cons-threshold (* 16 1024 1024)
+		       gc-cons-percentage 0.1))))
 
+(defun my/restore-file-name-handler ()
+  "Restore file-name-handler list."
+  (setq file-name-handler-alist *my/init-file-name-handler-alist*))
+
+(defun my/restore-gc-and-file-handler ()
+  "Call restore functions for both gc and file-handler."
+  (my/restore-garbage-collection)
+  (my/restore-file-name-handler)
+  (garbage-collect))
+
+(setq file-name-handler-alist nil)
+(my/defer-garbage-collection)
+
+(add-hook 'after-init-hook #'my/restore-gc-and-file-handler())
+(add-hook 'minibuffer-setup-hook #'my/defer-garbage-collection)
+(add-hook 'minibuffer-exit-hook #'my/restore-garbage-collection)
 (add-hook 'focus-out-hook #'garbage-collect)
 
+;; - Basic Behaviour ------------------------------------------------
+;; Disable GUI elements
+(tool-bar-mode -1)                              ; Disable tool bar
+(menu-bar-mode -1)                              ; Disable menu bar
+(scroll-bar-mode -1)                            ; Hide scroll bar
 
+;; Editor line behaviour
+(global-display-line-numbers-mode)              ; Display line-numbers in all buffers
+(global-hl-line-mode)                           ; Highlight current line
+(show-paren-mode t)                             ; Parenthesis highlighting
 
+(defalias 'yes-or-no-p 'y-or-n-p)               ; Change yes/no prompt to y/n
+
+;; Use utf-8 everywhere.
+(prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
+(setq-default default-buffer-file-coding-system 'utf-8)
+
+;; Set editor values to preferences
+(setq inhibit-startup-screen t                      ; Disable startup screen.
+      visible-bell 1                                ; Disable audible beeps.
+      tab-width 4                                   ; Set tab width to 4 spaces.
+      backup-inhibited t                            ; Don't use file backups.
+      cursor-in-non-selected-windows 'hollow        ; Don't show cursors in inactive window.
+      make-pointer-invisible t                      ; Hide mouse when typing.
+      fast-but-imprecise-scrolling nil              ; Not sure what this does??!
+      jit-lock-defer-time 0                         ; don't wait for jit.
+      select-enable-clipboard t                     ; integrate with system clipboard
+      x-select-request-type '(UTF8_STRING           ; Treat clipboard input as utf8
+			      COMPOUND_TEXT         ;   then other in list.
+			      TEXT
+			      STRING)
+      mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
+      scroll-preserve-screen-position t             ; Preserve line/column position.
+      delete-old-versions -1                        ; Delete execess backup files
+      backup-directory-alist `(("." . "backups"))   ; where to put backup files
+      vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
+      find-file-visit-truename t                    ; find true path of the file.
+      )
+
+(setq-default frame-title-format "%b %& emacs"                 ; Window Title => {Buffer Name} {Modified Status}
+	      delete-by-moving-to-trash t                      ; delete moves to recycle bin
+	      column-number-mode t                             ; display column number
+	      show-paren-delay 0                               ; show matching immediately
+	      scroll-conservatively  most-positive-fixnum      ; scroll sensibly, don't jump around
+	      mouse-wheel-scroll-amount '(1 ((shift) . 1))     ; one line at a time
+	      mouse-wheel-follow-mouse t                       ; scroll window under mouse
+	      find-file-visit-truename t                       ; find true path of a file
+	      custom-file (expand-file-name ".emacs-custom.el" ; save machine specific settings here
+					    user-emacs-directory)
+	      indicate-empty-lines t                           ; Show empty lines
+	      truncate-lines t                                 ; disable word wrap
+	      default-tab-width 4                              ; Default tab width is also 4 spaces.
+	      )
 
 ;; ------------------------------------------------------------------
+;; Load Custom file if it exists
 (eval-when-compile
+  (defun my/load-custom-file ()
     (when (file-exists-p custom-file)
       (load custom-file)))
 
   (if window-system
+      (add-hook 'after-init-hook #'my/load-custom-file)))
 
 ;; ------------------------------------------------------------------
 ;; Configure Package Archives
@@ -44,43 +130,121 @@
 (eval-when-compile
   (require 'use-package))
 
+(setq use-package-always-ensure t ; always download on first run
+      use-package-always-defer  t ; always defer loading packages
+      )
 
+;; - Delight or Diminish --------------------------------------------
+(use-package diminish)
+(use-package delight)
 
+;; - Which Key ------------------------------------------------------
+(use-package which-key
+  :diminish
+  :hook (after-init . which-key-mode))
 
+;; - Ivy ------------------------------------------------------------
 (use-package ivy
+  :diminish
   :init
   (setq-default ivy-initial-input-alist nil)
   (setq ivy-use-virtual-buffers t
+	ivy-count-format "(%d/%d) "
+	ivy-height 20)
   :hook (after-init . ivy-mode))
 
+(use-package all-the-icons-ivy-rich
+  :hook (after-init . all-the-icons-ivy-rich-mode))
 
 (use-package ivy-rich
   :hook (after-init . ivy-rich-mode))
 
+(use-package ivy-hydra)
+
+;; - Counsel --------------------------------------------------------
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
+	 ("C-x C-f" . counsel-find-file)))
 
+;; - Swiper ---------------------------------------------------------
 (use-package swiper
   :bind (("C-s" . swiper)))
 
 ;; - WiNum ----------------------------------------------------------
 (use-package winum
   :bind (("C-`" . winum-select-window-by-number)
+	 ("M-1" . winum-select-window-1)
+	 ("M-2" . winum-select-window-2)
+	 ("M-3" . winum-select-window-3)
+	 ("M-4" . winum-select-window-4)
+	 ("M-5" . winum-select-window-5)
+	 ("M-6" . winum-select-window-6)
+	 ("M-7" . winum-select-window-7)
+	 ("M-8" . winum-select-window-8))
   :hook (after-init . winum-mode))
 
+;; - Rainbow Delimiters ---------------------------------------------
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+;; - Theme ----------------------------------------------------------
+(use-package inkpot-theme
+  :init
+  (load-theme 'inkpot t))
+
+;; - YA Snippets ----------------------------------------------------
+(use-package yasnippet-snippets)
+
+(use-package common-lisp-snippets)
+
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :hook (after-init . yas-global-mode)
   :config
+  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
+
+;; - Company --------------------------------------------------------
 (use-package company
+  :diminish
+  :commands (company-complete-common company-dabbrev)
+  :hook (after-init . global-company-mode)
+  :preface
+  ;; enable yasnippet everywhere
+  (defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
+  (defun company-mode/backend-with-yas (backend)
+    (if (or
+         (not company-mode/enable-yas)
+         (and (listp backend) (member 'company-yasnippet backend)))
+        backend
+      (append (if (consp backend) backend (list backend))
+              '(:with company-yasnippet))))
   :config
+  (setq-default company-dabbrev-downcase nil
+		company-dabbrev-ignore-case nil)
+  (setq company-tooltip-limit 20
+	company-idle-delay 0
+	company-minimum-prefix-length 2
+	company-selection-wrap-around t)
+  (setq company-backends
+	(mapcar #'company-mode/backend-with-yas company-backends))
+  (company-tng-configure-default))
 
 (use-package company-quickhelp
+  :hook (company-mode . company-quickhelp-mode))
 
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
+  :delight "(f) "
+  :hook (prog-mode . flycheck-mode))
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
   :delight "(p) "
+  :hook ((prog-mode . paredit-mode)))
 
+;; - Magit ----------------------------------------------------------
+(use-package magit
+  :bind ("C-x g" . magit-status))
 
 ;; - All the icons --------------------------------------------------
 
