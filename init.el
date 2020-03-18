@@ -1,5 +1,4 @@
-;;; -*- lexical-binding: t; -*-
-;;; init.el --- Init file for emacs
+;;; init.el --- Init file for emacs      -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; This file bootstraps the configuration of Emacs
 
@@ -19,7 +18,7 @@
   "Function to restore garbage collection."
   (run-at-time 1 nil
 	       (lambda ()
-		 (setq gc-cons-threshold (* 16 1024 1024)
+		 (setq gc-cons-threshold (* 128 1024 1024)
 		       gc-cons-percentage 0.1))))
 
 (defun my/restore-file-name-handler ()
@@ -50,6 +49,7 @@
 (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
 (global-hl-line-mode)                           ; Highlight current line
 (show-paren-mode t)                             ; Parenthesis highlighting
+(delete-selection-mode t)                       ; Make delete work as expected
 
 (defalias 'yes-or-no-p 'y-or-n-p)               ; Change yes/no prompt to y/n
 
@@ -95,7 +95,24 @@
 	      indicate-empty-lines t                           ; Show empty lines
 	      truncate-lines t                                 ; disable word wrap
 	      default-tab-width 4                              ; Default tab width is also 4 spaces.
+	      help-window-select t                             ; focus on help when shown.
 	      )
+
+;; Change window splitting behaviour.
+(defun vsplit-other-window ()
+  "Splits the window vertically and switch to that window."
+  (interactive)
+  (split-window-vertically)
+  (other-window 1 nil))
+
+(defun hsplit-other-window ()
+  "Splits the window horizontally and switch to that window."
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1 nil))
+
+(global-set-key (kbd "C-x 2") 'hsplit-other-window)
+(global-set-key (kbd "C-x 3") 'vsplit-other-window)
 
 ;; ------------------------------------------------------------------
 ;; Load Custom file if it exists
@@ -142,6 +159,9 @@
 (use-package which-key
   :diminish
   :hook (after-init . which-key-mode))
+
+;; - All the icons --------------------------------------------------
+(use-package all-the-icons)
 
 ;; - Ivy ------------------------------------------------------------
 (use-package ivy
@@ -200,8 +220,10 @@
 (use-package yasnippet
   :diminish yas-minor-mode
   :hook (after-init . yas-global-mode)
+  :functions yas-reload-all
   :config
-  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
+  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
+  (yas-reload-all))
 
 ;; - Company --------------------------------------------------------
 (use-package company
@@ -235,18 +257,18 @@
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
   :delight "(f) "
-  :hook (prog-mode . flycheck-mode))
+  :hook ((prog-mode . flycheck-mode)))
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
   :delight "(p) "
-  :hook ((prog-mode . paredit-mode)))
+  :hook ((prog-mode             . paredit-mode)
+	 (lisp-interaction-mode . paredit-mode)
+	 (slime-repl-mode       . paredit-mode)))
 
 ;; - Magit ----------------------------------------------------------
 (use-package magit
   :bind ("C-x g" . magit-status))
-
-;; - All the icons --------------------------------------------------
 
 ;; - Doom Modeline --------------------------------------------------
 
@@ -255,18 +277,38 @@
 ;; - Flyspell -------------------------------------------------------
 
 ;; - El Doc ---------------------------------------------------------
+(use-package eldoc
+  :diminish)
 
 ;; - Org Mode -------------------------------------------------------
+(use-package org
+  :ensure org-plus-contrib
+  :bind (("C-c l" . org-store-link)
+	 ("C-c c" . org-capture)
+	 ("C-c a" . org-agenda))
+  :mode (("\\.org$" . org-mode))
+  :config
+  (setq-default org-support-shift-select t
+		org-use-sub-superscripts '{}
+		org-export-with-sub-superscripts '{}))
+
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
+
+(use-package htmlize)
 
 ;; - Common Lisp ----------------------------------------------------
-;; ---- Implementations ---------------------------------------------
-(defvar my/default-lisp nil "Default Lisp implementation to use.")
-(setq my/default-lisp 'sbcl)
+(use-package slime-company)
+
+(use-package slime
+  :config
+  (setq slime-lisp-implementations '((sbcl ("sbcl")))
+	slime-default-lisp 'sbcl)
+  (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
 
 ;; - Racket ---------------------------------------------------------
-;; ---- Implementations ---------------------------------------------
-(defvar my/default-scheme nil "Default Scheme implementation to use.")
-(setq my/default-scheme '(racket))
+(use-package racket-mode
+  :mode ("\\.rkt[dl]?\\'" . racket-mode))
 
 ;; - CMake ----------------------------------------------------------
 
