@@ -228,7 +228,7 @@
   (yas-reload-all))
 
 (use-package ivy-yasnippet
-  :bind ("C-x S" . ivy-yasnippet))
+  :bind ("C-c S" . ivy-yasnippet))
 
 ;; - Company --------------------------------------------------------
 (use-package company
