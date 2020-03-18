@@ -227,6 +227,9 @@
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
   (yas-reload-all))
 
+(use-package ivy-yasnippet
+  :bind ("C-x S" . ivy-yasnippet))
+
 ;; - Company --------------------------------------------------------
 (use-package company
   :diminish
