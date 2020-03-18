@@ -170,11 +170,13 @@
   (setq-default ivy-initial-input-alist nil)
   (setq ivy-use-virtual-buffers t
 	ivy-count-format "(%d/%d) "
-	ivy-height 20)
+	ivy-height 20
+	ivy-display-style 'fancy)
+  (all-the-icons-ivy-setup)
   :hook (after-init . ivy-mode))
 
-(use-package all-the-icons-ivy-rich
-  :hook (after-init . all-the-icons-ivy-rich-mode))
+;; (use-package all-the-icons-ivy-rich
+;;   :hook (after-init . all-the-icons-ivy-rich-mode))
 
 (use-package ivy-rich
   :hook (after-init . ivy-rich-mode))
