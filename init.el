@@ -50,6 +50,7 @@
 (global-hl-line-mode)                           ; Highlight current line
 (show-paren-mode t)                             ; Parenthesis highlighting
 (delete-selection-mode t)                       ; Make delete work as expected
+(global-prettify-symbols-mode t)                ; prettify symbols (like lambda)
 
 (defalias 'yes-or-no-p 'y-or-n-p)               ; Change yes/no prompt to y/n
 
@@ -145,11 +146,11 @@
 
 ;; compile it
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
 
-(setq use-package-always-ensure t ; always download on first run
-      use-package-always-defer  t ; always defer loading packages
-      )
+  (setq use-package-always-ensure t ; always download on first run
+	use-package-always-defer  t ; always defer loading packages
+	))
 
 ;; - Delight or Diminish --------------------------------------------
 (use-package diminish)
@@ -162,6 +163,8 @@
 
 ;; - All the icons --------------------------------------------------
 (use-package all-the-icons)
+
+(use-package all-the-icons-ivy)
 
 ;; - Ivy ------------------------------------------------------------
 (use-package ivy
@@ -275,12 +278,6 @@
 (use-package magit
   :bind ("C-x g" . magit-status))
 
-;; - Doom Modeline --------------------------------------------------
-
-;; - Treemacs -------------------------------------------------------
-
-;; - Flyspell -------------------------------------------------------
-
 ;; - El Doc ---------------------------------------------------------
 (use-package eldoc
   :diminish)
@@ -302,6 +299,12 @@
 
 (use-package htmlize)
 
+;; - Doom Modeline --------------------------------------------------
+
+;; - Treemacs -------------------------------------------------------
+
+;; - Flyspell -------------------------------------------------------
+
 ;; - Common Lisp ----------------------------------------------------
 (use-package slime-company)
 
@@ -309,15 +312,29 @@
   :config
   (setq slime-lisp-implementations '((sbcl ("sbcl")))
 	slime-default-lisp 'sbcl)
-  (slime-setup '(slime-fancy slime-company slime-quicklisp slime-asdf)))
-
+  (slime-setup '(slime-fancy
+		 slime-company
+		 slime-quicklisp
+		 slime-asdf
+		 )))
 ;; - Racket ---------------------------------------------------------
 (use-package racket-mode
   :mode ("\\.rkt[dl]?\\'" . racket-mode))
 
 ;; - CMake ----------------------------------------------------------
+(use-package cmake-mode
+  :mode ("CMakeLists\\.txt\\'"
+	 "\\.cmake\\'"))
+
+(use-package cmake-font-lock
+  :after (cmake-mode)
+  :hook (cmake-mode . cmake-font-lock-activate))
 
 ;; - Markdown -------------------------------------------------------
+(use-package markdown-mode
+  :delight "ϻ "
+  :mode ("\\.markdown\\'"
+	 "\\.md\\'"))
 
 ;; - Powershell -----------------------------------------------------
 
@@ -326,7 +343,6 @@
 ;; - Python ---------------------------------------------------------
 
 ;; - IRC ------------------------------------------------------------
-
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
