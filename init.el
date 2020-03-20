@@ -154,6 +154,14 @@
 	use-package-always-defer  t ; always defer loading packages
 	))
 
+;; - No Littering ---------------------------------------------------
+(use-package no-littering
+  :config
+  (setq no-littering-etc-directory (expand-file-name "etc/"
+						     user-emacs-directory)
+	no-littering-var-directory (expand-file-name "var/"
+						     user-emacs-directory)))
+
 ;; - Delight or Diminish --------------------------------------------
 (use-package diminish)
 (use-package delight)
