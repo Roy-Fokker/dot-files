@@ -327,6 +327,13 @@
 (use-package racket-mode
   :mode ("\\.rkt[dl]?\\'" . racket-mode))
 
+;; - Clojure --------------------------------------------------------
+(use-package clojure-mode-extra-font-locking)
+
+(use-package clojure-mode)
+
+(use-package cider)
+
 ;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
   :mode ("CMakeLists\\.txt\\'"
