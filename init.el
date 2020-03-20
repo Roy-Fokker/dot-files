@@ -156,6 +156,11 @@
 (use-package diminish)
 (use-package delight)
 
+;; - Theme ----------------------------------------------------------
+(use-package inkpot-theme
+  :init
+  (load-theme 'inkpot t))
+
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
   :diminish
