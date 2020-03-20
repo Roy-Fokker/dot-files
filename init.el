@@ -7,7 +7,8 @@
 ;; - Garbage Collection setting -------------------------------------
 ;; Techniques borrowed from DOOM Emacs FAQ
 
-(defvar *my/init-file-name-handler-alist* file-name-handler-alist "Save file name handler till startup is done.")
+(defvar *my/init-file-name-handler-alist* file-name-handler-alist
+  "Save file name handler till startup is done.")
 
 (defun my/defer-garbage-collection ()
   "Function to defer garbage collection."
@@ -256,7 +257,7 @@
 
 ;; - Company --------------------------------------------------------
 (use-package company
-  :diminish
+  :delight "(c) "
   :commands (company-complete-common company-dabbrev)
   :hook (after-init . global-company-mode)
   :preface
