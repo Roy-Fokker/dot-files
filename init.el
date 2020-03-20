@@ -220,6 +220,25 @@
 	  racket-repl-mode)
 	 . rainbow-delimiters-mode))
 
+;; - Treemacs -------------------------------------------------------
+(use-package treemacs
+  :config
+  (setq treemacs-python-executable "python.exe")
+  :bind (
+	 :map global-map
+	      ("M-0"       . treemacs-select-window)
+	      ("C-x t 1"   . treemacs-delete-other-windows)
+	      ("C-x t t"   . treemacs)
+	      ("C-x t B"   . treemacs-bookmark)
+	      ("C-x t f"   . treemacs-find-file)
+	      ("C-x t M-f" . treemacs-find-tag)))
+
+(use-package treemacs-icons-dired
+  :hook (treemacs-mode . treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after treemacs magit)
+
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet-snippets)
 
@@ -306,8 +325,6 @@
 (use-package htmlize)
 
 ;; - Doom Modeline --------------------------------------------------
-
-;; - Treemacs -------------------------------------------------------
 
 ;; - Flyspell -------------------------------------------------------
 
