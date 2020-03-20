@@ -212,12 +212,13 @@
 
 ;; - Rainbow Delimiters ---------------------------------------------
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-;; - Theme ----------------------------------------------------------
-(use-package inkpot-theme
-  :init
-  (load-theme 'inkpot t))
+  :hook ((prog-mode
+	  text-mode
+	  lisp-interaction-mode
+	  slime-repl-mode
+	  cider-repl-mode
+	  racket-repl-mode)
+	 . rainbow-delimiters-mode))
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet-snippets)
@@ -267,14 +268,17 @@
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
   :delight "(f) "
-  :hook ((prog-mode . flycheck-mode)))
+  :hook (prog-mode . flycheck-mode))
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
   :delight "(p) "
-  :hook ((prog-mode             . paredit-mode)
-	 (lisp-interaction-mode . paredit-mode)
-	 (slime-repl-mode       . paredit-mode)))
+  :hook ((prog-mode
+	  lisp-interaction-mode
+	  slime-repl-mode
+	  cider-repl-mode
+	  racket-repl-mode)
+	 . paredit-mode))
 
 ;; - Magit ----------------------------------------------------------
 (use-package magit
