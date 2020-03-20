@@ -247,6 +247,21 @@
 (use-package treemacs-magit
   :after treemacs magit)
 
+;; - Doom Modeline --------------------------------------------------
+(use-package doom-modeline
+  :config
+  (setq doom-modeline-height 25
+	doom-modeline-bar-width 3
+	doom-modeline-buffer-file-name-style 'buffer-name
+	doom-modeline-icon t
+	doom-modeline-major-mode-icon t
+	doom-modeline-major-mode-color-icon t
+	doom-modeline-minor-modes t)
+  :custom-face
+  (doom-modeline-bar ((t (:background "#bd93f9"))))
+  (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
+  :hook (after-init . doom-modeline-mode))
+
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet-snippets)
 
@@ -332,8 +347,6 @@
   :hook (org-mode . org-bullets-mode))
 
 (use-package htmlize)
-
-;; - Doom Modeline --------------------------------------------------
 
 ;; - Flyspell -------------------------------------------------------
 
