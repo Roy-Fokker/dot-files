@@ -116,7 +116,8 @@
 (global-set-key (kbd "C-x 3") 'vsplit-other-window)
 
 ;; ------------------------------------------------------------------
-;; Load Custom file if it exists
+;; Load Custom file if it exists.
+;; Loaded after emacs finishes initializing.
 (eval-when-compile
   (defun my/load-custom-file ()
     (when (file-exists-p custom-file)
