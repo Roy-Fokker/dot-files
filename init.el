@@ -121,6 +121,61 @@
 
 (global-set-key (kbd "C-x 2") 'hsplit-other-window)
 (global-set-key (kbd "C-x 3") 'vsplit-other-window)
+;; ------------------------------------------------------------------
+;; Save and Load Frame Size and Location.
+;; This faster than using desktop-save-mode. As it doesn't reload
+;; all the file/buffers and modes.
+
+(eval-when-compile
+  (defun my/save-frame-geometry ()
+    "Save Emacs frame geometry into a file to be loaded later."
+    (let ((frame-left (first (frame-position)))
+	  (frame-top (rest (frame-position)))
+	  (frame-width (frame-width))
+	  (frame-height (frame-height))
+	  (frame-info-file (expand-file-name "frame-geometry.el"
+					     user-emacs-directory)))
+      (unless (number-or-marker-p frame-left)
+	(setq frame-left 0))
+      (unless (number-or-marker-p frame-top)
+	(setq frame-top 0))
+      (unless (number-or-marker-p frame-width)
+	(setq frame-width 200))
+      (unless (number-or-marker-p frame-height)
+	(setq frame-height 65))
+
+      (with-temp-buffer
+	(insert
+	 ";; This is previous session's emacs frame geometry.\n"
+	 ";; Last generated: " (current-time-string) ".\n"
+	 (format "%S"
+		 `(setq initial-frame-alist
+			'((top . ,frame-top)
+			  (left . ,frame-left)
+			  (width . ,frame-width)
+			  (height . ,frame-height)))))
+	(when (file-writable-p frame-info-file)
+	  (write-file frame-info-file)
+	  (byte-compile-file frame-info-file)))
+      ))
+
+  (defun my/load-frame-geometry ()
+    "Load Emacs frame geometry into current session."
+    (let ((frame-info-file (expand-file-name "frame-geometry.el"
+					     user-emacs-directory))
+	  (frame-info-elc (expand-file-name "frame-geometry.elc"
+					    user-emacs-directory)))
+      (cond
+       ((file-readable-p frame-info-elc)
+	(load-file frame-info-elc))
+       ((file-readable-p frame-info-file)
+	(load-file frame-info-file)))
+      ))
+
+  (if window-system
+      (progn
+	(add-hook 'kill-emacs-hook #'my/save-frame-geometry)
+	(add-hook 'after-init-hook #'my/load-frame-geometry))))
 
 ;; ------------------------------------------------------------------
 ;; Load Custom file if it exists.
