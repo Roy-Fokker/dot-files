@@ -12,7 +12,6 @@
 
 * Build/Save Tangle
 Some mechanism to build the init.el on saving of this Org file.
-
 #+begin_src emacs-lisp
 
 #+end_src
@@ -70,6 +69,21 @@ These functions will split and switch.
 #+end_src
 *** Key Bindings
 Switch the keybindings around.
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Window Location and Size
+This is faster than using desktop-save-mode.
+Also it does not reload full state of emacs.
+Only Window/Frame size and location are reloaded.
+
+*** Functions
+#+begin_src emacs-lisp
+
+#+end_src
+
+*** Hooks
 #+begin_src emacs-lisp
 
 #+end_src
