@@ -10,30 +10,203 @@
 - [[https://jonathanabennett.github.io/blog/2019/05/28/emacs.org-~-may-2019/][Jonathan Abennett]]
 - [[https://github.com/rubensts/.emacs.d][Rubensts]]
 
-* Editor Theme
+* Build/Save Tangle
+Some mechanism to build the init.el on saving of this Org file.
 
-* Common Packages
+#+begin_src emacs-lisp
 
-* Programming Assistance
+#+end_src
 
-* Org Mode
+* Garbage Collection
+Using techniques borrowed from DOOM Emacs FAQ
 
-* Git Porceline
+** Functions
+#+BEGIN_SRC emacs-lisp
 
-* Language Server
+#+END_SRC
 
-* Common Lisp
+** Hooks
+#+BEGIN_SRC emacs-lisp
 
-* Scheme
+#+END_SRC
 
-* C and C++
+** Initial Calls
+#+BEGIN_SRC emacs-lisp
 
-* Python
+#+END_SRC
 
-* Markdown
+* Emacs Behaviour
+** GUI Elements
+#+BEGIN_SRC emacs-lisp
 
-* Powershell
+#+END_SRC
 
-* IRC
+** Line modes
+#+BEGIN_SRC emacs-lisp
 
+#+END_SRC
 
+** UTF 8
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+
+** Default Font
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+
+** Preference variables
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Window Splitting
+Don't like default splitting behaviour.
+*** Functions
+These functions will split and switch.
+#+begin_src emacs-lisp
+
+#+end_src
+*** Key Bindings
+Switch the keybindings around.
+#+begin_src emacs-lisp
+
+#+end_src
+
+* Machine Specific File
+** Custom File Loading
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Hook
+#+begin_src emacs-lisp
+
+#+end_src
+
+* Package Archives 
+Configure Package Repositories and install =use-package=
+
+** Archive List
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Initialize
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Use-Package
+#+begin_src emacs-lisp
+
+#+end_src
+
+* Emacs Behaviour Packages
+** No Littering
+#+begin_src emacs-lisp
+
+#+end_src
+** Diminish and Delight
+#+begin_src emacs-lisp
+
+#+end_src
+** Inkpot Theme
+#+begin_src emacs-lisp
+
+#+end_src
+** Which Key
+#+begin_src emacs-lisp
+
+#+end_src
+** All the icons
+#+begin_src emacs-lisp
+
+#+end_src
+** Unicode Fonts
+#+begin_src emacs-lisp
+
+#+end_src
+** Ivy
+#+begin_src emacs-lisp
+
+#+end_src
+** Counsel
+#+begin_src emacs-lisp
+
+#+end_src
+** Swiper
+#+begin_src emacs-lisp
+
+#+end_src
+** WiNum
+#+begin_src emacs-lisp
+
+#+end_src
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+
+#+end_src
+** Treemacs
+#+begin_src emacs-lisp
+
+#+end_src
+** Doom Modeline
+#+begin_src emacs-lisp
+
+#+end_src
+** YA Snippets
+#+begin_src emacs-lisp
+
+#+end_src
+** Company
+#+begin_src emacs-lisp
+
+#+end_src
+** Flycheck
+#+begin_src emacs-lisp
+
+#+end_src
+** ParEdit
+#+begin_src emacs-lisp
+
+#+end_src
+** Magit
+#+begin_src emacs-lisp
+
+#+end_src
+** El Doc
+#+begin_src emacs-lisp
+
+#+end_src
+
+* Language and File-Format Packages
+** Org Mode
+#+begin_src emacs-lisp
+
+#+end_src
+** Common Lisp
+#+begin_src emacs-lisp
+
+#+end_src
+** Racket
+#+begin_src emacs-lisp
+
+#+end_src
+** Clojure
+#+begin_src emacs-lisp
+
+#+end_src
+** CMake
+#+begin_src emacs-lisp
+
+#+end_src
+** Markdown
+#+begin_src emacs-lisp
+
+#+end_src
+** Python
+#+begin_src emacs-lisp
+
+#+end_src
