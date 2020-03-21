@@ -62,6 +62,11 @@
 (set-keyboard-coding-system 'utf-8)
 (setq-default default-buffer-file-coding-system 'utf-8)
 
+;; Set default font
+(set-frame-font "Fira Code" nil t)
+(set-face-attribute 'default nil)
+
+
 ;; Set editor values to preferences
 (setq inhibit-startup-screen t                      ; Disable startup screen.
       visible-bell 1                                ; Disable audible beeps.
@@ -182,6 +187,11 @@
 
 (use-package all-the-icons-ivy)
 
+;; - Unicode Fonts --------------------------------------------------
+(use-package unicode-fonts
+  :config
+  (unicode-fonts-setup))
+
 ;; - Ivy ------------------------------------------------------------
 (use-package ivy
   :diminish
@@ -258,10 +268,10 @@
   :custom-face
   (doom-modeline-bar ((t (:background "#bd93f9"))))
   (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
-  :hook (after-init . doom-modeline-mode)
+  :hook (after-init . doom-modeline-mode))
 
-  ;; - YA Snippets ----------------------------------------------------
-  (use-package yasnippet-snippets))
+;; - YA Snippets ----------------------------------------------------
+(use-package yasnippet-snippets)
 
 (use-package common-lisp-snippets)
 
