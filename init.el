@@ -82,6 +82,7 @@
       backup-directory-alist `(("." . "backups"))   ; where to put backup files
       vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
       find-file-visit-truename t                    ; find true path of the file.
+      inhibit-compacting-font-caches t              ; to speed up text rendering.
       )
 
 (setq-default frame-title-format "%b %& emacs"                 ; Window Title => {Buffer Name} {Modified Status}
@@ -250,20 +251,17 @@
 ;; - Doom Modeline --------------------------------------------------
 (use-package doom-modeline
   :config
-  (setq doom-modeline-height 25
-	doom-modeline-bar-width 3
-	doom-modeline-buffer-file-name-style 'buffer-name
-	doom-modeline-icon t
+  (setq doom-modeline-icon t
 	doom-modeline-major-mode-icon t
 	doom-modeline-major-mode-color-icon t
 	doom-modeline-minor-modes t)
   :custom-face
   (doom-modeline-bar ((t (:background "#bd93f9"))))
   (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
-  :hook (after-init . doom-modeline-mode))
+  :hook (after-init . doom-modeline-mode)
 
-;; - YA Snippets ----------------------------------------------------
-(use-package yasnippet-snippets)
+  ;; - YA Snippets ----------------------------------------------------
+  (use-package yasnippet-snippets))
 
 (use-package common-lisp-snippets)
 
@@ -280,7 +278,7 @@
 
 ;; - Company --------------------------------------------------------
 (use-package company
-  :delight "(c) "
+  :delight "ⓒ "
   :commands (company-complete-common company-dabbrev)
   :hook (after-init . global-company-mode)
   :preface
@@ -309,12 +307,12 @@
 
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
-  :delight "(f) "
+  :delight "ⓕ "
   :hook (prog-mode . flycheck-mode))
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
-  :delight "(p) "
+  :delight "ⓟ "
   :hook ((prog-mode
 	  lisp-interaction-mode
 	  slime-repl-mode
@@ -375,6 +373,7 @@
 
 ;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
+  :delight "¢ "
   :mode ("CMakeLists\\.txt\\'"
 	 "\\.cmake\\'"))
 
