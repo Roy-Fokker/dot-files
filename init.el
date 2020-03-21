@@ -6,39 +6,39 @@
 
 ;; - Garbage Collection setting -------------------------------------
 ;; Techniques borrowed from DOOM Emacs FAQ
+(eval-when-compile
+  (defvar *my/init-file-name-handler-alist* file-name-handler-alist
+    "Save file name handler till startup is done.")
 
-(defvar *my/init-file-name-handler-alist* file-name-handler-alist
-  "Save file name handler till startup is done.")
+  (defun my/defer-garbage-collection ()
+    "Function to defer garbage collection."
+    (setq gc-cons-threshold most-positive-fixnum
+	  gc-cons-percentage 0.6))
 
-(defun my/defer-garbage-collection ()
-  "Function to defer garbage collection."
-  (setq gc-cons-threshold most-positive-fixnum
-	gc-cons-percentage 0.6))
+  (defun my/restore-garbage-collection ()
+    "Function to restore garbage collection."
+    (run-at-time 1 nil
+		 (lambda ()
+		   (setq gc-cons-threshold (* 128 1024 1024)
+			 gc-cons-percentage 0.1))))
 
-(defun my/restore-garbage-collection ()
-  "Function to restore garbage collection."
-  (run-at-time 1 nil
-	       (lambda ()
-		 (setq gc-cons-threshold (* 128 1024 1024)
-		       gc-cons-percentage 0.1))))
+  (defun my/restore-file-name-handler ()
+    "Restore file-name-handler list."
+    (setq file-name-handler-alist *my/init-file-name-handler-alist*))
 
-(defun my/restore-file-name-handler ()
-  "Restore file-name-handler list."
-  (setq file-name-handler-alist *my/init-file-name-handler-alist*))
+  (defun my/restore-gc-and-file-handler ()
+    "Call restore functions for both gc and file-handler."
+    (my/restore-garbage-collection)
+    (my/restore-file-name-handler)
+    (garbage-collect))
 
-(defun my/restore-gc-and-file-handler ()
-  "Call restore functions for both gc and file-handler."
-  (my/restore-garbage-collection)
-  (my/restore-file-name-handler)
-  (garbage-collect))
+  (setq file-name-handler-alist nil)
+  (my/defer-garbage-collection)
 
-(setq file-name-handler-alist nil)
-(my/defer-garbage-collection)
-
-(add-hook 'after-init-hook #'my/restore-gc-and-file-handler())
-(add-hook 'minibuffer-setup-hook #'my/defer-garbage-collection)
-(add-hook 'minibuffer-exit-hook #'my/restore-garbage-collection)
-(add-hook 'focus-out-hook #'garbage-collect)
+  (add-hook 'after-init-hook #'my/restore-gc-and-file-handler())
+  (add-hook 'minibuffer-setup-hook #'my/defer-garbage-collection)
+  (add-hook 'minibuffer-exit-hook #'my/restore-garbage-collection)
+  (add-hook 'focus-out-hook #'garbage-collect))
 
 ;; - Basic Behaviour ------------------------------------------------
 ;; Disable GUI elements
@@ -107,20 +107,22 @@
 	      )
 
 ;; Change window splitting behaviour.
-(defun vsplit-other-window ()
-  "Splits the window vertically and switch to that window."
-  (interactive)
-  (split-window-vertically)
-  (other-window 1 nil))
+(eval-when-compile
+  (defun vsplit-other-window ()
+    "Splits the window vertically and switch to that window."
+    (interactive)
+    (split-window-vertically)
+    (other-window 1 nil))
 
-(defun hsplit-other-window ()
-  "Splits the window horizontally and switch to that window."
-  (interactive)
-  (split-window-horizontally)
-  (other-window 1 nil))
+  (defun hsplit-other-window ()
+    "Splits the window horizontally and switch to that window."
+    (interactive)
+    (split-window-horizontally)
+    (other-window 1 nil))
 
-(global-set-key (kbd "C-x 2") 'hsplit-other-window)
-(global-set-key (kbd "C-x 3") 'vsplit-other-window)
+  (global-set-key (kbd "C-x 2") 'hsplit-other-window) ; Change the bindings for vertical
+  (global-set-key (kbd "C-x 3") 'vsplit-other-window)) ; and horizontal splits.
+
 ;; ------------------------------------------------------------------
 ;; Save and Load Frame Size and Location.
 ;; This faster than using desktop-save-mode. As it doesn't reload
