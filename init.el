@@ -239,6 +239,19 @@
   :diminish
   :hook (after-init . which-key-mode))
 
+;; - Undo Tree ------------------------------------------------------
+(use-package undo-tree
+  :diminish (undo-tree-mode global-undo-tree-mode)
+  :config
+  (setq undo-tree-visualizer-diff t
+	undo-tree-visualizer-timestamps t
+	undo-tree-enable-undo-in-region t)
+  (defalias 'redo 'undo-tree-redo)
+  (defalias 'undo 'undo-tree-undo)
+  :hook (after-init . global-undo-tree-mode)
+  :bind (("C-z"   . undo)
+	 ("C-Z" . redo)))
+
 ;; - All the icons --------------------------------------------------
 (use-package all-the-icons)
 
