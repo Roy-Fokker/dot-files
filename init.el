@@ -104,6 +104,7 @@
 	      truncate-lines t                                 ; disable word wrap
 	      default-tab-width 4                              ; Default tab width is also 4 spaces.
 	      help-window-select t                             ; focus on help when shown.
+	      savehist-save-minibuffer-history t               ; save minibuffer history.
 	      )
 
 ;; Change window splitting behaviour.
