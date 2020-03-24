@@ -66,7 +66,6 @@
 (set-frame-font "Fira Code" nil t)
 (set-face-attribute 'default nil)
 
-
 ;; Set editor values to preferences
 (setq inhibit-startup-screen t                      ; Disable startup screen.
       visible-bell 1                                ; Disable audible beeps.
@@ -250,7 +249,7 @@
   (defalias 'redo 'undo-tree-redo)
   (defalias 'undo 'undo-tree-undo)
   :hook (after-init . global-undo-tree-mode)
-  :bind (("C-z"   . undo)
+  :bind (("C-z" . undo)
 	 ("C-Z" . redo)))
 
 ;; - Popup Kill Ring ------------------------------------------------
