@@ -420,7 +420,9 @@
   :config
   (setq-default org-support-shift-select t
 		org-use-sub-superscripts '{}
-		org-export-with-sub-superscripts '{}))
+		org-export-with-sub-superscripts '{}
+		org-src-fontify-natively t
+		org-src-window-setup 'current-window))
 
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
