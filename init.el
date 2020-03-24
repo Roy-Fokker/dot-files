@@ -253,6 +253,10 @@
   :bind (("C-z"   . undo)
 	 ("C-Z" . redo)))
 
+;; - Popup Kill Ring ------------------------------------------------
+(use-package popup-kill-ring
+  :bind ("M-y" . popup-kill-ring))
+
 ;; - All the icons --------------------------------------------------
 (use-package all-the-icons)
 
