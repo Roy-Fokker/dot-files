@@ -46,6 +46,9 @@
 (menu-bar-mode -1)                              ; Disable menu bar
 (scroll-bar-mode -1)                            ; Hide scroll bar
 
+;; Enable Common User Actions, like sane editor
+(cua-mode t)
+
 ;; Editor line behaviour
 (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
 (global-hl-line-mode)                           ; Highlight current line
