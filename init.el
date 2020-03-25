@@ -289,7 +289,8 @@
 ;; - Counsel --------------------------------------------------------
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file)))
+	 ("C-x C-f" . counsel-find-file))
+  :hook (after-init . counsel-mode))
 
 ;; - Swiper ---------------------------------------------------------
 (use-package swiper
