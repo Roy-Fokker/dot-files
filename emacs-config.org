@@ -63,6 +63,16 @@ Disable GUI elements
   (scroll-bar-mode -1)                            ; Hide scroll bar
 #+END_SRC
 
+** Common User Actions
+Enable most shortcuts from CUA 
+[[https://en.wikipedia.org/wiki/Table_of_keyboard_shortcuts][CUA Shortcuts]]
+#+begin_src emacs-lisp
+  (cua-mode t)
+#+end_src
+Force emacs to use Ctrl + S to save buffer.
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key (kbd "C-s") 'save-buffer)
+#+end_src
 ** Editor Line modes
 #+BEGIN_SRC emacs-lisp
   (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
@@ -320,7 +330,7 @@ and deferred from loading.
     (defalias 'undo 'undo-tree-undo)
     :hook (after-init . global-undo-tree-mode)
     :bind (("C-z" . undo)
-           ("C-Z" . redo)))
+           ("C-y" . redo)))
 #+end_src
 ** Pop-up Kill Ring
 #+begin_src emacs-lisp
@@ -370,7 +380,7 @@ and deferred from loading.
 ** Swiper
 #+begin_src emacs-lisp
   (use-package swiper
-    :bind (("C-s" . swiper)))
+    :bind (("C-f" . swiper)))
 #+end_src
 ** WiNum
 #+begin_src emacs-lisp

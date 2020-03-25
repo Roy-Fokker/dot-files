@@ -48,6 +48,7 @@
 
 ;; Enable Common User Actions, like sane editor
 (cua-mode t)
+(global-set-key (kbd "C-s") 'save-buffer)
 
 ;; Editor line behaviour
 (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
@@ -253,7 +254,7 @@
   (defalias 'undo 'undo-tree-undo)
   :hook (after-init . global-undo-tree-mode)
   :bind (("C-z" . undo)
-	 ("C-Z" . redo)))
+	 ("C-y" . redo)))
 
 ;; - Popup Kill Ring ------------------------------------------------
 (use-package popup-kill-ring
@@ -294,7 +295,7 @@
 
 ;; - Swiper ---------------------------------------------------------
 (use-package swiper
-  :bind (("C-s" . swiper)))
+  :bind (("C-f" . swiper)))
 
 ;; - WiNum ----------------------------------------------------------
 (use-package winum
