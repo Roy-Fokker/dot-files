@@ -444,7 +444,14 @@
 		org-use-sub-superscripts '{}
 		org-export-with-sub-superscripts '{}
 		org-src-fontify-natively t
-		org-src-window-setup 'current-window))
+		org-src-window-setup 'current-window
+		org-src-tab-acts-natively t
+		org-directory (expand-file-name "org"
+						user-emacs-directory)
+		org-agenda-files (list (expand-file-name "agenda"
+							 org-directory))
+		org-default-notes-file (expand-file-name "agenda/notes.org"
+							 org-directory)))
 
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
