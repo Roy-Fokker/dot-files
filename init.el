@@ -291,6 +291,7 @@
 
 ;; - Counsel --------------------------------------------------------
 (use-package counsel
+  :diminish
   :bind (("M-x" . counsel-M-x)
 	 ("C-x C-f" . counsel-find-file))
   :hook (after-init . counsel-mode))
@@ -354,7 +355,9 @@
   (setq doom-modeline-icon t
 	doom-modeline-major-mode-icon t
 	doom-modeline-major-mode-color-icon t
-	doom-modeline-minor-modes t)
+	doom-modeline-minor-modes t
+	doom-modeline-unicode-fallback t
+	doom-modeline-bar-width 3)
   :custom-face
   (doom-modeline-bar ((t (:background "#bd93f9"))))
   (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
