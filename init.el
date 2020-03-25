@@ -234,6 +234,21 @@
   :init
   (load-theme 'inkpot t))
 
+;; - Evil Mode ------------------------------------------------------
+;; (use-package evil
+;;   :hook (after-init . evil-mode))
+
+;; ;; - General --------------------------------------------------------
+;; (use-package general
+;;   :config
+;;   (general-define-key
+;;    :states '(normal visual insert emacs)
+;;    :prefix "SPC"
+;;    :non-normal-prefix "M-SPC"
+;;    "TAB" '(switch-to-prev-buffer :which-key "previous buffer")
+   
+;;    ))
+
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
   :diminish
