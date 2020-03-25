@@ -123,13 +123,15 @@ Ones that flycheck says can be set using =setq=.
         mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
         scroll-preserve-screen-position t             ; Preserve line/column position.
         delete-old-versions -1                        ; Delete execess backup files
-        backup-directory-alist `(("." . "backups"))   ; where to put backup files
+        backup-directory-alist `(("." .               ; where to put backup files
+                                  (expand-file-name "backups"
+                                                    user-emacs-directory)))
         vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
         find-file-visit-truename t                    ; find true path of the file.
         inhibit-compacting-font-caches t              ; to speed up text rendering.
         )
 #+end_src
-*** Setq=Default Variables
+*** Setq-Default Variables
 Ones that flycheck says are "free variables", as must use =setq-default=
 #+begin_src emacs-lisp
   (setq-default frame-title-format "%b %& emacs"                 ; Window Title = {Buffer Name} {Modified Status}

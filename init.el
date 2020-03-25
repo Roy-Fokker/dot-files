@@ -87,7 +87,9 @@
       mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
       scroll-preserve-screen-position t             ; Preserve line/column position.
       delete-old-versions -1                        ; Delete execess backup files
-      backup-directory-alist `(("." . "backups"))   ; where to put backup files
+      backup-directory-alist `(("." .               ; where to put backup files
+				(expand-file-name "backups"
+						  user-emacs-directory)))
       vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
       find-file-visit-truename t                    ; find true path of the file.
       inhibit-compacting-font-caches t              ; to speed up text rendering.
