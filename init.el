@@ -394,7 +394,7 @@
 
 ;; - Company --------------------------------------------------------
 (use-package company
-  :delight "ⓒ "
+  :delight "ⓒ"
   :commands (company-complete-common company-dabbrev)
   :hook (after-init . global-company-mode)
   :preface
@@ -423,12 +423,12 @@
 
 ;; - Flycheck -------------------------------------------------------
 (use-package flycheck
-  :delight "ⓕ "
+  :diminish
   :hook (prog-mode . flycheck-mode))
 
 ;; - ParEdit --------------------------------------------------------
 (use-package paredit
-  :delight "ⓟ "
+  :delight "ⓟ"
   :hook ((prog-mode
 	  lisp-interaction-mode
 	  slime-repl-mode
