@@ -130,6 +130,19 @@
   (global-set-key (kbd "C-x 3") 'vsplit-other-window)) ; and horizontal splits.
 
 ;; ------------------------------------------------------------------
+;; This function will get full path of the special folder regardless
+;; where it is on a Windows machine. It makes a call out to cmd/PS.
+
+(defun get-windows-special-folder-path (FOLDER_NAME)
+  "FOLDER_NAME is special folder name of interest."
+  (first
+   (process-lines "powershell"
+		  "-Command"
+		  (concat "[Environment]::GetFolderPath(\""
+			  FOLDER_NAME
+			  "\")"))))
+
+;; ------------------------------------------------------------------
 ;; Save and Load Frame Size and Location.
 ;; This faster than using desktop-save-mode. As it doesn't reload
 ;; all the file/buffers and modes.
@@ -447,7 +460,7 @@
 		org-src-window-setup 'current-window
 		org-src-tab-acts-natively t
 		org-directory (expand-file-name "org"
-						user-emacs-directory)
+						(get-windows-special-folder-path "MyDocuments"))
 		org-agenda-files (list (expand-file-name "agenda"
 							 org-directory))
 		org-default-notes-file (expand-file-name "agenda/notes.org"
