@@ -254,6 +254,32 @@ Again, not sure about ~window-system~ check.
       (add-hook 'after-init-hook #'my/load-custom-file))
 #+end_src
 
+* Windows Special Folders
+Since I use emacs only on Windows, sometimes I need 
+to save something to various [[https://docs.microsoft.com/en-us/dotnet/api/system.environment.specialfolder?view=netframework-4.8][Windows Special Folders]].
+Emacs doesn't understand these, as it only looks as ~Environment Variables~.
+Emacs's behaviour doesn't actually work for Windows, as users 
+are allowed to move these special folders where ever they like.
+
+In my case since this config is used on 3 different machines, each one
+is setup every so slightly differently.
+
+So, I've written this function to get actual path based on 
+Special Folder names. It makes a call out to ~CMD~ to 
+get the folder path.
+
+#+begin_src emacs-lisp
+  (defun get-windows-special-folder-path (FOLDER_NAME)
+    "FOLDER_NAME is special folder name of interest."
+    (first
+     (process-lines "powershell"
+                    "-NoProfile"
+                    "-Command"
+                    (concat "[Environment]::GetFolderPath(\""
+                            FOLDER_NAME
+                            "\")"))))
+#+end_src
+
 * Package Archives 
 Configure Package Repositories and install =use-package=
 ** Load Package package
@@ -543,7 +569,14 @@ and deferred from loading.
                   org-use-sub-superscripts '{}
                   org-export-with-sub-superscripts '{}
                   org-src-fontify-natively t
-                  org-src-window-setup 'current-window))
+                  org-src-window-setup 'current-window
+                  org-src-tab-acts-natively t
+                  org-directory (expand-file-name "org"
+                                                  (get-windows-special-folder-path "MyDocuments"))
+                  org-agenda-files (list (expand-file-name "agenda"
+                                                           org-directory))
+                  org-default-notes-file (expand-file-name "agenda/notes.org"
+                                                           org-directory)))
 
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode))
