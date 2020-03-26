@@ -137,6 +137,7 @@
   "FOLDER_NAME is special folder name of interest."
   (first
    (process-lines "powershell"
+		  "-NoProfile"
 		  "-Command"
 		  (concat "[Environment]::GetFolderPath(\""
 			  FOLDER_NAME
