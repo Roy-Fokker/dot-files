@@ -465,7 +465,9 @@
 		org-agenda-files (list (expand-file-name "agenda"
 							 org-directory))
 		org-default-notes-file (expand-file-name "agenda/notes.org"
-							 org-directory)))
+							 org-directory))
+  :hook (org-mode . (lambda ()
+		      (org-display-inline-images))))
 
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
