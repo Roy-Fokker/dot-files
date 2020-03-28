@@ -73,6 +73,7 @@ Force emacs to use Ctrl + S to save buffer.
 #+begin_src emacs-lisp :tangle yes
   (global-set-key (kbd "C-s") 'save-buffer)
 #+end_src
+
 ** Editor Line modes
 #+BEGIN_SRC emacs-lisp
   (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
@@ -219,11 +220,13 @@ Only Window/Frame size and location are reloaded.
     "Load Emacs frame geometry into current session."
     (let ((frame-info-file (expand-file-name "frame-geometry.el"
                                              user-emacs-directory))
-          (frame-info-elc  (expand-file-name "frame-geometry.elc"
+          (frame-info-elc (expand-file-name "frame-geometry.elc"
                                             user-emacs-directory)))
-      (if (file-readable-p frame-info-elc)
-          (load-file frame-info-elc)
-        (load-file frame-info-file))
+      (cond
+       ((file-readable-p frame-info-elc)
+        (load-file frame-info-elc))
+       ((file-readable-p frame-info-file)
+        (load-file frame-info-file)))
       ))
 #+end_src
 
@@ -264,9 +267,9 @@ are allowed to move these special folders where ever they like.
 In my case since this config is used on 3 different machines, each one
 is setup every so slightly differently.
 
-So, I've written this function to get actual path based on 
-Special Folder names. It makes a call out to ~CMD~ to 
-get the folder path.
+This function will get full path of the special folders in Windows
+regardless of how it's setup for machine.
+It makes a call out to default shell on the system.
 
 #+begin_src emacs-lisp
   (defun get-windows-special-folder-path (FOLDER_NAME)
@@ -465,16 +468,18 @@ and deferred from loading.
 #+end_src
 ** Doom Modeline
 #+begin_src emacs-lisp
-  (use-package doom-modeline
-    :config
-    (setq doom-modeline-icon t
-          doom-modeline-major-mode-icon t
-          doom-modeline-major-mode-color-icon t
-          doom-modeline-minor-modes t)
-    :custom-face
-    (doom-modeline-bar ((t (:background "#bd93f9"))))
-    (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
-    :hook (after-init . doom-modeline-mode))
+    (use-package doom-modeline
+      :config
+      (setq doom-modeline-icon t
+            doom-modeline-major-mode-icon t
+            doom-modeline-major-mode-color-icon t
+            doom-modeline-minor-modes t
+            doom-modeline-unicode-fallback t
+            doom-modeline-bar-width 3)
+      :custom-face
+      (doom-modeline-bar ((t (:background "#bd93f9"))))
+      (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
+      :hook (after-init . doom-modeline-mode))
 #+end_src
 ** YA Snippets
 #+begin_src emacs-lisp
@@ -497,7 +502,7 @@ and deferred from loading.
 ** Company
 #+begin_src emacs-lisp
   (use-package company
-    :delight "ⓒ "
+    :delight "ⓒ"
     :commands (company-complete-common company-dabbrev)
     :hook (after-init . global-company-mode)
     :preface
@@ -535,7 +540,7 @@ and deferred from loading.
 ** ParEdit
 #+begin_src emacs-lisp
   (use-package paredit
-    :delight "ⓟ "
+    :delight "ⓟ"
     :hook ((prog-mode
             lisp-interaction-mode
             slime-repl-mode
@@ -560,6 +565,7 @@ and deferred from loading.
 #+begin_src emacs-lisp
   (use-package org
     :ensure org-plus-contrib
+    :diminish (org-indent-mode)
     :bind (("C-c l" . org-store-link)
            ("C-c c" . org-capture)
            ("C-c a" . org-agenda))
@@ -576,7 +582,9 @@ and deferred from loading.
                   org-agenda-files (list (expand-file-name "agenda"
                                                            org-directory))
                   org-default-notes-file (expand-file-name "agenda/notes.org"
-                                                           org-directory)))
+                                                           org-directory))
+    :hook (org-mode . (lambda ()
+                        (org-display-inline-images))))
 
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode))
@@ -595,7 +603,19 @@ and deferred from loading.
                    slime-company
                    slime-quicklisp
                    slime-asdf
-                   )))
+                   slime-hyperdoc
+                   slime-repl
+                   slime-autodoc
+                   slime-macrostep
+                   slime-references
+                   slime-mdot-fu
+                   slime-xref-browser
+                   slime-presentations
+                   slime-cl-indent
+                   slime-fancy-inspector
+                   slime-fontifying-fu
+                   slime-trace-dialog)
+                 ))
 #+end_src
 ** Racket
 #+begin_src emacs-lisp
