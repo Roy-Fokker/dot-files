@@ -55,18 +55,19 @@ The icon needs to be copied to
 directory. That is what =ms-appdata:///roaming/msys2.ico= refers to.
 Icon can be copied from Msys2 root directory.
 
-* VIM Configuration
-VIM configuration is empty. Haven't figured it out yet.
-Both =.vimrc= and =init.vim= are empty.
-
 * Magit.sh
 This will launch Emacs with just Magit. It's pretty ugly.
-
-* Org Mode output style
-=notes-style.org= is to style the output from emacs org-mode.
-Mostly for HTML styling.
 
 * BASH
 =.bashrc= just style colours in bash console, mostly to override
 stupid ones default windows-bash uses.  
 Setup by =CreateSymlinks.ps1= as well.
+
+* Org Mode output style
+=notes-style.org= is to style the output from emacs org-mode.
+Mostly for HTML styling.
+
+* VIM Configuration
+VIM configuration is empty. Haven't figured it out yet.
+Both =.vimrc= and =init.vim= are empty.
+
