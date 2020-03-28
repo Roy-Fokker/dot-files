@@ -307,8 +307,7 @@
 (use-package counsel
   :diminish
   :bind (("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file))
-  :hook (after-init . counsel-mode))
+	 ("C-x C-f" . counsel-find-file)))
 
 ;; - Swiper ---------------------------------------------------------
 (use-package swiper
@@ -449,6 +448,7 @@
 ;; - Org Mode -------------------------------------------------------
 (use-package org
   :ensure org-plus-contrib
+  :diminish (org-indent-mode)
   :bind (("C-c l" . org-store-link)
 	 ("C-c c" . org-capture)
 	 ("C-c a" . org-agenda))
