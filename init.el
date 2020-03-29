@@ -326,6 +326,11 @@
 	 ("M-8" . winum-select-window-8))
   :hook (after-init . winum-mode))
 
+;; - Windmove -------------------------------------------------------
+(use-package windmove
+  :init
+  (windmove-default-keybindings 'meta))
+
 ;; - Rainbow Delimiters ---------------------------------------------
 (use-package rainbow-delimiters
   :hook ((prog-mode
@@ -513,7 +518,7 @@
 
 ;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
-  :delight "¢ "
+  :delight "¢"
   :mode ("CMakeLists\\.txt\\'"
 	 "\\.cmake\\'"))
 
@@ -523,7 +528,9 @@
 
 ;; - Markdown -------------------------------------------------------
 (use-package markdown-mode
-  :delight "ϻ "
+  :delight "ϻ"
+  :init
+  (setq markdown-command "pandoc")
   :mode ("\\.markdown\\'"
 	 "\\.md\\'"))
 
