@@ -516,6 +516,10 @@
 
 (use-package cider)
 
+;; - Janet ----------------------------------------------------------
+(use-package janet-mode
+  )
+
 ;; - CMake ----------------------------------------------------------
 (use-package cmake-mode
   :delight "¢"
@@ -526,13 +530,18 @@
   :after (cmake-mode)
   :hook (cmake-mode . cmake-font-lock-activate))
 
+;; - Pandoc ---------------------------------------------------------
+(use-package pandoc-mode
+  :hook (pandoc-mode . pandoc-load-default-settings))
+
 ;; - Markdown -------------------------------------------------------
 (use-package markdown-mode
   :delight "ϻ"
   :init
   (setq markdown-command "pandoc")
   :mode ("\\.markdown\\'"
-	 "\\.md\\'"))
+	 "\\.md\\'")
+  :hook (markdow-mode . pandoc-mode))
 
 ;; - Powershell -----------------------------------------------------
 
