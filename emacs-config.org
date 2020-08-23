@@ -70,7 +70,7 @@ Enable most shortcuts from CUA
   (cua-mode t)
 #+end_src
 Force emacs to use Ctrl + S to save buffer.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-s") 'save-buffer)
 #+end_src
 
