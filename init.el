@@ -6,39 +6,38 @@
 
 ;; - Garbage Collection setting -------------------------------------
 ;; Techniques borrowed from DOOM Emacs FAQ
-(eval-when-compile
-  (defvar *my/init-file-name-handler-alist* file-name-handler-alist
-    "Save file name handler till startup is done.")
+(defvar *my/init-file-name-handler-alist* file-name-handler-alist
+  "Save file name handler till startup is done.")
 
-  (defun my/defer-garbage-collection ()
-    "Function to defer garbage collection."
-    (setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6))
+(defun my/defer-garbage-collection ()
+  "Function to defer garbage collection."
+  (setq gc-cons-threshold most-positive-fixnum
+	gc-cons-percentage 0.6))
 
-  (defun my/restore-garbage-collection ()
-    "Function to restore garbage collection."
-    (run-at-time 1 nil
-         (lambda ()
-           (setq gc-cons-threshold (* 128 1024 1024)
-             gc-cons-percentage 0.1))))
+(defun my/restore-garbage-collection ()
+  "Function to restore garbage collection."
+  (run-at-time 1 nil
+               (lambda ()
+		 (setq gc-cons-threshold (* 128 1024 1024)
+		       gc-cons-percentage 0.1))))
 
-  (defun my/restore-file-name-handler ()
-    "Restore file-name-handler list."
-    (setq file-name-handler-alist *my/init-file-name-handler-alist*))
+(defun my/restore-file-name-handler ()
+  "Restore file-name-handler list."
+  (setq file-name-handler-alist *my/init-file-name-handler-alist*))
 
-  (defun my/restore-gc-and-file-handler ()
-    "Call restore functions for both gc and file-handler."
-    (my/restore-garbage-collection)
-    (my/restore-file-name-handler)
-    (garbage-collect))
+(defun my/restore-gc-and-file-handler ()
+  "Call restore functions for both gc and file-handler."
+  (my/restore-garbage-collection)
+  (my/restore-file-name-handler)
+  (garbage-collect))
 
-  (setq file-name-handler-alist nil)
-  (my/defer-garbage-collection)
+(setq file-name-handler-alist nil)
+(my/defer-garbage-collection)
 
-  (add-hook 'after-init-hook #'my/restore-gc-and-file-handler())
-  (add-hook 'minibuffer-setup-hook #'my/defer-garbage-collection)
-  (add-hook 'minibuffer-exit-hook #'my/restore-garbage-collection)
-  (add-hook 'focus-out-hook #'garbage-collect))
+(add-hook 'after-init-hook #'my/restore-gc-and-file-handler())
+(add-hook 'minibuffer-setup-hook #'my/defer-garbage-collection)
+(add-hook 'minibuffer-exit-hook #'my/restore-garbage-collection)
+(add-hook 'focus-out-hook #'garbage-collect)
 
 ;; - Basic Behaviour ------------------------------------------------
 ;; Disable GUI elements
@@ -49,6 +48,9 @@
 ;; Enable Common User Actions, like sane editor
 (cua-mode t)
 (global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "C-f") 'isearch-forward)
+(global-set-key (kbd "C-S-f") 'isearch-backward)
+
 
 ;; Editor line behaviour
 (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
@@ -81,15 +83,15 @@
       jit-lock-defer-time 0                         ; don't wait for jit.
       select-enable-clipboard t                     ; integrate with system clipboard
       x-select-request-type '(UTF8_STRING           ; Treat clipboard input as utf8
-                  COMPOUND_TEXT         ;   then other in list.
-                  TEXT
-                  STRING)
+			      COMPOUND_TEXT         ;   then other in list.
+			      TEXT
+			      STRING)
       mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
       scroll-preserve-screen-position t             ; Preserve line/column position.
       delete-old-versions -1                        ; Delete execess backup files
       backup-directory-alist `(("." .               ; where to put backup files
-                (expand-file-name "backups"
-                          user-emacs-directory)))
+				(expand-file-name "backups"
+						  user-emacs-directory)))
       vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
       find-file-visit-truename t                    ; find true path of the file.
       inhibit-compacting-font-caches t              ; to speed up text rendering.
@@ -104,7 +106,7 @@
               mouse-wheel-follow-mouse t                       ; scroll window under mouse
               find-file-visit-truename t                       ; find true path of a file
               custom-file (expand-file-name ".emacs-custom.el" ; save machine specific settings here
-                           user-emacs-directory)
+					    user-emacs-directory)
               indicate-empty-lines t                           ; Show empty lines
               truncate-lines t                                 ; disable word wrap
               default-tab-width 4                              ; Default tab width is also 4 spaces.
@@ -112,22 +114,24 @@
               savehist-save-minibuffer-history t               ; save minibuffer history.
               )
 
+(load-theme 'tango-dark t)
+
 ;; Change window splitting behaviour.
-(eval-when-compile
-  (defun vsplit-other-window ()
-    "Splits the window vertically and switch to that window."
-    (interactive)
-    (split-window-vertically)
-    (other-window 1 nil))
 
-  (defun hsplit-other-window ()
-    "Splits the window horizontally and switch to that window."
-    (interactive)
-    (split-window-horizontally)
-    (other-window 1 nil))
+(defun vsplit-other-window ()
+  "Splits the window vertically and switch to that window."
+  (interactive)
+  (split-window-vertically)
+  (other-window 1 nil))
 
-  (global-set-key (kbd "C-x 2") 'hsplit-other-window) ; Change the bindings for vertical
-  (global-set-key (kbd "C-x 3") 'vsplit-other-window)) ; and horizontal splits.
+(defun hsplit-other-window ()
+  "Splits the window horizontally and switch to that window."
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1 nil))
+
+(global-set-key (kbd "C-x 2") 'hsplit-other-window) ; Change the bindings for vertical
+(global-set-key (kbd "C-x 3") 'vsplit-other-window) ; and horizontal splits.
 
 ;; ------------------------------------------------------------------
 ;; This function will get full path of the special folder regardless
@@ -135,81 +139,79 @@
 
 (defun get-windows-special-folder-path (FOLDER_NAME)
   "FOLDER_NAME is special folder name of interest."
-  (first
+  (car
    (process-lines "powershell"
                   "-NoProfile"
                   "-Command"
                   (concat "[Environment]::GetFolderPath(\""
-                  FOLDER_NAME
-                  "\")"))))
+			  FOLDER_NAME
+			  "\")"))))
 
 ;; ------------------------------------------------------------------
 ;; Save and Load Frame Size and Location.
 ;; This faster than using desktop-save-mode. As it doesn't reload
 ;; all the file/buffers and modes.
 
-(eval-when-compile
-  (defun my/save-frame-geometry ()
-    "Save Emacs frame geometry into a file to be loaded later."
-    (let ((frame-left      (first (frame-position)))
-          (frame-top       (rest (frame-position)))
-          (frame-width     (frame-width))
-          (frame-height    (frame-height))
-          (frame-info-file (expand-file-name "frame-geometry.el"
-                                             user-emacs-directory)))
+(defun my/save-frame-geometry ()
+  "Save Emacs frame geometry into a file to be loaded later."
+  (let ((frame-left      (car (frame-position)))
+        (frame-top       (cdr (frame-position)))
+        (frame-width     (frame-width))
+        (frame-height    (frame-height))
+        (frame-info-file (expand-file-name "frame-geometry.el"
+                                           user-emacs-directory)))
 
-      (unless (number-or-marker-p frame-left)
-              (setq frame-left 0))
-      (unless (number-or-marker-p frame-top)
-              (setq frame-top 0))
-      (unless (number-or-marker-p frame-width)
-              (setq frame-width 200))
-      (unless (number-or-marker-p frame-height)
-              (setq frame-height 65))
+    (unless (number-or-marker-p frame-left)
+      (setq frame-left 0))
+    (unless (number-or-marker-p frame-top)
+      (setq frame-top 0))
+    (unless (number-or-marker-p frame-width)
+      (setq frame-width 200))
+    (unless (number-or-marker-p frame-height)
+      (setq frame-height 65))
 
-      (with-temp-buffer
-        (insert
-         ";; This is previous session's emacs frame geometry.\n"
-         ";; Last generated: " (current-time-string) ".\n"
-         (format "%S"
-                 `(setq initial-frame-alist
-                        '((top     . ,frame-top)
-                          (left    . ,frame-left)
-                          (width   . ,frame-width)
-                          (height  . ,frame-height)))))
-        (when (file-writable-p frame-info-file)
-              (write-file frame-info-file)
-              (byte-compile-file frame-info-file)))
-      ))
+    (with-temp-buffer
+      (insert
+       ";; This is previous session's emacs frame geometry.\n"
+       ";; Last generated: " (current-time-string) ".\n"
+       (format "%S"
+               `(setq initial-frame-alist
+                      '((top     . ,frame-top)
+                        (left    . ,frame-left)
+                        (width   . ,frame-width)
+                        (height  . ,frame-height)))))
+      (when (file-writable-p frame-info-file)
+        (write-file frame-info-file)
+        (byte-compile-file frame-info-file)))
+    ))
 
-  (defun my/load-frame-geometry ()
-    "Load Emacs frame geometry into current session."
-    (let ((frame-info-file (expand-file-name "frame-geometry.el"
-                                             user-emacs-directory))
-      (frame-info-elc (expand-file-name "frame-geometry.elc"
-                                        user-emacs-directory)))
-      (cond
-       ((file-readable-p frame-info-elc)
-          (load-file frame-info-elc))
-       ((file-readable-p frame-info-file)
-          (load-file frame-info-file)))
-      ))
+(defun my/load-frame-geometry ()
+  "Load Emacs frame geometry into current session."
+  (let ((frame-info-file (expand-file-name "frame-geometry.el"
+                                           user-emacs-directory))
+	(frame-info-elc (expand-file-name "frame-geometry.elc"
+                                          user-emacs-directory)))
+    (cond
+     ((file-readable-p frame-info-elc)
+      (load-file frame-info-elc))
+     ((file-readable-p frame-info-file)
+      (load-file frame-info-file)))
+    ))
 
-  (if window-system
-      (progn
-        (add-hook 'kill-emacs-hook #'my/save-frame-geometry)
-        (add-hook 'after-init-hook #'my/load-frame-geometry))))
+(if window-system
+    (progn
+      (add-hook 'kill-emacs-hook #'my/save-frame-geometry)
+      (add-hook 'after-init-hook #'my/load-frame-geometry)))
 
 ;; ------------------------------------------------------------------
 ;; Load Custom file if it exists.
 ;; Loaded after emacs finishes initializing.
-(eval-when-compile
-  (defun my/load-custom-file ()
-    (when (file-exists-p custom-file)
-      (load custom-file)))
+(defun my/load-custom-file ()
+  (when (file-exists-p custom-file)
+    (load custom-file)))
 
-  (if window-system
-      (add-hook 'after-init-hook #'my/load-custom-file)))
+(if window-system
+    (add-hook 'after-init-hook #'my/load-custom-file))
 
 ;; ------------------------------------------------------------------
 ;; Configure Package Archives
@@ -223,7 +225,9 @@
 (add-to-list 'package-archives '("elpa"  . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
-(package-initialize) ;; initialize package.el
+;; only initialize package.el if emacs less than 27
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 ;; install use-package if it's not present
 (unless (package-installed-p 'use-package)
@@ -231,100 +235,111 @@
         (package-install 'use-package))
 
 ;; compile it
-(eval-when-compile
-  (require 'use-package)
+(require 'use-package)
+(setq use-package-always-ensure t ; always download on first run
+      use-package-always-defer  t ; always defer loading packages
+      )
 
-  (setq use-package-always-ensure t ; always download on first run
-        use-package-always-defer  t ; always defer loading packages
-    ))
+;; ------------------------------------------------------------------
+;; Packages Used by Emacs
 
-;; - No Littering ---------------------------------------------------
-(use-package no-littering
-  :config
-  (setq no-littering-etc-directory (expand-file-name "etc/"
-                                                     user-emacs-directory)
-        no-littering-var-directory (expand-file-name "var/"
-                                                     user-emacs-directory)))
-
-;; - Delight or Diminish --------------------------------------------
-(use-package diminish)
-(use-package delight)
-
-;; - Theme ----------------------------------------------------------
-(use-package inkpot-theme
+;; - Doom Theme -----------------------------------------------------
+(use-package doom-themes
   :init
-  (load-theme 'inkpot t))
+  (load-theme 'doom-one t))
+
+;; - doom modeline --------------------------------------------------
+(use-package doom-modeline
+  :hook
+  (after-init . doom-modeline-mode))
+
+;; - all the icons --------------------------------------------------
+(use-package all-the-icons)
+
+;; - ivy swiper and counsel -----------------------------------------
+(use-package ivy
+  :init
+  (when (setq enable-recursive-minibuffers t)
+    (minibuffer-depth-indicate-mode t))
+  :custom
+  (ivy-use-virtual-buffers t)
+  (ivy-count-format "(%d/%d) ")
+  (ivy-wrap t)
+  :bind
+  (("C-x C-b" . ivy-switch-buffer)
+   ("C-c C-r" . ivy-resume))
+  :hook
+  (after-init . ivy-mode))
+
+(use-package swiper
+  :after ivy
+  :bind
+  ("C-f" . swiper))
+
+(use-package counsel
+  :after ivy
+  :bind
+  (("M-x" . counsel-M-x)
+   ("M-y" . counsel-yank-pop)
+   ("C-x C-f" . counsel-find-file))
+  :hook
+  (after-init . counsel-mode))
 
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
-  :diminish
-  :hook (after-init . which-key-mode))
-
-;; - Undo Tree ------------------------------------------------------
-(use-package undo-tree
-  :diminish (undo-tree-mode global-undo-tree-mode)
-  :config
-  (setq undo-tree-visualizer-diff t
-        undo-tree-visualizer-timestamps t
-        undo-tree-enable-undo-in-region t)
-  (defalias 'redo 'undo-tree-redo)
-  (defalias 'undo 'undo-tree-undo)
-  :hook (after-init . global-undo-tree-mode)
-  :bind (("C-z" . undo)
-         ("C-y" . redo)))
-
-;; - Popup Kill Ring ------------------------------------------------
-(use-package popup-kill-ring
-  :bind ("M-y" . popup-kill-ring))
-
-;; - All the icons --------------------------------------------------
-(use-package all-the-icons)
-
-(use-package all-the-icons-ivy)
-
-;; - Unicode Fonts --------------------------------------------------
-(use-package unicode-fonts
-  :config
-  (unicode-fonts-setup))
-
-;; - Doom Modeline --------------------------------------------------
-(use-package doom-modeline
-    :config
-    (setq doom-modeline-icon t
-          doom-modeline-major-mode-icon t
-          doom-modeline-major-mode-color-icon t
-          doom-modeline-minor-modes t
-          doom-modeline-unicode-fallback t
-          doom-modeline-bar-width 3)
-    :custom-face
-    (doom-modeline-bar ((t (:background "#bd93f9"))))
-    (doom-modeline-bar-inactive ((t (:background "#6272a4"))))
-    :hook 
-    (after-init . doom-modeline-mode))
-
-;; - Rainbow Brackets -----------------------------------------------
-(use-package rainbow-delimiters
-    :hook ((prog-mode
-            text-mode
-            lisp-interaction-mode
-            slime-repl-mode
-            cider-repl-mode
-            racket-repl-mode)
-           . rainbow-delimiters-mode)
-    :custom-face
-    (rainbow-delimiters-depth-1-face ((t (:foreground "dark orange"))))
-    (rainbow-delimiters-depth-2-face ((t (:foreground "deep pink"))))
-    (rainbow-delimiters-depth-3-face ((t (:foreground "chartreuse"))))
-    (rainbow-delimiters-depth-4-face ((t (:foreground "deep sky blue"))))
-    (rainbow-delimiters-depth-5-face ((t (:foreground "yellow"))))
-    (rainbow-delimiters-depth-6-face ((t (:foreground "orchid"))))
-    (rainbow-delimiters-depth-7-face ((t (:foreground "spring green"))))
-    (rainbow-delimiters-depth-8-face ((t (:foreground "sienna1")))))
+  :hook
+  (after-init . which-key-mode))
 
 ;; - Magit ----------------------------------------------------------
 (use-package magit
-  :bind
-  ("C-x g" . magit-status))
+  :bind ("C-x g" . magit-status))
+
+;; - Rainbow Brackets -----------------------------------------------
+(use-package rainbow-delimiters
+  :hook
+  ((prog-mode
+    text-mode
+    lisp-interaction-mode-hook)
+   . rainbow-delimiters-mode))
+
+;; - Paredit --------------------------------------------------------
+(use-package paredit
+  :hook
+  ((lisp-mode
+    emacs-lisp-mode
+    lisp-interaction-mode)
+   . paredit-mode))
+
+;; - Company --------------------------------------------------------
+(use-package company
+  :config
+  (setq company-idle-delay 0
+	company-tooltip-limit 20
+	company-minimum-prefix-length 2
+	company-selection-wrap-around t)
+  :hook
+  (after-init . global-company-mode))
+
+;; - YA Snippets ----------------------------------------------------
+(use-package yasnippet
+  :commands yas-minor-mode
+  :hook
+  (prog-mode . yas-global-mode))
+
+(use-package yasnippet-snippets)
+(use-package common-lisp-snippets)
+
+;; - Common Lisp ----------------------------------------------------
+(use-package sly
+  :custom
+  (inferior-lisp-program "sbcl")
+  (sly-contribs '(sly-fancy)))
+
+(use-package sly-quicklisp
+  :requires sly)
+
+(use-package sly-asdf
+  :requires sly)
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
