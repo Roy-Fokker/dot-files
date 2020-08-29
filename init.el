@@ -244,7 +244,14 @@
 
 ;; ------------------------------------------------------------------
 ;; Packages Used by Emacs
-
+;; ------------------------------------------------------------------
+;; - No Littering ---------------------------------------------------
+(use-package no-littering
+  :config
+  (setq no-littering-etc-directory (expand-file-name "etc/"
+                                                     user-emacs-directory)
+        no-littering-var-directory (expand-file-name "var/"
+                                                     user-emacs-directory)))
 ;; - Doom Theme -----------------------------------------------------
 (use-package doom-themes
   :init
@@ -312,6 +319,14 @@
     lisp-interaction-mode)
    . paredit-mode))
 
+;; - Lispy ----------------------------------------------------------
+;; (use-package lispy
+;;   :hook
+;;   ((lisp-mode
+;;     emacs-lisp-mode
+;;     lisp-interaction-mode)
+;;    . lispy-mode))
+
 ;; - Company --------------------------------------------------------
 (use-package company
   :config
@@ -331,17 +346,40 @@
 (use-package yasnippet-snippets)
 (use-package common-lisp-snippets)
 
-;; - Common Lisp ----------------------------------------------------
-(use-package sly
+;; - Common Lisp using sly -------------------------------------------
+;; (use-package sly
+;;   :custom
+;;   (inferior-lisp-program "sbcl")
+;;   (sly-contribs '(sly-fancy)))
+
+;; (use-package sly-quicklisp
+;;   :requires sly)
+
+;; (use-package sly-asdf
+;;   :requires sly)
+
+;; - Common Lisp using slime -----------------------------------------
+(use-package slime-company)
+
+(use-package slime
   :custom
   (inferior-lisp-program "sbcl")
-  (sly-contribs '(sly-fancy)))
-
-(use-package sly-quicklisp
-  :requires sly)
-
-(use-package sly-asdf
-  :requires sly)
+  (slime-contribs '(slime-fancy
+					slime-company
+					slime-quicklisp
+					slime-asdf
+					slime-hyperdoc
+					slime-repl
+					slime-autodoc
+					slime-macrostep
+					slime-references
+					slime-mdot-fu
+					slime-xref-browser
+					slime-presentations
+					slime-cl-indent
+					slime-fancy-inspector
+					slime-fontifying-fu
+					slime-trace-dialog)))
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
