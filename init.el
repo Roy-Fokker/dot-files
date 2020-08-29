@@ -51,6 +51,8 @@
 (global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "C-S-f") 'isearch-backward)
 
+;; Window Movement
+(windmove-default-keybindings)
 
 ;; Editor line behaviour
 (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
