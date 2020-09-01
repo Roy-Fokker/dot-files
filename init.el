@@ -116,10 +116,10 @@
               savehist-save-minibuffer-history t               ; save minibuffer history.
               )
 
-(load-theme 'tango-dark t)
+(load-theme 'tango-dark t)                                     ; Set a default dark theme, overriden later
 
+;; ------------------------------------------------------------------
 ;; Change window splitting behaviour.
-
 (defun vsplit-other-window ()
   "Splits the window vertically and switch to that window."
   (interactive)
@@ -138,7 +138,6 @@
 ;; ------------------------------------------------------------------
 ;; This function will get full path of the special folder regardless
 ;; where it is on a Windows machine. It makes a call out to cmd/PS.
-
 (defun get-windows-special-folder-path (FOLDER_NAME)
   "FOLDER_NAME is special folder name of interest."
   (car
@@ -148,62 +147,6 @@
                   (concat "[Environment]::GetFolderPath(\""
 			  FOLDER_NAME
 			  "\")"))))
-
-;; ------------------------------------------------------------------
-;; Save and Load Frame Size and Location.
-;; This faster than using desktop-save-mode. As it doesn't reload
-;; all the file/buffers and modes.
-
-;; (defun my/save-frame-geometry ()
-;;   "Save Emacs frame geometry into a file to be loaded later."
-;;   (let ((frame-left      (car (frame-position)))
-;;         (frame-top       (cdr (frame-position)))
-;;         (frame-width     (frame-width))
-;;         (frame-height    (frame-height))
-;;         (frame-info-file (expand-file-name "frame-geometry.el"
-;;                                            user-emacs-directory)))
-
-;;     (unless (number-or-marker-p frame-left)
-;;       (setq frame-left 0))
-;;     (unless (number-or-marker-p frame-top)
-;;       (setq frame-top 0))
-;;     (unless (number-or-marker-p frame-width)
-;;       (setq frame-width 200))
-;;     (unless (number-or-marker-p frame-height)
-;;       (setq frame-height 65))
-
-;;     (with-temp-buffer
-;;       (insert
-;;        ";; This is previous session's emacs frame geometry.\n"
-;;        ";; Last generated: " (current-time-string) ".\n"
-;;        (format "%S"
-;;                `(setq initial-frame-alist
-;;                       '((top     . ,frame-top)
-;;                         (left    . ,frame-left)
-;;                         (width   . ,frame-width)
-;;                         (height  . ,frame-height)))))
-;;       (when (file-writable-p frame-info-file)
-;;         (write-file frame-info-file)
-;;         (byte-compile-file frame-info-file)))
-;;     ))
-
-;; (defun my/load-frame-geometry ()
-;;   "Load Emacs frame geometry into current session."
-;;   (let ((frame-info-file (expand-file-name "frame-geometry.el"
-;;                                            user-emacs-directory))
-;; 	(frame-info-elc (expand-file-name "frame-geometry.elc"
-;;                                           user-emacs-directory)))
-;;     (cond
-;;      ((file-readable-p frame-info-elc)
-;;       (load-file frame-info-elc))
-;;      ((file-readable-p frame-info-file)
-;;       (load-file frame-info-file)))
-;;     ))
-
-;; (if window-system
-;;     (progn
-;;       (add-hook 'kill-emacs-hook #'my/save-frame-geometry)
-;;       (add-hook 'after-init-hook #'my/load-frame-geometry)))
 
 ;; ------------------------------------------------------------------
 ;; Setup desktop save mode
@@ -246,8 +189,8 @@
 
 ;; install use-package if it's not present
 (unless (package-installed-p 'use-package)
-        (package-refresh-contents)
-        (package-install 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 ;; compile it
 (require 'use-package)
@@ -306,6 +249,25 @@
    ("C-x C-f" . counsel-find-file))
   :hook
   (after-init . counsel-mode))
+
+;; - Treemacs -------------------------------------------------------
+(use-package treemacs
+  :custom
+  (treemacs-python-executable "python.exe")
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 0"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t f" . treemacs-find-file)
+        ("C-x t C-f" . treemacs-find-tag)))
+
+(use-package treemacs-icons-dired
+  :hook (treemacs-mode . treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after treemacs magit)
 
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
@@ -378,21 +340,24 @@
   :custom
   (inferior-lisp-program "sbcl")
   (slime-contribs '(slime-fancy
-					slime-company
-					slime-quicklisp
-					slime-asdf
-					slime-hyperdoc
-					slime-repl
-					slime-autodoc
-					slime-macrostep
-					slime-references
-					slime-mdot-fu
-					slime-xref-browser
-					slime-presentations
-					slime-cl-indent
-					slime-fancy-inspector
-					slime-fontifying-fu
-					slime-trace-dialog)))
+		    slime-company
+		    slime-quicklisp
+		    slime-asdf
+		    slime-hyperdoc
+		    slime-repl
+		    slime-autodoc
+		    slime-macrostep
+		    slime-references
+		    slime-mdot-fu
+		    slime-xref-browser
+		    slime-presentations
+		    slime-cl-indent
+		    slime-fancy-inspector
+		    slime-fontifying-fu
+		    slime-trace-dialog))
+  :hook
+  (lisp-mode . slime-mode)
+  (inferior-lisp-mode . inferior-slime-mode))
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
