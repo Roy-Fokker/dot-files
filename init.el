@@ -231,7 +231,7 @@
   (ivy-count-format "(%d/%d) ")
   (ivy-wrap t)
   :bind
-  (("C-x C-b" . ivy-switch-buffer)
+  (("C-x b"   . ivy-switch-buffer)
    ("C-c C-r" . ivy-resume))
   :hook
   (after-init . ivy-mode))
