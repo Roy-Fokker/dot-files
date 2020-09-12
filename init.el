@@ -217,6 +217,8 @@
 
 ;; - doom modeline --------------------------------------------------
 (use-package doom-modeline
+  :custom
+  (doom-modeline--modal-icon t)
   :hook
   (after-init . doom-modeline-mode))
 
