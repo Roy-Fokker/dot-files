@@ -42,6 +42,7 @@
 ;; - Basic Behaviour ------------------------------------------------
 ;; Disable GUI elements
 (tool-bar-mode -1)                              ; Disable tool bar
+(tooltip-mode -1)                               ; Disable tooltips
 (menu-bar-mode -1)                              ; Disable menu bar
 (scroll-bar-mode -1)                            ; Hide scroll bar
 
