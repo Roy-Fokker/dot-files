@@ -53,6 +53,7 @@
 (global-set-key (kbd "C-S-f") 'isearch-backward)
 (global-set-key [C-Tab] 'other-window)
 (global-set-key (kbd "C-w") 'kill-this-buffer)
+(global-set-key (kbd "C-S-w") 'delete-window)
 
 ;; Window Movement
 (windmove-default-keybindings)
