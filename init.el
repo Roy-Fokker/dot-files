@@ -212,6 +212,15 @@
                                                      user-emacs-directory)
         no-littering-var-directory (expand-file-name "var/"
                                                      user-emacs-directory)))
+
+;; - Diminish -------------------------------------------------------
+(use-package diminish)
+
+;; - Diminish Built-in Modes ----------------------------------------
+(diminish 'eldoc-mode)
+(diminish 'auto-revert-mode)
+(diminish 'abbrev-mode)
+
 ;; - Doom Theme -----------------------------------------------------
 (use-package doom-themes
   :init
@@ -229,6 +238,7 @@
 
 ;; - ivy swiper and counsel -----------------------------------------
 (use-package ivy
+  :diminish
   :init
   (when (setq enable-recursive-minibuffers t)
     (minibuffer-depth-indicate-mode t))
@@ -258,6 +268,7 @@
 
 ;; - Treemacs -------------------------------------------------------
 (use-package treemacs
+  :diminish
   :custom
   (treemacs-python-executable "python.exe")
   :bind
@@ -277,6 +288,7 @@
 
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
+  :diminish
   :hook
   (after-init . which-key-mode))
 
@@ -289,15 +301,18 @@
   :hook
   ((prog-mode
     text-mode
-    lisp-interaction-mode-hook)
+    lisp-interaction-mode
+	slime-repl-mode)
    . rainbow-delimiters-mode))
 
 ;; - Paredit --------------------------------------------------------
 (use-package paredit
+  :diminish (paredit-mode . " ↀ")
   :hook
   ((lisp-mode
     emacs-lisp-mode
-    lisp-interaction-mode)
+    lisp-interaction-mode
+	slime-repl-mode)
    . paredit-mode))
 
 ;; - Lispy ----------------------------------------------------------
@@ -310,6 +325,7 @@
 
 ;; - Company --------------------------------------------------------
 (use-package company
+  :diminish (company-mode . " Ͽ")
   :config
   (setq company-idle-delay 0
 	company-tooltip-limit 20
@@ -320,6 +336,7 @@
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
+  :diminish (yas-minor-mode . " Ϋ")
   :commands yas-minor-mode
   :hook
   (prog-mode . yas-global-mode))
@@ -343,6 +360,8 @@
 (use-package slime-company)
 
 (use-package slime
+  :diminish ((slime-mode . " 🔸")
+			 (slime-autodoc-mode . " ₯"))
   :custom
   (inferior-lisp-program "sbcl")
   (slime-contribs '(slime-fancy
