@@ -230,8 +230,9 @@
 (use-package doom-modeline
   :custom
   (doom-modeline--modal-icon t)
+  (doom-modeline-minor-modes t)
   :hook
-  (after-init . doom-modeline-mode))
+  (window-setup . doom-modeline-mode))
 
 ;; - all the icons --------------------------------------------------
 (use-package all-the-icons)
