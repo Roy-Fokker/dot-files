@@ -50,6 +50,8 @@
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-f") 'isearch-forward)
 (global-set-key (kbd "C-S-f") 'isearch-backward)
+(global-set-key [C-Tab] 'other-window)
+(global-set-key (kbd "C-w") 'kill-this-buffer)
 
 ;; Window Movement
 (windmove-default-keybindings)
