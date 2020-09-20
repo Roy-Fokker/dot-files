@@ -302,7 +302,10 @@
 
 ;; - Magit ----------------------------------------------------------
 (use-package magit
-  :bind ("C-x g" . magit-status))
+  :custom
+  (magit-completing-read-function 'ivy-completing-read)
+  :bind
+  ("C-x g" . magit-status))
 
 ;; - Rainbow Brackets -----------------------------------------------
 (use-package rainbow-delimiters
