@@ -316,6 +316,17 @@
 	slime-repl-mode)
    . rainbow-delimiters-mode))
 
+;; - Highlight indent guides ----------------------------------------
+(use-package highlight-indent-guides
+  :diminish
+  :commands
+  (highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-method 'bitmap)
+  (highlight-indent-guides-responsive 'stack)
+  :hook
+  (prog-mode . highlight-indent-guides-mode))
+
 ;; - Paredit --------------------------------------------------------
 (use-package paredit
   :diminish (paredit-mode . " ↀ")
