@@ -267,6 +267,13 @@
   :hook
   (after-init . counsel-mode))
 
+;; - SMEX -----------------------------------------------------------
+(use-package smex
+  :custom
+  (smex-completion-method 'ivy)
+  :hook
+  (after-init . smex-initialize))
+
 ;; - Treemacs -------------------------------------------------------
 (use-package treemacs
   :diminish
