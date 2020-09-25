@@ -101,6 +101,7 @@
       vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
       find-file-visit-truename t                    ; find true path of the file.
       inhibit-compacting-font-caches t              ; to speed up text rendering.
+      w32-get-true-file-attributes nil              ; disable Net Logon checks
       )
 
 (setq-default frame-title-format "%b %& emacs"                 ; Window Title => {Buffer Name} {Modified Status}
