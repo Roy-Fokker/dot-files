@@ -183,10 +183,13 @@
 ;; Don't load any packages by default
 (setq package-enable-at-startup nil)
 
+;; Disable key checks due to elpa keys not being up to date
+;; (setq package-check-signature nil)
+
 ;; Where to look for packages
-(add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
-(add-to-list 'package-archives '("elpa"  . "http://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org"   . "https://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("elpa"  . "https://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;; only initialize package.el if emacs less than 27
 (when (< emacs-major-version 27)
