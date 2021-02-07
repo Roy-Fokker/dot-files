@@ -75,7 +75,7 @@
 (setq-default default-buffer-file-coding-system 'utf-8)
 
 ;; Set default font
-(set-frame-font "Fira Code" nil t)
+(set-frame-font "Cascadia Code"  nil t)
 (set-face-attribute 'default nil)
 
 ;; Set editor values to preferences
@@ -184,7 +184,7 @@
 (setq package-enable-at-startup nil)
 
 ;; Disable key checks due to elpa keys not being up to date
-;; (setq package-check-signature nil)
+(setq package-check-signature nil)
 
 ;; Where to look for packages
 (add-to-list 'package-archives '("org"   . "https://orgmode.org/elpa/") t)
@@ -386,26 +386,26 @@
 (use-package slime-company)
 
 (use-package slime
-  :diminish ((slime-mode . " 🔸")
+  :diminish ((slime-mode . " ※")
 			 (slime-autodoc-mode . " ₯"))
-  :custom
-  (inferior-lisp-program "sbcl")
-  (slime-contribs '(slime-fancy
-		    slime-company
-		    slime-quicklisp
-		    slime-asdf
-		    slime-hyperdoc
-		    slime-repl
-		    slime-autodoc
-		    slime-macrostep
-		    slime-references
-		    slime-mdot-fu
-		    slime-xref-browser
-		    slime-presentations
-		    slime-cl-indent
-		    slime-fancy-inspector
-		    slime-fontifying-fu
-		    slime-trace-dialog))
+  :init
+  (setq inferior-lisp-program "sbcl"
+	slime-contribs '(slime-fancy
+			 slime-company
+			 slime-quicklisp
+			 slime-asdf
+			 slime-hyperdoc
+			 slime-repl
+			 slime-autodoc
+			 slime-macrostep
+			 slime-references
+			 slime-mdot-fu
+			 slime-xref-browser
+			 slime-presentations
+			 slime-cl-indent
+			 slime-fancy-inspector
+			 slime-fontifying-fu
+			 slime-trace-dialog))
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
