@@ -206,25 +206,6 @@
       use-package-always-defer  t ; always defer loading packages
       )
 
-;; ------------------------------------------------------------------
-;; Packages Used by Emacs
-;; ------------------------------------------------------------------
-;; - No Littering ---------------------------------------------------
-(use-package no-littering
-  :config
-  (setq no-littering-etc-directory (expand-file-name "etc/"
-                                                     user-emacs-directory)
-        no-littering-var-directory (expand-file-name "var/"
-                                                     user-emacs-directory)))
-
-;; - Diminish -------------------------------------------------------
-(use-package diminish)
-
-;; - Diminish Built-in Modes ----------------------------------------
-(diminish 'eldoc-mode)
-(diminish 'auto-revert-mode)
-(diminish 'abbrev-mode)
-
 ;; - Doom Theme -----------------------------------------------------
 (use-package doom-themes
   :init
@@ -278,26 +259,6 @@
   :hook
   (after-init . smex-initialize))
 
-;; - Treemacs -------------------------------------------------------
-(use-package treemacs
-  :diminish
-  :custom
-  (treemacs-python-executable "python.exe")
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 0"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t f" . treemacs-find-file)
-        ("C-x t C-f" . treemacs-find-tag)))
-
-(use-package treemacs-icons-dired
-  :hook (treemacs-mode . treemacs-icons-dired-mode))
-
-(use-package treemacs-magit
-  :after treemacs magit)
-
 ;; - Which Key ------------------------------------------------------
 (use-package which-key
   :diminish
@@ -320,20 +281,8 @@
 	slime-repl-mode)
    . rainbow-delimiters-mode))
 
-;; - Highlight indent guides ----------------------------------------
-(use-package highlight-indent-guides
-  :diminish
-  :commands
-  (highlight-indent-guides-mode)
-  :custom
-  (highlight-indent-guides-method 'bitmap)
-  (highlight-indent-guides-responsive 'stack)
-  :hook
-  (prog-mode . highlight-indent-guides-mode))
-
 ;; - Paredit --------------------------------------------------------
 (use-package paredit
-  :diminish (paredit-mode . " ↀ")
   :hook
   ((lisp-mode
     emacs-lisp-mode
@@ -341,17 +290,8 @@
 	slime-repl-mode)
    . paredit-mode))
 
-;; - Lispy ----------------------------------------------------------
-;; (use-package lispy
-;;   :hook
-;;   ((lisp-mode
-;;     emacs-lisp-mode
-;;     lisp-interaction-mode)
-;;    . lispy-mode))
-
 ;; - Company --------------------------------------------------------
 (use-package company
-  :diminish (company-mode . " Ͽ")
   :config
   (setq company-idle-delay 0
 	company-tooltip-limit 20
@@ -362,7 +302,6 @@
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
-  :diminish (yas-minor-mode . " Ϋ")
   :commands yas-minor-mode
   :hook
   (prog-mode . yas-global-mode))
@@ -370,24 +309,10 @@
 (use-package yasnippet-snippets)
 (use-package common-lisp-snippets)
 
-;; - Common Lisp using sly -------------------------------------------
-;; (use-package sly
-;;   :custom
-;;   (inferior-lisp-program "sbcl")
-;;   (sly-contribs '(sly-fancy)))
-
-;; (use-package sly-quicklisp
-;;   :requires sly)
-
-;; (use-package sly-asdf
-;;   :requires sly)
-
 ;; - Common Lisp using slime -----------------------------------------
 (use-package slime-company)
 
 (use-package slime
-  :diminish ((slime-mode . " ※")
-			 (slime-autodoc-mode . " ₯"))
   :init
   (setq inferior-lisp-program "sbcl"
 	slime-contribs '(slime-fancy
@@ -406,6 +331,7 @@
 			 slime-fancy-inspector
 			 slime-fontifying-fu
 			 slime-trace-dialog))
+  ;;(load (expand-file-name "$userprofile/quicklisp/slime-helper.el"))
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
