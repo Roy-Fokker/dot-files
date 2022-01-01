@@ -39,143 +39,6 @@
 (add-hook 'minibuffer-exit-hook #'my/restore-garbage-collection)
 (add-hook 'focus-out-hook #'garbage-collect)
 
-;; - Basic Behaviour ------------------------------------------------
-;; Disable GUI elements
-(tool-bar-mode -1)                              ; Disable tool bar
-(tooltip-mode -1)                               ; Disable tooltips
-(menu-bar-mode -1)                              ; Disable menu bar
-(scroll-bar-mode -1)                            ; Hide scroll bar
-
-;; Enable Common User Actions, like sane editor
-(cua-mode t)
-(global-set-key (kbd "C-s") 'save-buffer)
-(global-set-key (kbd "C-f") 'isearch-forward)
-(global-set-key (kbd "C-S-f") 'isearch-backward)
-(global-set-key [C-Tab] 'other-window)
-(global-set-key (kbd "C-w") 'kill-this-buffer)
-(global-set-key (kbd "C-S-w") 'delete-window)
-
-;; Window Movement
-(windmove-default-keybindings)
-
-;; Editor line behaviour
-(global-display-line-numbers-mode)              ; Display line-numbers in all buffers
-(global-hl-line-mode)                           ; Highlight current line
-(show-paren-mode t)                             ; Parenthesis highlighting
-(delete-selection-mode t)                       ; Make delete work as expected
-(global-prettify-symbols-mode t)                ; prettify symbols (like lambda)
-
-(defalias 'yes-or-no-p 'y-or-n-p)               ; Change yes/no prompt to y/n
-
-;; Use utf-8 everywhere.
-(prefer-coding-system       'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq-default default-buffer-file-coding-system 'utf-8)
-
-;; Set default font
-(set-frame-font "Cascadia Code"  nil t)
-(set-face-attribute 'default nil)
-
-;; Set editor values to preferences
-(setq inhibit-startup-screen t                      ; Disable startup screen.
-      visible-bell 1                                ; Disable audible beeps.
-      tab-width 4                                   ; Set tab width to 4 spaces.
-      backup-inhibited t                            ; Don't use file backups.
-      cursor-in-non-selected-windows 'hollow        ; Don't show cursors in inactive window.
-      make-pointer-invisible t                      ; Hide mouse when typing.
-      fast-but-imprecise-scrolling nil              ; Not sure what this does??!
-      jit-lock-defer-time 0                         ; don't wait for jit.
-      select-enable-clipboard t                     ; integrate with system clipboard
-      x-select-request-type '(UTF8_STRING           ; Treat clipboard input as utf8
-			      COMPOUND_TEXT         ;   then other in list.
-			      TEXT
-			      STRING)
-      mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
-      scroll-preserve-screen-position t             ; Preserve line/column position.
-      delete-old-versions -1                        ; Delete execess backup files
-      backup-directory-alist `(("." .               ; where to put backup files
-				(expand-file-name "backups"
-						  user-emacs-directory)))
-      vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
-      find-file-visit-truename t                    ; find true path of the file.
-      inhibit-compacting-font-caches t              ; to speed up text rendering.
-      w32-get-true-file-attributes nil              ; disable Net Logon checks
-      )
-
-(setq-default frame-title-format "%b %& emacs"                 ; Window Title => {Buffer Name} {Modified Status}
-              delete-by-moving-to-trash t                      ; delete moves to recycle bin
-              column-number-mode t                             ; display column number
-              show-paren-delay 0                               ; show matching immediately
-              scroll-conservatively  most-positive-fixnum      ; scroll sensibly, don't jump around
-              mouse-wheel-scroll-amount '(1 ((shift) . 1))     ; one line at a time
-              mouse-wheel-follow-mouse t                       ; scroll window under mouse
-              find-file-visit-truename t                       ; find true path of a file
-              custom-file (expand-file-name ".emacs-custom.el" ; save machine specific settings here
-					    user-emacs-directory)
-              indicate-empty-lines t                           ; Show empty lines
-              truncate-lines t                                 ; disable word wrap
-              default-tab-width 4                              ; Default tab width is also 4 spaces.
-              help-window-select t                             ; focus on help when shown.
-              savehist-save-minibuffer-history t               ; save minibuffer history.
-              )
-
-(load-theme 'tango-dark t)                                     ; Set a default dark theme, overriden later
-
-;; ------------------------------------------------------------------
-;; Change window splitting behaviour.
-(defun vsplit-other-window ()
-  "Splits the window vertically and switch to that window."
-  (interactive)
-  (split-window-vertically)
-  (other-window 1 nil))
-
-(defun hsplit-other-window ()
-  "Splits the window horizontally and switch to that window."
-  (interactive)
-  (split-window-horizontally)
-  (other-window 1 nil))
-
-(global-set-key (kbd "C-x 2") 'hsplit-other-window) ; Change the bindings for vertical
-(global-set-key (kbd "C-x 3") 'vsplit-other-window) ; and horizontal splits.
-
-;; ------------------------------------------------------------------
-;; This function will get full path of the special folder regardless
-;; where it is on a Windows machine. It makes a call out to cmd/PS.
-(defun get-windows-special-folder-path (FOLDER_NAME)
-  "FOLDER_NAME is special folder name of interest."
-  (car
-   (process-lines "powershell"
-                  "-NoProfile"
-                  "-Command"
-                  (concat "[Environment]::GetFolderPath(\""
-			  FOLDER_NAME
-			  "\")"))))
-
-;; ------------------------------------------------------------------
-;; Setup desktop save mode
-(setq desktop-dirname             "~/.emacs.d/desktop/"    ; Path to save folder
-      desktop-base-file-name      "emacs.desktop"          ; file name to save in
-      desktop-base-lock-name      "lock"                   ; temp file
-      desktop-path                (list desktop-dirname)   ; ???
-      desktop-save                t                        ; save without asking
-      desktop-files-not-to-save   "^$"                     ; reload tramp paths
-      desktop-load-locked-desktop nil                      ; don't load locked file
-      desktop-auto-save-timeout   30)                      ; frequency of checks for changes to desktop
-
-(desktop-save-mode t)
-
-;; ------------------------------------------------------------------
-;; Load Custom file if it exists.
-;; Loaded after emacs finishes initializing.
-(defun my/load-custom-file ()
-  (when (file-exists-p custom-file)
-    (load custom-file)))
-
-(if window-system
-    (add-hook 'after-init-hook #'my/load-custom-file))
-
 ;; ------------------------------------------------------------------
 ;; Configure Package Archives
 (require 'package) ; package management
@@ -201,12 +64,158 @@
   (package-install 'use-package))
 
 ;; compile it
-(require 'use-package)
+(eval-and-compile
+  (require 'use-package))
+
 (setq use-package-always-ensure t ; always download on first run
       use-package-always-defer  t ; always defer loading packages
       )
 
-;; - Doom Theme -----------------------------------------------------
+;; - Basic Behaviour ------------------------------------------------
+;; Set editor values to preferences
+(setq inhibit-startup-screen t                      ; Disable startup screen.
+      visible-bell t                                ; Disable audible beeps.
+      tab-width 4                                   ; Set tab width to 4 spaces.
+      backup-inhibited t                            ; Don't use file backups.
+      cursor-in-non-selected-windows 'hollow        ; Don't show cursors in inactive window.
+      make-pointer-invisible t                      ; Hide mouse when typing.
+      fast-but-imprecise-scrolling nil              ; Not sure what this does??!
+      jit-lock-defer-time 0                         ; don't wait for jit.
+      select-enable-clipboard t                     ; integrate with system clipboard
+      x-select-request-type '(UTF8_STRING           ; Treat clipboard input as utf8
+			                        COMPOUND_TEXT         ;   then other in list.
+                              TEXT
+                              STRING)
+      mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
+      scroll-preserve-screen-position t             ; Preserve line/column position.
+      delete-old-versions -1                        ; Delete execess backup files
+      backup-directory-alist `(("." .               ; where to put backup files
+				                        (expand-file-name "backups"
+						                                      user-emacs-directory)))
+      vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
+      find-file-visit-truename t                    ; find true path of the file.
+      inhibit-compacting-font-caches t              ; to speed up text rendering.
+      w32-get-true-file-attributes nil              ; disable Net Logon checks
+      frame-resize-pixelwise t                      ; ensure text size is not rounded
+      create-lockfiles nil                          ; don't create lockfiles
+      )
+
+(setq-default frame-title-format "%b %& emacs"                 ; Window Title => {Buffer Name} {Modified Status}
+              delete-by-moving-to-trash t                      ; delete moves to recycle bin
+              column-number-mode t                             ; display column number
+              show-paren-delay 0                               ; show matching immediately
+              scroll-conservatively  most-positive-fixnum      ; scroll sensibly, don't jump around
+              mouse-wheel-scroll-amount '(1 ((shift) . 1))     ; one line at a time
+              mouse-wheel-follow-mouse t                       ; scroll window under mouse
+              find-file-visit-truename t                       ; find true path of a file
+              custom-file (expand-file-name ".emacs-custom.el" ; save machine specific settings here
+					    user-emacs-directory)
+              indicate-empty-lines t                           ; Show empty lines
+              truncate-lines t                                 ; disable word wrap
+              default-tab-width 4                              ; Default tab width is also 4 spaces.
+              help-window-select t                             ; focus on help when shown.
+              savehist-save-minibuffer-history t               ; save minibuffer history.
+              )
+
+(load-theme 'tango-dark t)                                     ; Set a default dark theme, overriden later
+
+;; = Emacs configuration ============================================
+;; - set editor behaviour -------------------------------------------
+(use-package emacs
+  :ensure nil
+  :init
+  (tool-bar-mode -1)                              ; Disable tool bar
+  (tooltip-mode -1)                               ; Disable tooltips
+  (menu-bar-mode -1)                              ; Disable menu bar
+  (scroll-bar-mode -1)                            ; Hide scroll bar
+  (defalias 'yes-or-no-p 'y-or-n-p)               ; Change yes/no prompt to y/n
+
+  :config
+  (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
+  (global-hl-line-mode)                           ; Highlight current line
+  (show-paren-mode t)                             ; Parenthesis highlighting
+  (delete-selection-mode t)                       ; Make delete work as expected
+  (global-prettify-symbols-mode t)                ; prettify symbols (like lambda)
+  (windmove-default-keybindings)                  ; Window Movement
+  )
+
+;; - set font and utf preferences ---------------------------------------
+(use-package emacs
+  :ensure nil
+  :config
+  ;; Use utf-8 everywhere.
+  (prefer-coding-system       'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (setq-default default-buffer-file-coding-system 'utf-8)
+
+  ;; Set default font
+  (set-frame-font "Cascadia Code"  nil t)
+  (set-face-attribute 'default nil)
+)
+
+;; - change window splitting ----------------------------------------
+(use-package emacs
+  :ensure nil
+  :preface
+  (defun my/split-and-follow-horizontally ()
+    "Split window below."
+    (interactive)
+    (split-window-below)
+    (other-window 1))
+  (defun my/split-and-follow-vertically ()
+    "Split window right."
+    (interactive)
+    (split-window-right)
+    (other-window 1))
+  :bind
+  (("C-x 2" . 'my/split-and-follow-horizontally)
+   ("C-x 3" . 'my/split-and-follow-vertically)))
+
+;; - CUA Mode -------------------------------------------------------
+(use-package emacs
+  :ensure nil
+  :hook
+  (window-setup . cua-mode)
+  :bind
+  (("C-s"   . 'save-buffer)
+   ("C-f"   . 'isearch-forward)
+   ("C-S-f" . 'isearch-backward)
+   ("<C-tab>" . 'other-window)
+   ("C-w"   . 'kill-this-buffer)
+   ("C-S-w" . 'delete-window)
+   ("C-z"   . 'undo)))
+
+;; - desktop save mode setup ----------------------------------------
+(use-package emacs
+  :ensure nil
+  :preface
+  (setq desktop-dirname             "~/.emacs.d/"            ; Path to save folder
+	      desktop-base-file-name      "emacs.desktop"          ; file name to save in
+	      desktop-base-lock-name      "lock"                   ; temp file
+	      desktop-path                (list desktop-dirname)   ; ???
+	      desktop-save                t                        ; save without asking
+	      desktop-files-not-to-save   "^$"                     ; reload tramp paths
+	      desktop-load-locked-desktop nil                      ; don't load locked file
+	      desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
+	)
+  (desktop-save-mode t))
+
+;; = Package Configurations =========================================
+;; - async ----------------------------------------------------------
+(use-package async
+  :init
+  (dired-async-mode 1))
+
+;; - all-the-icons --------------------------------------------------
+(use-package all-the-icons)
+
+(use-package unicode-fonts
+  :hook
+  (window-setup . unicode-fonts-setup))
+
+;; - Doom Themes ----------------------------------------------------
 (use-package doom-themes
   :init
   (load-theme 'doom-one t))
@@ -219,10 +228,7 @@
   :hook
   (window-setup . doom-modeline-mode))
 
-;; - all the icons --------------------------------------------------
-(use-package all-the-icons)
-
-;; - ivy swiper and counsel -----------------------------------------
+;; - ivy, ivy-rich, swiper, counsel and smex -------------------------
 (use-package ivy
   :diminish
   :init
@@ -238,6 +244,10 @@
   :hook
   (after-init . ivy-mode))
 
+(use-package ivy-rich
+  :hook
+  (after-init . ivy-rich-mode))
+
 (use-package swiper
   :after ivy
   :bind
@@ -248,46 +258,35 @@
   :bind
   (("M-x" . counsel-M-x)
    ("M-y" . counsel-yank-pop)
-   ("C-x C-f" . counsel-find-file))
+   ("C-x C-f" . counsel-find-file)
+   :map minibuffer-local-map
+   ("C-r" . 'counsel-minibuffer-history))
   :hook
   (after-init . counsel-mode))
 
-;; - SMEX -----------------------------------------------------------
 (use-package smex
   :custom
   (smex-completion-method 'ivy)
   :hook
   (after-init . smex-initialize))
 
-;; - Which Key ------------------------------------------------------
+;; - which key ------------------------------------------------------
 (use-package which-key
   :diminish
   :hook
   (after-init . which-key-mode))
 
-;; - Magit ----------------------------------------------------------
-(use-package magit
-  :custom
-  (magit-completing-read-function 'ivy-completing-read)
-  :bind
-  ("C-x g" . magit-status))
-
-;; - Rainbow Brackets -----------------------------------------------
+;; - rainbow delimiters ---------------------------------------------
 (use-package rainbow-delimiters
   :hook
-  ((prog-mode
-    text-mode
-    lisp-interaction-mode
-	slime-repl-mode)
-   . rainbow-delimiters-mode))
+  (prog-mode . rainbow-delimiters-mode))
 
 ;; - Paredit --------------------------------------------------------
 (use-package paredit
   :hook
   ((lisp-mode
     emacs-lisp-mode
-    lisp-interaction-mode
-	slime-repl-mode)
+    lisp-interaction-mode)
    . paredit-mode))
 
 ;; - Company --------------------------------------------------------
@@ -307,10 +306,10 @@
   (prog-mode . yas-global-mode))
 
 (use-package yasnippet-snippets)
-(use-package common-lisp-snippets)
 
-;; - Common Lisp using slime -----------------------------------------
+;; - Common Lisp using Slime ----------------------------------------
 (use-package slime-company)
+(use-package common-lisp-snippets)
 
 (use-package slime
   :init
@@ -331,7 +330,6 @@
 			 slime-fancy-inspector
 			 slime-fontifying-fu
 			 slime-trace-dialog))
-  ;;(load (expand-file-name "$userprofile/quicklisp/slime-helper.el"))
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
