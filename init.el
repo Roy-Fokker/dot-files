@@ -12,14 +12,14 @@
 (defun my/defer-garbage-collection ()
   "Function to defer garbage collection."
   (setq gc-cons-threshold most-positive-fixnum
-	gc-cons-percentage 0.6))
+        gc-cons-percentage 0.6))
 
 (defun my/restore-garbage-collection ()
   "Function to restore garbage collection."
   (run-at-time 1 nil
                (lambda ()
-		 (setq gc-cons-threshold (* 128 1024 1024)
-		       gc-cons-percentage 0.1))))
+                       (setq gc-cons-threshold (* 128 1024 1024)
+                             gc-cons-percentage 0.1))))
 
 (defun my/restore-file-name-handler ()
   "Restore file-name-handler list."
@@ -83,15 +83,15 @@
       jit-lock-defer-time 0                         ; don't wait for jit.
       select-enable-clipboard t                     ; integrate with system clipboard
       x-select-request-type '(UTF8_STRING           ; Treat clipboard input as utf8
-			      COMPOUND_TEXT         ;   then other in list.
-			      TEXT
-			      STRING)
+                              COMPOUND_TEXT         ;   then other in list.
+                              TEXT
+                              STRING)
       mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
       scroll-preserve-screen-position t             ; Preserve line/column position.
       delete-old-versions -1                        ; Delete execess backup files
       backup-directory-alist `(("." .               ; where to put backup files
-				(expand-file-name "backups"
-						  user-emacs-directory)))
+                                (expand-file-name "backups"
+                                                  user-emacs-directory)))
       vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
       find-file-visit-truename t                    ; find true path of the file.
       inhibit-compacting-font-caches t              ; to speed up text rendering.
@@ -109,7 +109,7 @@
               mouse-wheel-follow-mouse t                       ; scroll window under mouse
               find-file-visit-truename t                       ; find true path of a file
               custom-file (expand-file-name ".emacs-custom.el" ; save machine specific settings here
-					    user-emacs-directory)
+                                            user-emacs-directory)
               indicate-empty-lines t                           ; Show empty lines
               truncate-lines t                                 ; disable word wrap
               default-tab-width 4                              ; Default tab width is also 4 spaces.
@@ -192,14 +192,14 @@
   :ensure nil
   :preface
   (setq desktop-dirname             "~/.emacs.d/"            ; Path to save folder
-	desktop-base-file-name      "emacs.desktop"          ; file name to save in
-	desktop-base-lock-name      "lock"                   ; temp file
-	desktop-path                (list desktop-dirname)   ; ???
-	desktop-save                t                        ; save without asking
-	desktop-files-not-to-save   "^$"                     ; reload tramp paths
-	desktop-load-locked-desktop nil                      ; don't load locked file
-	desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
-	)
+        desktop-base-file-name      "emacs.desktop"          ; file name to save in
+        desktop-base-lock-name      "lock"                   ; temp file
+        desktop-path                (list desktop-dirname)   ; ???
+        desktop-save                t                        ; save without asking
+        desktop-files-not-to-save   "^$"                     ; reload tramp paths
+        desktop-load-locked-desktop nil                      ; don't load locked file
+        desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
+  )
   (desktop-save-mode t))
 
 ;; = Package Configurations =========================================
@@ -337,22 +337,22 @@
 (use-package slime
   :init
   (setq inferior-lisp-program "sbcl"
-	slime-contribs '(slime-fancy
-			 slime-company
-			 slime-quicklisp
-			 slime-asdf
-			 slime-hyperdoc
-			 slime-repl
-			 slime-autodoc
-			 slime-macrostep
-			 slime-references
-			 slime-mdot-fu
-			 slime-xref-browser
-			 slime-presentations
-			 slime-cl-indent
-			 slime-fancy-inspector
-			 slime-fontifying-fu
-			 slime-trace-dialog))
+        slime-contribs '(slime-fancy
+                         slime-company
+                         slime-quicklisp
+                         slime-asdf
+                         slime-hyperdoc
+                         slime-repl
+                         slime-autodoc
+                         slime-macrostep
+                         slime-references
+                         slime-mdot-fu
+                         slime-xref-browser
+                         slime-presentations
+                         slime-cl-indent
+                         slime-fancy-inspector
+                         slime-fontifying-fu
+                         slime-trace-dialog))
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
