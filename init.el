@@ -318,7 +318,11 @@
   (treemacs-mode . treemacs-icons-dired-mode))
 
 ;; - Magit ----------------------------------------------------------
-(use-package magit)
+(use-package magit
+  :custom
+  (magit-completing-read-function 'ivy-completing-read)
+  :bind
+  (("C-x g" . magit-status)))
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
