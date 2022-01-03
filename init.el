@@ -202,12 +202,7 @@
   )
   (desktop-save-mode t))
 
-;; = Package Configurations =========================================
-;; - async ----------------------------------------------------------
-(use-package async
-  :init
-  (dired-async-mode 1))
-
+;; = Third-Party Packages' Configuration ============================
 ;; - all-the-icons --------------------------------------------------
 (use-package all-the-icons)
 
