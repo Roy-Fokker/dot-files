@@ -18,8 +18,8 @@
   "Function to restore garbage collection."
   (run-at-time 1 nil
                (lambda ()
-                       (setq gc-cons-threshold (* 128 1024 1024)
-                             gc-cons-percentage 0.1))))
+                 (setq gc-cons-threshold (* 128 1024 1024)
+                       gc-cons-percentage 0.1))))
 
 (defun my/restore-file-name-handler ()
   "Restore file-name-handler list."
