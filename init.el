@@ -133,9 +133,9 @@
   :config
   (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
   (global-hl-line-mode)                           ; Highlight current line
-  (show-paren-mode t)                             ; Parenthesis highlighting
-  (delete-selection-mode t)                       ; Make delete work as expected
-  (global-prettify-symbols-mode t)                ; prettify symbols (like lambda)
+  (show-paren-mode)                               ; Parenthesis highlighting
+  (delete-selection-mode)                         ; Make delete work as expected
+  (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
   )
 
