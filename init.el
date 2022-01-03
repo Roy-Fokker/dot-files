@@ -83,15 +83,15 @@
       jit-lock-defer-time 0                         ; don't wait for jit.
       select-enable-clipboard t                     ; integrate with system clipboard
       x-select-request-type '(UTF8_STRING           ; Treat clipboard input as utf8
-			                        COMPOUND_TEXT         ;   then other in list.
-                              TEXT
-                              STRING)
+			      COMPOUND_TEXT         ;   then other in list.
+			      TEXT
+			      STRING)
       mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
       scroll-preserve-screen-position t             ; Preserve line/column position.
       delete-old-versions -1                        ; Delete execess backup files
       backup-directory-alist `(("." .               ; where to put backup files
-				                        (expand-file-name "backups"
-						                                      user-emacs-directory)))
+				(expand-file-name "backups"
+						  user-emacs-directory)))
       vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
       find-file-visit-truename t                    ; find true path of the file.
       inhibit-compacting-font-caches t              ; to speed up text rendering.
@@ -192,13 +192,13 @@
   :ensure nil
   :preface
   (setq desktop-dirname             "~/.emacs.d/"            ; Path to save folder
-	      desktop-base-file-name      "emacs.desktop"          ; file name to save in
-	      desktop-base-lock-name      "lock"                   ; temp file
-	      desktop-path                (list desktop-dirname)   ; ???
-	      desktop-save                t                        ; save without asking
-	      desktop-files-not-to-save   "^$"                     ; reload tramp paths
-	      desktop-load-locked-desktop nil                      ; don't load locked file
-	      desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
+	desktop-base-file-name      "emacs.desktop"          ; file name to save in
+	desktop-base-lock-name      "lock"                   ; temp file
+	desktop-path                (list desktop-dirname)   ; ???
+	desktop-save                t                        ; save without asking
+	desktop-files-not-to-save   "^$"                     ; reload tramp paths
+	desktop-load-locked-desktop nil                      ; don't load locked file
+	desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
 	)
   (desktop-save-mode t))
 
@@ -256,11 +256,11 @@
 (use-package counsel
   :after ivy
   :bind
-  (("M-x" . counsel-M-x)
-   ("M-y" . counsel-yank-pop)
+  (("M-x"     . counsel-M-x)
+   ("M-y"     . counsel-yank-pop)
    ("C-x C-f" . counsel-find-file)
    :map minibuffer-local-map
-   ("C-r" . 'counsel-minibuffer-history))
+   ("C-r"     . 'counsel-minibuffer-history))
   :hook
   (after-init . counsel-mode))
 
@@ -270,16 +270,16 @@
   :hook
   (after-init . smex-initialize))
 
+;; - rainbow delimiters ---------------------------------------------
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+
 ;; - which key ------------------------------------------------------
 (use-package which-key
   :diminish
   :hook
   (after-init . which-key-mode))
-
-;; - rainbow delimiters ---------------------------------------------
-(use-package rainbow-delimiters
-  :hook
-  (prog-mode . rainbow-delimiters-mode))
 
 ;; - Paredit --------------------------------------------------------
 (use-package paredit
@@ -291,17 +291,19 @@
 
 ;; - Company --------------------------------------------------------
 (use-package company
-  :config
-  (setq company-idle-delay 0
-	company-tooltip-limit 20
-	company-minimum-prefix-length 2
-	company-selection-wrap-around t)
+  :custom
+  ((company-idle-delay 0)
+   (company-tooltip-limit 20)
+   (company-minimum-prefix-length 2)
+   (company-selection-wrap-around t))
   :hook
   (after-init . global-company-mode))
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
   :commands yas-minor-mode
+  :init
+  (which-key-add-key-based-replacements "C-c &" "YAsnippet")
   :hook
   (prog-mode . yas-global-mode))
 
@@ -333,6 +335,28 @@
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
+
+;; - Treemacs -------------------------------------------------------
+(use-package treemacs
+  :custom
+  ((treemacs-python-executable "python.exe"))
+  :init
+  (which-key-add-key-based-replacements "C-c t" "Treemacs")
+  :bind
+  (("M-0"       . treemacs-select-window)
+   ("C-c t 1"   . treemacs-delete-other-windows)
+   ("C-c t t"   . treemacs)
+   ("C-c t B"   . treemacs-bookmark)
+   ("C-c t f"   . treemacs-find-file)
+   ("C-c t M-f" . treemacs-find-tag)))
+
+(use-package treemacs-icons-dired
+  :hook
+  (treemacs-mode . treemacs-icons-dired-mode))
+
+
+;; - Magit ----------------------------------------------------------
+(use-package magit)
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
