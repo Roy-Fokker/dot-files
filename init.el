@@ -153,7 +153,7 @@
   ;; Set default font
   (set-frame-font "Cascadia Code"  nil t)
   (set-face-attribute 'default nil)
-)
+  )
 
 ;; - change window splitting ----------------------------------------
 (use-package emacs
@@ -270,16 +270,16 @@
   :hook
   (after-init . smex-initialize))
 
-;; - rainbow delimiters ---------------------------------------------
-(use-package rainbow-delimiters
-  :hook
-  (prog-mode . rainbow-delimiters-mode))
-
 ;; - which key ------------------------------------------------------
 (use-package which-key
   :diminish
   :hook
   (after-init . which-key-mode))
+
+;; - rainbow delimiters ---------------------------------------------
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
 
 ;; - Paredit --------------------------------------------------------
 (use-package paredit
@@ -298,6 +298,27 @@
    (company-selection-wrap-around t))
   :hook
   (after-init . global-company-mode))
+
+;; - Treemacs -------------------------------------------------------
+(use-package treemacs
+  :custom
+  ((treemacs-python-executable "python.exe"))
+  :init
+  (which-key-add-key-based-replacements "C-c t" "treemacs")
+  :bind
+  (("M-0"       . treemacs-select-window)
+   ("C-c t 1"   . treemacs-delete-other-windows)
+   ("C-c t t"   . treemacs)
+   ("C-c t b"   . treemacs-bookmark)
+   ("C-c t f"   . treemacs-find-file)
+   ("C-c t M-f" . treemacs-find-tag)))
+
+(use-package treemacs-icons-dired
+  :hook
+  (treemacs-mode . treemacs-icons-dired-mode))
+
+;; - Magit ----------------------------------------------------------
+(use-package magit)
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
@@ -335,28 +356,6 @@
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
-
-;; - Treemacs -------------------------------------------------------
-(use-package treemacs
-  :custom
-  ((treemacs-python-executable "python.exe"))
-  :init
-  (which-key-add-key-based-replacements "C-c t" "Treemacs")
-  :bind
-  (("M-0"       . treemacs-select-window)
-   ("C-c t 1"   . treemacs-delete-other-windows)
-   ("C-c t t"   . treemacs)
-   ("C-c t B"   . treemacs-bookmark)
-   ("C-c t f"   . treemacs-find-file)
-   ("C-c t M-f" . treemacs-find-tag)))
-
-(use-package treemacs-icons-dired
-  :hook
-  (treemacs-mode . treemacs-icons-dired-mode))
-
-
-;; - Magit ----------------------------------------------------------
-(use-package magit)
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
