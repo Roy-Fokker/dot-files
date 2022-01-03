@@ -71,55 +71,59 @@
       use-package-always-defer  t ; always defer loading packages
       )
 
-;; - Basic Behaviour ------------------------------------------------
-;; Set editor values to preferences
-(setq inhibit-startup-screen t                      ; Disable startup screen.
-      visible-bell t                                ; Disable audible beeps.
-      tab-width 4                                   ; Set tab width to 4 spaces.
-      backup-inhibited t                            ; Don't use file backups.
-      cursor-in-non-selected-windows 'hollow        ; Don't show cursors in inactive window.
-      make-pointer-invisible t                      ; Hide mouse when typing.
-      fast-but-imprecise-scrolling nil              ; Not sure what this does??!
-      jit-lock-defer-time 0                         ; don't wait for jit.
-      select-enable-clipboard t                     ; integrate with system clipboard
-      x-select-request-type '(UTF8_STRING           ; Treat clipboard input as utf8
-                              COMPOUND_TEXT         ;   then other in list.
-                              TEXT
-                              STRING)
-      mouse-yank-at-point t                         ; Paste at text-cursor, not mouse-cursor.
-      scroll-preserve-screen-position t             ; Preserve line/column position.
-      delete-old-versions -1                        ; Delete execess backup files
-      backup-directory-alist `(("." .               ; where to put backup files
-                                (expand-file-name "backups"
-                                                  user-emacs-directory)))
-      vc-follow-symlinks t                          ; don't ask for confirmation when opening symlink file
-      find-file-visit-truename t                    ; find true path of the file.
-      inhibit-compacting-font-caches t              ; to speed up text rendering.
-      w32-get-true-file-attributes nil              ; disable Net Logon checks
-      frame-resize-pixelwise t                      ; ensure text size is not rounded
-      create-lockfiles nil                          ; don't create lockfiles
-      )
-
-(setq-default frame-title-format "%b %& emacs"                 ; Window Title => {Buffer Name} {Modified Status}
-              delete-by-moving-to-trash t                      ; delete moves to recycle bin
-              column-number-mode t                             ; display column number
-              show-paren-delay 0                               ; show matching immediately
-              scroll-conservatively  most-positive-fixnum      ; scroll sensibly, don't jump around
-              mouse-wheel-scroll-amount '(1 ((shift) . 1))     ; one line at a time
-              mouse-wheel-follow-mouse t                       ; scroll window under mouse
-              find-file-visit-truename t                       ; find true path of a file
-              custom-file (expand-file-name ".emacs-custom.el" ; save machine specific settings here
-                                            user-emacs-directory)
-              indicate-empty-lines t                           ; Show empty lines
-              truncate-lines t                                 ; disable word wrap
-              default-tab-width 4                              ; Default tab width is also 4 spaces.
-              help-window-select t                             ; focus on help when shown.
-              savehist-save-minibuffer-history t               ; save minibuffer history.
-              )
-
-(load-theme 'tango-dark t)                                     ; Set a default dark theme, overriden later
-
 ;; = Emacs configuration ============================================
+;; - set editor properties ------------------------------------------
+(use-package emacs
+  :ensure nil
+  :custom
+  ((inhibit-startup-screen t)                            ; Disable startup screen.
+   (visible-bell t)                                      ; Disable audible beeps.
+   (tab-width 4)                                         ; Set tab width to 4 spaces.
+   (backup-inhibited t)                                  ; Don't use file backups.
+   (cursor-in-non-selected-windows 'hollow)              ; Don't show cursors in inactive window.
+   (make-pointer-invisible t)                            ; Hide mouse when typing.
+   (fast-but-imprecise-scrolling nil)                    ; Not sure what this does??!
+   (jit-lock-defer-time 0)                               ; don't wait for jit.
+   (select-enable-clipboard t)                           ; integrate with system clipboard
+   (x-select-request-type '(UTF8_STRING                  ; Treat clipboard input as utf8
+                            COMPOUND_TEXT                ;   then other in list.
+                            TEXT
+                            STRING))
+   (mouse-yank-at-point t)                               ; Paste at text-cursor, not mouse-cursor.
+   (scroll-preserve-screen-position t)                   ; Preserve line/column position.
+   (delete-old-versions -1)                              ; Delete execess backup files
+   (backup-directory-alist `(("." .                      ; where to put backup files
+                              (expand-file-name "backups"
+                                                user-emacs-directory))))
+   (vc-follow-symlinks t)                                ; don't ask for confirmation when opening symlink file
+   (find-file-visit-truename t)                          ; find true path of the file.
+   (inhibit-compacting-font-caches t)                    ; to speed up text rendering.
+   (w32-get-true-file-attributes nil)                    ; disable Net Logon checks
+   (frame-resize-pixelwise t)                            ; ensure text size is not rounded
+   (create-lockfiles nil)                                ; don't create lockfiles
+   (frame-title-format "%b %& emacs")                    ; Window Title => {Buffer Name} {Modified Status}
+   (delete-by-moving-to-trash t)                         ; delete moves to recycle bin
+   (column-number-mode t)                                ; display column number
+   (show-paren-delay 0)                                  ; show matching immediately
+   (scroll-conservatively  most-positive-fixnum)         ; scroll sensibly, don't jump around
+   (mouse-wheel-scroll-amount '(1 ((shift) . 1)))        ; one line at a time
+   (mouse-wheel-follow-mouse t)                          ; scroll window under mouse
+   (find-file-visit-truename t)                          ; find true path of a file
+   (custom-file (expand-file-name ".emacs-custom.el"     ; save machine specific settings here
+                                  user-emacs-directory))
+   (indicate-empty-lines t)                              ; Show empty lines
+   (truncate-lines t)                                    ; disable word wrap
+   (default-tab-width 4)                                 ; Default tab width is also 4 spaces.
+   (help-window-select t)                                ; focus on help when shown.
+   (savehist-save-minibuffer-history t)                  ; save minibuffer history.
+   ))
+
+;; - Set a default dark theme, overriden later ----------------------
+(use-package emacs
+  :ensure nil
+  :init
+  (load-theme 'tango-dark t))
+
 ;; - set editor behaviour -------------------------------------------
 (use-package emacs
   :ensure nil
