@@ -183,13 +183,13 @@
   :hook
   (window-setup . cua-mode)
   :bind
-  (("C-s"   . 'save-buffer)
-   ("C-f"   . 'isearch-forward)
-   ("C-S-f" . 'isearch-backward)
+  (("C-s"     . 'save-buffer)
+   ("C-f"     . 'isearch-forward)
+   ("C-S-f"   . 'isearch-backward)
    ("<C-tab>" . 'other-window)
-   ("C-w"   . 'kill-this-buffer)
-   ("C-S-w" . 'delete-window)
-   ("C-z"   . 'undo)))
+   ("C-w"     . 'kill-this-buffer)
+   ("C-S-w"   . 'delete-window)
+   ("C-z"     . 'undo)))
 
 ;; - desktop save mode setup ----------------------------------------
 (use-package emacs
@@ -231,9 +231,9 @@
 (use-package ivy
   :diminish
   :init
-  (when (setq enable-recursive-minibuffers t)
-    (minibuffer-depth-indicate-mode t))
+  (minibuffer-depth-indicate-mode t)
   :custom
+  (enable-recursive-minibuffers t)
   (ivy-use-virtual-buffers t)
   (ivy-count-format "(%d/%d) ")
   (ivy-wrap t)
