@@ -141,6 +141,7 @@
   (delete-selection-mode)                         ; Make delete work as expected
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
+  (recentf-mode)                                  ; Recent Files
   )
 
 ;; - set font and utf preferences ---------------------------------------
@@ -318,8 +319,8 @@
 
 ;; - Magit ----------------------------------------------------------
 (use-package magit
-  :custom
-  (magit-completing-read-function 'ivy-completing-read)
+  ;:custom
+  ;(magit-completing-read-function 'ivy-completing-read)
   :bind
   (("C-x g" . magit-status)))
 
