@@ -141,7 +141,7 @@
   (delete-selection-mode)                         ; Make delete work as expected
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
-  (recentf-mode)                                  ; Recent Files
+;;  (recentf-mode)                                  ; Recent Files
   )
 
 ;; - set font and utf preferences ---------------------------------------
@@ -333,6 +333,9 @@
   (prog-mode . yas-global-mode))
 
 (use-package yasnippet-snippets)
+
+;; - Git Config files -----------------------------------------------
+(use-package git-modes)
 
 ;; - Common Lisp using Slime ----------------------------------------
 (use-package slime-company)
