@@ -194,6 +194,21 @@
    ("C-S-w"   . 'delete-window)
    ("C-z"     . 'undo)))
 
+;; - Fix delete behaviour -------------------------------------------
+;; Below function didn't work when applied to <delete> suspect
+;; that <delete> means something else to emacs
+;; (use-package emacs
+;;   :ensure nil
+;;   :preface
+;;   (defun my/delete-behaviour (n)
+;; 	"Make delete button behave as expected in a sensible system"
+;; 	(interactive "p")
+;; 	(if (use-region-p)
+;; 		(delete-region (region-beginning) (region-end))
+;; 	  (delete-char n)))
+;;   :bind
+;;   (("<delete>" . delete-active-region)))
+
 ;; - desktop save mode setup ----------------------------------------
 (use-package emacs
   :ensure nil
