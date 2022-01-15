@@ -183,6 +183,7 @@
   :ensure nil
   :custom
   (delete-selection-mode t)
+  (normal-erase-is-backspace t)
   :hook
   (window-setup . cua-mode)
   :bind
@@ -207,7 +208,7 @@
 ;; 		(delete-region (region-beginning) (region-end))
 ;; 	  (delete-char n)))
 ;;   :bind
-;;   (("<delete>" . delete-active-region)))
+;;   (("<deletechar>" . 'my/delete-behaviour)))
 
 ;; - desktop save mode setup ----------------------------------------
 (use-package emacs
