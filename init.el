@@ -329,6 +329,9 @@
   :commands yas-minor-mode
   :init
   (which-key-add-key-based-replacements "C-c &" "YAsnippet")
+  :config
+  (yas-reload-all)
+  (push '(company-capf company-yasnippet) company-backends)
   :hook
   (prog-mode . yas-global-mode))
 
