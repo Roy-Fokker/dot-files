@@ -181,6 +181,8 @@
 ;; - CUA Mode -------------------------------------------------------
 (use-package emacs
   :ensure nil
+  :custom
+  (delete-selection-mode t)
   :hook
   (window-setup . cua-mode)
   :bind
