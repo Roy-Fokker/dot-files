@@ -187,7 +187,7 @@
   (("C-s"     . 'save-buffer)
    ("C-f"     . 'isearch-forward)
    ("C-S-f"   . 'isearch-backward)
-   ("<C-tab>" . 'other-window)
+   ("C-<tab>" . 'other-window)
    ("C-w"     . 'kill-this-buffer)
    ("C-S-w"   . 'delete-window)
    ("C-z"     . 'undo)))
