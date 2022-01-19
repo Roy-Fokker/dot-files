@@ -263,6 +263,7 @@
   (after-init . ivy-mode))
 
 (use-package ivy-rich
+  :after ivy
   :hook
   (after-init . ivy-rich-mode))
 
