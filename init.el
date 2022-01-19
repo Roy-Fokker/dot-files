@@ -318,6 +318,11 @@
   :hook
   (after-init . global-company-mode))
 
+(use-package company-box
+  :after company
+  :hook
+  (company-mode . company-box-mode))
+
 ;; - Treemacs -------------------------------------------------------
 (use-package treemacs
   :custom
