@@ -391,6 +391,28 @@
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
 
+;; - Language Server Protocol ---------------------------------------
+;; (use-package lsp-mode
+;;   :commands lsp
+;;   :custom
+;;   ((lsp-keymap-prefix "C-c l"))
+;;   :hook
+;;   (c++-mode . lsp)
+;;   (c-mode . lsp)
+;;   (lsp-mode . lsp-enable-which-key-integration))
+
+;; (use-package lsp-ui
+;;   :custom
+;;   ((lsp-ui-doc-enable nil)
+;;    (lsp-ui-doc-delay 0.5))
+;;   :commands lsp-ui-mode)
+
+;; (use-package lsp-ivy
+;;   :commands lsp-ivy-workspace-symbol)
+
+;; (use-package lsp-treemacs
+;;   :commands lsp-treemacs-errors-list)
+
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
