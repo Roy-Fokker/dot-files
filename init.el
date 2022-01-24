@@ -361,6 +361,13 @@
 
 (use-package yasnippet-snippets)
 
+;; - YA Scroll ------------------------------------------------------
+(use-package yascroll
+  :custom
+  ((yascroll:delay-to-hide nil))
+  :hook
+  (after-init . global-yascroll-bar-mode))
+
 ;; - Git Config files -----------------------------------------------
 (use-package git-modes)
 
