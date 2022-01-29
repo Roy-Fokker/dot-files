@@ -305,7 +305,11 @@
   :hook
   ((lisp-mode
     emacs-lisp-mode
-    lisp-interaction-mode)
+    lisp-interaction-mode
+	scheme-mode
+	racket-mode
+	racket-repl-mode
+	eval-expression-minibuffer-setup)
    . paredit-mode))
 
 ;; - Company --------------------------------------------------------
@@ -376,27 +380,44 @@
 (use-package common-lisp-snippets)
 
 (use-package slime
-  :init
-  (setq inferior-lisp-program "sbcl"
-        slime-contribs '(slime-fancy
-                         slime-company
-                         slime-quicklisp
-                         slime-asdf
-                         slime-hyperdoc
-                         slime-repl
-                         slime-autodoc
-                         slime-macrostep
-                         slime-references
-                         slime-mdot-fu
-                         slime-xref-browser
-                         slime-presentations
-                         slime-cl-indent
-                         slime-fancy-inspector
-                         slime-fontifying-fu
-                         slime-trace-dialog))
+  :custom
+  ((inferior-lisp-program "sbcl")
+   (slime-contribs '(slime-fancy
+					 slime-company
+					 slime-quicklisp
+					 slime-asdf
+					 slime-hyperdoc
+					 slime-repl
+					 slime-autodoc
+					 slime-macrostep
+					 slime-references
+					 slime-mdot-fu
+					 slime-xref-browser
+					 slime-presentations
+					 slime-cl-indent
+					 slime-fancy-inspector
+					 slime-fontifying-fu
+					 slime-trace-dialog)))
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
+
+;; - Racket ---------------------------------------------------------
+(use-package geiser
+  :commands (geiser-mode
+			 run-geiser)
+  :bind
+  (("C-c \\"   . geiser-insert-lambda)
+   ("C-c C-\\" . geiser-insert-lambda)
+   ("C-c s"    . geiser-insert-sigma)
+   ("C-c C-s"  . geiser-insert-sigma)))
+
+(use-package geiser-racket
+  :after geiser
+  :commands (run-racket)
+  :custom
+  ((geiser-default-implementation 'racket)
+   (geiser-active-implementation  '(racket))))
 
 ;; - Language Server Protocol ---------------------------------------
 ;; (use-package lsp-mode
