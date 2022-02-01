@@ -381,23 +381,24 @@
 
 (use-package slime
   :custom
-  ((inferior-lisp-program "sbcl")
-   (slime-contribs '(slime-fancy
-					 slime-company
-					 slime-quicklisp
-					 slime-asdf
-					 slime-hyperdoc
-					 slime-repl
-					 slime-autodoc
-					 slime-macrostep
-					 slime-references
-					 slime-mdot-fu
-					 slime-xref-browser
-					 slime-presentations
-					 slime-cl-indent
-					 slime-fancy-inspector
-					 slime-fontifying-fu
-					 slime-trace-dialog)))
+  ((inferior-lisp-program "sbcl"))
+  :init
+  (setq slime-contribs '(slime-fancy
+						 slime-company
+						 slime-quicklisp
+						 slime-asdf
+						 slime-hyperdoc
+						 slime-repl
+						 slime-autodoc
+						 slime-macrostep
+						 slime-references
+						 slime-mdot-fu
+						 slime-xref-browser
+						 slime-presentations
+						 slime-cl-indent
+						 slime-fancy-inspector
+						 slime-fontifying-fu
+						 slime-trace-dialog))
   :hook
   (lisp-mode . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
