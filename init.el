@@ -67,8 +67,8 @@
 (eval-and-compile
   (require 'use-package))
 
-(setq use-package-always-ensure t ; always download on first run
-      use-package-always-defer  t ; always defer loading packages
+(setq use-package-always-ensure t   ; always download on first run
+      use-package-always-defer  nil ; don't defer loading packages causes issues with :custom
       )
 
 ;; = Emacs configuration ============================================
@@ -319,6 +319,9 @@
    (company-tooltip-limit 20)
    (company-minimum-prefix-length 2)
    (company-selection-wrap-around t))
+  :bind
+  (:map company-active-map
+		("<tab>" . company-complete-selection))
   :hook
   (after-init . global-company-mode))
 
@@ -354,6 +357,7 @@
 
 ;; - YA Snippets ----------------------------------------------------
 (use-package yasnippet
+  :after company
   :commands yas-minor-mode
   :init
   (which-key-add-key-based-replacements "C-c &" "YAsnippet")
@@ -381,26 +385,25 @@
 
 (use-package slime
   :custom
-  ((inferior-lisp-program "sbcl"))
-  :init
-  (setq slime-contribs '(slime-fancy
-						 slime-company
-						 slime-quicklisp
-						 slime-asdf
-						 slime-hyperdoc
-						 slime-repl
-						 slime-autodoc
-						 slime-macrostep
-						 slime-references
-						 slime-mdot-fu
-						 slime-xref-browser
-						 slime-presentations
-						 slime-cl-indent
-						 slime-fancy-inspector
-						 slime-fontifying-fu
-						 slime-trace-dialog))
+  (inferior-lisp-program "sbcl")
+  (slime-contribs '(slime-fancy
+					slime-company
+					slime-quicklisp
+					slime-asdf
+					slime-hyperdoc
+					slime-repl
+					slime-autodoc
+					slime-macrostep
+					slime-references
+					slime-mdot-fu
+					slime-xref-browser
+					slime-presentations
+					slime-cl-indent
+					slime-fancy-inspector
+					slime-fontifying-fu
+					slime-trace-dialog))
   :hook
-  (lisp-mode . slime-mode)
+  (lisp-mode          . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
 
 ;; - Racket ---------------------------------------------------------
