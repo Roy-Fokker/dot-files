@@ -68,7 +68,7 @@
   (require 'use-package))
 
 (setq use-package-always-ensure t   ; always download on first run
-      use-package-always-defer  nil ; don't defer loading packages causes issues with :custom
+      use-package-always-defer  t   ; always defer loading on until package is required
       )
 
 ;; = Emacs configuration ============================================
@@ -386,7 +386,6 @@
 
 (use-package slime
   :custom
-  (inferior-lisp-program "sbcl")
   (slime-contribs '(slime-fancy
 					slime-company
 					slime-quicklisp
@@ -403,6 +402,8 @@
 					slime-fancy-inspector
 					slime-fontifying-fu
 					slime-trace-dialog))
+  :config
+  (setq inferior-lisp-program "sbcl")
   :hook
   (lisp-mode          . slime-mode)
   (inferior-lisp-mode . inferior-slime-mode))
