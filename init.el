@@ -193,7 +193,8 @@
    ("C-<tab>" . 'other-window)
    ("C-w"     . 'kill-this-buffer)
    ("C-S-w"   . 'delete-window)
-   ("C-z"     . 'undo)))
+   ("C-z"     . 'undo)
+   ("<escape>". 'keyboard-escape-quit)))
 
 ;; - Fix delete behaviour -------------------------------------------
 ;; Below function didn't work when applied to <delete> suspect
