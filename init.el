@@ -284,11 +284,12 @@
   :hook
   (after-init . counsel-mode))
 
-(use-package smex
-  :custom
-  (smex-completion-method 'ivy)
-  :hook
-  (after-init . smex-initialize))
+;; Seems that I don't actually use functions of SMEX
+;; (use-package smex
+;;   :custom
+;;   (smex-completion-method 'ivy)
+;;   :hook
+;;   (after-init . smex-initialize))
 
 ;; - which key ------------------------------------------------------
 (use-package which-key
