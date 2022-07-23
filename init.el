@@ -196,21 +196,6 @@
    ("C-z"     . 'undo)
    ("<escape>". 'keyboard-escape-quit)))
 
-;; - Fix delete behaviour -------------------------------------------
-;; Below function didn't work when applied to <delete> suspect
-;; that <delete> means something else to emacs
-;; (use-package emacs
-;;   :ensure nil
-;;   :preface
-;;   (defun my/delete-behaviour (n)
-;; 	"Make delete button behave as expected in a sensible system"
-;; 	(interactive "p")
-;; 	(if (use-region-p)
-;; 		(delete-region (region-beginning) (region-end))
-;; 	  (delete-char n)))
-;;   :bind
-;;   (("<deletechar>" . 'my/delete-behaviour)))
-
 ;; - desktop save mode setup ----------------------------------------
 (use-package emacs
   :ensure nil
@@ -227,73 +212,8 @@
   (desktop-save-mode t))
 
 ;; = Third-Party Packages' Configuration ============================
-;; - all-the-icons --------------------------------------------------
-(use-package all-the-icons)
-
-(use-package unicode-fonts
-  :hook
-  (window-setup . unicode-fonts-setup))
-
-;; - Doom Themes ----------------------------------------------------
-(use-package doom-themes
-  :init
-  (load-theme 'doom-one t))
-
-;; - doom modeline --------------------------------------------------
-(use-package doom-modeline
-  :custom
-  (doom-modeline--modal-icon t)
-  (doom-modeline-minor-modes t)
-  :hook
-  (window-setup . doom-modeline-mode))
-
-;; - ivy, ivy-rich, swiper, counsel and smex -------------------------
-(use-package ivy
-  :diminish
-  :init
-  (minibuffer-depth-indicate-mode t)
-  :custom
-  (enable-recursive-minibuffers t)
-  (ivy-use-virtual-buffers t)
-  (ivy-count-format "(%d/%d) ")
-  (ivy-wrap t)
-  :bind
-  (("C-x b"   . ivy-switch-buffer)
-   ("C-c C-r" . ivy-resume))
-  :hook
-  (after-init . ivy-mode))
-
-(use-package ivy-rich
-  :after ivy
-  :hook
-  (after-init . ivy-rich-mode))
-
-(use-package swiper
-  :after ivy
-  :bind
-  ("C-f" . swiper))
-
-(use-package counsel
-  :after ivy
-  :bind
-  (("M-x"     . counsel-M-x)
-   ("M-y"     . counsel-yank-pop)
-   ("C-x C-f" . counsel-find-file)
-   :map minibuffer-local-map
-   ("C-r"     . 'counsel-minibuffer-history))
-  :hook
-  (after-init . counsel-mode))
-
-;; Seems that I don't actually use functions of SMEX
-;; (use-package smex
-;;   :custom
-;;   (smex-completion-method 'ivy)
-;;   :hook
-;;   (after-init . smex-initialize))
-
 ;; - which key ------------------------------------------------------
 (use-package which-key
-  :diminish
   :hook
   (after-init . which-key-mode))
 
@@ -302,19 +222,7 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-;; - Paredit --------------------------------------------------------
-(use-package paredit
-  :hook
-  ((lisp-mode
-    emacs-lisp-mode
-    lisp-interaction-mode
-	scheme-mode
-	racket-mode
-	racket-repl-mode
-	eval-expression-minibuffer-setup)
-   . paredit-mode))
-
-;; - Company --------------------------------------------------------
+;; - company --------------------------------------------------------
 (use-package company
   :custom
   ((company-idle-delay 0)
@@ -332,121 +240,45 @@
   :hook
   (company-mode . company-box-mode))
 
-;; - Treemacs -------------------------------------------------------
-(use-package treemacs
-  :custom
-  ((treemacs-python-executable "python.exe"))
+;; - doom-themes ----------------------------------------------------
+(use-package doom-themes
   :init
-  (which-key-add-key-based-replacements "C-c t" "treemacs")
-  :bind
-  (("M-0"       . treemacs-select-window)
-   ("C-c t 1"   . treemacs-delete-other-windows)
-   ("C-c t t"   . treemacs)
-   ("C-c t b"   . treemacs-bookmark)
-   ("C-c t f"   . treemacs-find-file)
-   ("C-c t M-f" . treemacs-find-tag)))
+  (load-theme 'doom-one t))
 
-(use-package treemacs-icons-dired
+;; - doom modeline --------------------------------------------------
+(use-package doom-modeline
+  :custom
+  (doom-modeline--modal-icon t)
   :hook
-  (treemacs-mode . treemacs-icons-dired-mode))
+  (window-setup . doom-modeline-mode))
 
-;; - Magit ----------------------------------------------------------
+;; - selectrum ------------------------------------------------------
+(use-package selectrum
+  :hook
+  (after-init .  selectrum-mode))
+
+;; - prescient ------------------------------------------------------
+(use-package prescient
+  :after company-box selectrum
+  :custom
+  (prescient-history-length 1000)
+  :hook
+  (after-init . precient-persist-mode))
+
+(use-package company-prescient
+  :after company-box
+  :hook
+  (after-init . company-prescient-mode))
+
+(use-package selectrum-prescient
+  :after selectrum
+  :hook
+  (after-init . selectrum-prescient-mode))
+
+;; - magit ----------------------------------------------------------
 (use-package magit
-  ;:custom
-  ;(magit-completing-read-function 'ivy-completing-read)
   :bind
   (("C-x g" . magit-status)))
-
-;; - YA Snippets ----------------------------------------------------
-(use-package yasnippet
-  :after company
-  :commands yas-minor-mode
-  :init
-  (which-key-add-key-based-replacements "C-c &" "YAsnippet")
-  :config
-  (yas-reload-all)
-  (push '(company-capf company-yasnippet) company-backends)
-  :hook
-  (prog-mode . yas-global-mode))
-
-(use-package yasnippet-snippets)
-
-;; - YA Scroll ------------------------------------------------------
-(use-package yascroll
-  :custom
-  ((yascroll:delay-to-hide nil))
-  :hook
-  (after-init . global-yascroll-bar-mode))
-
-;; - Git Config files -----------------------------------------------
-(use-package git-modes)
-
-;; - Common Lisp using Slime ----------------------------------------
-(use-package slime-company)
-(use-package common-lisp-snippets)
-
-(use-package slime
-  :custom
-  (slime-contribs '(slime-fancy
-					slime-company
-					slime-quicklisp
-					slime-asdf
-					slime-hyperdoc
-					slime-repl
-					slime-autodoc
-					slime-macrostep
-					slime-references
-					slime-mdot-fu
-					slime-xref-browser
-					slime-presentations
-					slime-cl-indent
-					slime-fancy-inspector
-					slime-fontifying-fu
-					slime-trace-dialog))
-  :config
-  (setq inferior-lisp-program "sbcl")
-  :hook
-  (lisp-mode          . slime-mode)
-  (inferior-lisp-mode . inferior-slime-mode))
-
-;; - Racket ---------------------------------------------------------
-(use-package geiser
-  :commands (geiser-mode
-			 run-geiser)
-  :bind
-  (("C-c \\"   . geiser-insert-lambda)
-   ("C-c C-\\" . geiser-insert-lambda)
-   ("C-c s"    . geiser-insert-sigma)
-   ("C-c C-s"  . geiser-insert-sigma)))
-
-(use-package geiser-racket
-  :after geiser
-  :commands (run-racket)
-  :custom
-  ((geiser-default-implementation 'racket)
-   (geiser-active-implementation  '(racket))))
-
-;; - Language Server Protocol ---------------------------------------
-;; (use-package lsp-mode
-;;   :commands lsp
-;;   :custom
-;;   ((lsp-keymap-prefix "C-c l"))
-;;   :hook
-;;   (c++-mode . lsp)
-;;   (c-mode . lsp)
-;;   (lsp-mode . lsp-enable-which-key-integration))
-
-;; (use-package lsp-ui
-;;   :custom
-;;   ((lsp-ui-doc-enable nil)
-;;    (lsp-ui-doc-delay 0.5))
-;;   :commands lsp-ui-mode)
-
-;; (use-package lsp-ivy
-;;   :commands lsp-ivy-workspace-symbol)
-
-;; (use-package lsp-treemacs
-;;   :commands lsp-treemacs-errors-list)
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
