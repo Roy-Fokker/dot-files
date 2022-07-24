@@ -141,7 +141,6 @@
   (delete-selection-mode)                         ; Make delete work as expected
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
-;;  (recentf-mode)                                  ; Recent Files
   )
 
 ;; - set font and utf preferences ---------------------------------------
@@ -211,6 +210,17 @@
   )
   (desktop-save-mode t))
 
+;; - recentf --------------------------------------------------------
+;; (use-package emacs
+;;   :ensure nil
+;;   :custom
+;;   ((recentf-max-menu-items 25)
+;;    (recentf-max-saved-items 25))
+;;   :bind
+;;   (("C-x C-r" . 'recentf-open-files))
+;;   :hook
+;;   (after-init . recentf-mode))
+
 ;; = Third-Party Packages' Configuration ============================
 ;; - which key ------------------------------------------------------
 (use-package which-key
@@ -275,10 +285,26 @@
   :hook
   (after-init . selectrum-prescient-mode))
 
+;; - marginalia -----------------------------------------------------
+(use-package marginalia
+  :bind
+  (:map minibuffer-local-map
+		("M-A" . marginalia-cycle))
+  :hook
+  (after-init . marginalia-mode))
+
 ;; - magit ----------------------------------------------------------
 (use-package magit
   :bind
   (("C-x g" . magit-status)))
+
+;; - elgot ----------------------------------------------------------
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  :hook
+  ((c-mode . eglot-ensure)
+   (c++-mode . eglot-ensure)))
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
