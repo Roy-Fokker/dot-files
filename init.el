@@ -306,6 +306,24 @@
   ((c-mode . eglot-ensure)
    (c++-mode . eglot-ensure)))
 
+;; - slime ----------------------------------------------------------
+(use-package slime-company)
+(use-package slime
+  :after slime-company
+  :custom
+  (slime-contribs '(slime-fancy
+					slime-company
+					slime-quicklisp
+					slime-asdf
+					slime-hyperdoc
+					slime-xref-browser
+					slime-cl-indent))
+  :config
+  (setq inferior-lisp-program "sbcl")
+  :hook
+  (lisp-mode . slime-mode)
+  (inferior-lisp-mode . inferior-slime-mode))
+
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
