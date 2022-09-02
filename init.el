@@ -317,6 +317,18 @@
   :bind
   (("C-x g" . magit-status)))
 
+;; - yasnippets -----------------------------------------------------
+(use-package yasnippet
+  :after company
+  :commands yas-minor-mode
+  :config
+  (yas-reload-all)
+  :hook
+  (prog-mode . yas-global-mode))
+
+(use-package yasnippet-snippets)
+(use-package common-lisp-snippets)
+
 ;; - elgot ----------------------------------------------------------
 (use-package eglot
   :config
