@@ -337,6 +337,14 @@
   ((c-mode . eglot-ensure)
    (c++-mode . eglot-ensure)))
 
+;; - paredit --------------------------------------------------------
+(use-package paredit
+  :hook
+  ((lisp-mode
+	emacs-lisp-mode
+	lisp-interaction-mode
+	slime-repl-mode) . paredit-mode))
+
 ;; - slime ----------------------------------------------------------
 (use-package slime
   :custom
