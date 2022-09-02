@@ -232,6 +232,25 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
+;; - treemacs -------------------------------------------------------
+(use-package treemacs
+  :custom
+  ((treemacs-python-executable "python.exe"))
+  :init
+  (which-key-add-key-based-replacements "C-c t" "treemacs")
+  :bind
+  (("M-0" . treemacs-select-window)
+   ("C-c t 1"   . treemacs-delete-other-windows)
+   ("C-c t t"   . treemacs)
+   ("C-c t b"   . treemacs-bookmark)
+   ("C-c t f"   . treemacs-find-file)
+   ("C-c t M-f" . treemacs-find-tag)))
+
+(use-package treemacs-icons-dired
+  :after treemacs
+  :hook
+  (treemacs-mode . treemacs-icons-dired-mode))
+
 ;; - company --------------------------------------------------------
 (use-package company
   :custom
