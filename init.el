@@ -338,9 +338,7 @@
    (c++-mode . eglot-ensure)))
 
 ;; - slime ----------------------------------------------------------
-(use-package slime-company)
 (use-package slime
-  :after slime-company
   :custom
   (slime-contribs '(slime-fancy
 					slime-company
