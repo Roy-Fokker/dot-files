@@ -222,6 +222,7 @@
 ;;   (after-init . recentf-mode))
 
 ;; = Third-Party Packages' Configuration ============================
+
 ;; - which key ------------------------------------------------------
 (use-package which-key
   :hook
@@ -239,7 +240,7 @@
   :init
   (which-key-add-key-based-replacements "C-c t" "treemacs")
   :bind
-  (("M-0" . treemacs-select-window)
+  (("M-0"       . treemacs-select-window)
    ("C-c t 1"   . treemacs-delete-other-windows)
    ("C-c t t"   . treemacs)
    ("C-c t b"   . treemacs-bookmark)
@@ -334,8 +335,8 @@
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   :hook
-  ((c-mode . eglot-ensure)
-   (c++-mode . eglot-ensure)))
+  ((c-mode
+	c++-mode) . eglot-ensure))
 
 ;; - paredit --------------------------------------------------------
 (use-package paredit
