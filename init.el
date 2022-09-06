@@ -320,13 +320,36 @@
 ;;   :hook
 ;;   (after-init . marginalia-mode))
 
+;; - ivy ------------------------------------------------------------
+(use-package ivy
+  :init
+  (minibuffer-depth-indicate-mode t)
   :custom
+  ((enable-recursive-minibuffers t)
+   (ivy-wrap t)
+   (ivy-initial-input-alist nil)
+   (ivy-use-virtual-buffers t)
+   (ivy-count-format "(%d/%d) ")
+   (ivy-height 20)
+   (ivy-display-style 'fancy)) 
   :hook
+  (after-init . ivy-mode))
 
+(use-package ivy-rich
+  :after ivy
   :hook
+  (after-init . ivy-rich-mode))
 
-
+;; - counsel --------------------------------------------------------
+(use-package counsel
   :bind
+  (("M-x"     . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)))
+
+;; - swiper ---------------------------------------------------------
+(use-package swiper
+  :bind
+  (("C-f" . swiper)))
 
 ;; - magit ----------------------------------------------------------
 (use-package magit
