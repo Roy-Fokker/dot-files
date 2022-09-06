@@ -283,35 +283,50 @@
   (window-setup . doom-modeline-mode))
 
 ;; - selectrum ------------------------------------------------------
-(use-package selectrum
-  :hook
-  (after-init .  selectrum-mode))
+;; (use-package selectrum
+;;   :hook
+;;   (after-init .  selectrum-mode))
 
 ;; - prescient ------------------------------------------------------
-(use-package prescient
-  :after company-box selectrum
+;; (use-package prescient
+;;   :after company-box selectrum
+;;   :custom
+;;   (prescient-history-length 1000)
+;;   :hook
+;;   (after-init . precient-persist-mode))
+
+;; (use-package company-prescient
+;;   :after company-box
+;;   :hook
+;;   (after-init . company-prescient-mode))
+
+;; (use-package selectrum-prescient
+;;   :after selectrum
+;;   :hook
+;;   (after-init . selectrum-prescient-mode))
+
+;; - vertico --------------------------------------------------------
+;; (use-package vertico
+;;   :custom
+;;   (vertico-cycle t)
+;;   :hook
+;;   (after-init . vertico-mode))
+
+;; ;; - marginalia -----------------------------------------------------
+;; (use-package marginalia
+;;   :bind
+;;   (:map minibuffer-local-map
+;; 		("M-A" . marginalia-cycle))
+;;   :hook
+;;   (after-init . marginalia-mode))
+
   :custom
-  (prescient-history-length 1000)
   :hook
-  (after-init . precient-persist-mode))
 
-(use-package company-prescient
-  :after company-box
   :hook
-  (after-init . company-prescient-mode))
 
-(use-package selectrum-prescient
-  :after selectrum
-  :hook
-  (after-init . selectrum-prescient-mode))
 
-;; - marginalia -----------------------------------------------------
-(use-package marginalia
   :bind
-  (:map minibuffer-local-map
-		("M-A" . marginalia-cycle))
-  :hook
-  (after-init . marginalia-mode))
 
 ;; - magit ----------------------------------------------------------
 (use-package magit
