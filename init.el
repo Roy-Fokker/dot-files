@@ -394,6 +394,7 @@
 	slime-repl-mode) . paredit-mode))
 
 ;; - slime ----------------------------------------------------------
+
 (use-package slime
   :custom
   (slime-contribs '(slime-fancy
@@ -406,13 +407,13 @@
   :config
   (setq inferior-lisp-program "sbcl")
   :hook
-  (lisp-mode . slime-mode)
-  (inferior-lisp-mode . inferior-slime-mode))
+  ((lisp-mode          . slime-mode)
+   (inferior-lisp-mode . inferior-slime-mode)))
 
 (use-package slime-company
   :after (slime company)
   :custom
-  ((slime-company-completion 'simple)
+  ((slime-company-completion       'simple)
    (slime-company-after-completion 'slime-company-just-one-space)))
 
 ;; ------------------------------------------------------------------
