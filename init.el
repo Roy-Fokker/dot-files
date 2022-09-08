@@ -68,8 +68,11 @@
 (eval-and-compile
   (require 'use-package))
 
-(setq use-package-always-ensure t   ; always download on first run
-      use-package-always-defer  t   ; always defer loading on until package is required
+(setq use-package-always-ensure         t    ; always download on first run
+      use-package-always-defer          t    ; always defer loading on until package is required
+	  use-package-verbose               t    ; make output verbose
+	  comp-async-report-warnings-errors nil  ; silence emacs on package warnings and errors
+	  comp-deferred-compilations        t    ; deffer compilations
       )
 
 ;; = Emacs configuration ============================================
@@ -327,12 +330,12 @@
   (minibuffer-depth-indicate-mode t)
   :custom
   ((enable-recursive-minibuffers t)
-   (ivy-wrap t)
-   (ivy-initial-input-alist nil)
-   (ivy-use-virtual-buffers t)
-   (ivy-count-format "(%d/%d) ")
-   (ivy-height 20)
-   (ivy-display-style 'fancy)) 
+   (ivy-wrap                     t)
+   (ivy-initial-input-alist      nil)
+   (ivy-use-virtual-buffers      t)
+   (ivy-count-format             "(%d/%d) ")
+   (ivy-height                   20)
+   (ivy-display-style            'fancy)) 
   :hook
   (after-init . ivy-mode))
 
