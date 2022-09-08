@@ -50,9 +50,10 @@
 (setq package-check-signature nil)
 
 ;; Where to look for packages
-(add-to-list 'package-archives '("org"   . "https://orgmode.org/elpa/") t)
-(add-to-list 'package-archives '("elpa"  . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(setq package-archives
+	  '(("org"   . "https://orgmode.org/elpa/")
+		("elpa"  . "https://elpa.gnu.org/packages/")
+		("melpa" . "https://melpa.org/packages/")))
 
 ;; only initialize package.el if emacs less than 27
 (when (< emacs-major-version 27)
