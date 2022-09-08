@@ -215,15 +215,15 @@
   (desktop-save-mode t))
 
 ;; - recentf --------------------------------------------------------
-;; (use-package emacs
-;;   :ensure nil
-;;   :custom
-;;   ((recentf-max-menu-items 25)
-;;    (recentf-max-saved-items 25))
-;;   :bind
-;;   (("C-x C-r" . 'recentf-open-files))
-;;   :hook
-;;   (after-init . recentf-mode))
+(use-package emacs
+  :ensure nil
+  :custom
+  ((recentf-max-menu-items 25)
+   (recentf-max-saved-items 25))
+  :bind
+  (("C-x C-r" . 'recentf-open-files))
+  :hook
+  (after-init . recentf-mode))
 
 ;; = Third-Party Packages' Configuration ============================
 
@@ -354,6 +354,11 @@
 (use-package swiper
   :bind
   (("C-f" . swiper)))
+
+;; - smex -----------------------------------------------------------
+(use-package smex
+  :init
+  (smex-initialize))
 
 ;; - magit ----------------------------------------------------------
 (use-package magit
