@@ -268,6 +268,54 @@
 (use-package swiper
   :bind (("C-f" . swiper)))
 
+;; = Languages ======================================================
+;; - C/C++ ----------------------------------------------------------
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  :hook
+  ((c-mode
+	c++-mode) . eglot-ensure))
+
+;; - Common Lisp ----------------------------------------------------
+;; ------------------------------------------------------- Snippets -
+(use-package common-lisp-snippets)
+
+;; ---------------------------------------------------------- Slime -
+(use-package slime
+  :custom
+  (slime-contribs '(slime-fancy
+					slime-company
+					slime-quicklisp
+					slime-asdf
+					slime-hyperdoc
+					slime-xref-browser
+					slime-cl-indent))
+  :config
+  (setq inferior-lisp-program "sbcl")
+  :hook
+  ((lisp-mode          . slime-mode)
+   (inferior-lisp-mode . inferior-slime-mode)))
+
+(use-package slime-company
+  :after (slime company)
+  :custom
+  ((slime-company-completion       'simple)
+   (slime-company-after-completion 'slime-company-just-one-space)))
+
+;; ------------------------------------------------------------ Sly -
+;; (use-package sly
+;;   :config
+;;   (setq inferior-lisp-program "sbcl")
+;;   :hook
+;;   ((lisp-mode . sly-editing-mode)))
+
+;; (use-package sly-quicklisp
+;;   :after sly)
+
+;; (use-package sly-asdf
+;;   :after sly)
+
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
 (provide 'init)
