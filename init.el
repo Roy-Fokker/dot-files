@@ -120,6 +120,10 @@
    (default-tab-width 4)                                 ; Default tab width is also 4 spaces.
    (help-window-select t)                                ; focus on help when shown.
    (savehist-save-minibuffer-history t)                  ; save minibuffer history.
+   (native-comp-deferred-compilation t)                  ; defer compilation of packages
+   (native-comp-async-query-on-exit t)                   ; kill any async jobs on exit
+   (native-comp-async-jobs-number 0)                     ; only run 4 async jobs at a time
+   (native-comp-async-report-warnings-errors nil)        ; don't care for warning messages
    ))
 
 ;; - Set a default dark theme, overriden later ----------------------
@@ -391,30 +395,42 @@
   ((lisp-mode
 	emacs-lisp-mode
 	lisp-interaction-mode
-	slime-repl-mode) . paredit-mode))
+	sly-editing-mode) . paredit-mode))
 
 ;; - slime ----------------------------------------------------------
+;; (use-package slime
+;;   :custom
+;;   (slime-contribs '(slime-fancy
+;; 					slime-company
+;; 					slime-quicklisp
+;; 					slime-asdf
+;; 					slime-hyperdoc
+;; 					slime-xref-browser
+;; 					slime-cl-indent))
+;;   :config
+;;   (setq inferior-lisp-program "sbcl")
+;;   :hook
+;;   ((lisp-mode          . slime-mode)
+;;    (inferior-lisp-mode . inferior-slime-mode)))
 
-(use-package slime
-  :custom
-  (slime-contribs '(slime-fancy
-					slime-company
-					slime-quicklisp
-					slime-asdf
-					slime-hyperdoc
-					slime-xref-browser
-					slime-cl-indent))
+;; (use-package slime-company
+;;   :after (slime company)
+;;   :custom
+;;   ((slime-company-completion       'simple)
+;;    (slime-company-after-completion 'slime-company-just-one-space)))
+
+;; - sly ------------------------------------------------------------
+(use-package sly
   :config
   (setq inferior-lisp-program "sbcl")
   :hook
-  ((lisp-mode          . slime-mode)
-   (inferior-lisp-mode . inferior-slime-mode)))
+  ((lisp-mode . sly-editing-mode)))
 
-(use-package slime-company
-  :after (slime company)
-  :custom
-  ((slime-company-completion       'simple)
-   (slime-company-after-completion 'slime-company-just-one-space)))
+(use-package sly-quicklisp
+  :after sly)
+
+(use-package sly-asdf
+  :after sly)
 
 ;; ------------------------------------------------------------------
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
