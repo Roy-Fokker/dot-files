@@ -208,6 +208,67 @@
   :bind
   (("C-x g" . magit-status)))
 
+;; - vertico --------------------------------------------------------
+(use-package vertico
+  :straight (:files (:defaults "extensions/*"))
+  :init (vertico-mode)
+  :bind (:map vertico-map
+			  ("C-<backspace>" . vertico-directory-up))
+  :custom (vertico-cycle t))
+
+;; - marginalia -----------------------------------------------------
+(use-package marginalia
+  :after vertico
+  :init (marginalia-mode)
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy
+						   marginalia-annotators-light
+						   nil)))
+
+;; - orderless ------------------------------------------------------
+(use-package orderless
+  :custom
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles . (partial-completion)))))
+  (completion-styles '(orderless)))
+
+;; - consult --------------------------------------------------------
+(use-package consult
+  :bind  (;; Related to the control commands.
+          ("<help> a" . consult-apropos)
+          ("C-x b"    . consult-buffer)
+          ("C-x M-:"  . consult-complex-command)
+          ("C-c k"    . consult-kmacro)
+          ;; Related to the navigation.
+          ("M-g a" . consult-org-agenda)
+          ("M-g e" . consult-error)
+          ("M-g g" . consult-goto-line)
+          ("M-g h" . consult-org-heading)
+          ("M-g i" . consult-imenu)
+          ("M-g k" . consult-global-mark)
+          ("C-f"   . consult-line)
+          ("M-g m" . consult-mark)
+          ("M-g o" . consult-outline)
+          ("M-g I" . consult-project-imenu)
+          ;; Related to the search and selection.
+          ("M-s G" . consult-git-grep)
+          ("M-s g" . consult-grep)
+          ("M-s k" . consult-keep-lines)
+          ("M-s l" . consult-locate)
+          ("M-s m" . consult-multi-occur)
+          ("M-s r" . consult-ripgrep)
+          ("M-s u" . consult-focus-lines)
+          ("M-s f" . consult-find))
+  :custom
+  (completion-in-region-function #'consult-completion-in-region)
+  (consult-narrow-key "<")
+  (consult-project-root-function #'projectile-project-root)
+  ;; Provides consistent display for both `consult-register' and the register
+  ;; preview when editing registers.
+  (register-preview-delay 0)
+  (register-preview-function #'consult-register-preview))
+
+
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
 (provide 'init)
