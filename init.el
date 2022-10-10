@@ -72,6 +72,9 @@
   (global-display-line-numbers-mode)              ; Display line-numbers in all buffers
   (global-hl-line-mode)                           ; Highlight current line
   (show-paren-mode)                               ; Parenthesis highlighting
+  (set-face-attribute 'show-paren-match
+					   nil
+					   :weight 'ultra-bold)
   (delete-selection-mode)                         ; Make delete work as expected
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
@@ -152,9 +155,9 @@
 
 ;; = Third-Party Packages' Configuration ============================
 ;; - dracula Theme --------------------------------------------------
-(use-package dracula-theme
+(use-package doom-themes
   :init
-  (load-theme 'dracula t))
+  (load-theme 'doom-dracula t))
 
 ;; - mood line ------------------------------------------------------
 (use-package mood-line
