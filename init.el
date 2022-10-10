@@ -7,7 +7,6 @@
 ;; = Emacs configuration ============================================
 ;; - set editor properties ------------------------------------------
 (use-package emacs
-  :ensure nil
   :custom
   ((inhibit-startup-screen t)                            ; Disable startup screen.
    (visible-bell t)                                      ; Disable audible beeps.
@@ -57,13 +56,11 @@
 
 ;; - Set a default dark theme, overriden later ----------------------
 (use-package emacs
-  :ensure nil
   :init
   (load-theme 'tango-dark t))
 
 ;; - set editor behaviour -------------------------------------------
 (use-package emacs
-  :ensure nil
   :init
   (tool-bar-mode -1)                              ; Disable tool bar
   (tooltip-mode -1)                               ; Disable tooltips
@@ -82,7 +79,6 @@
 
 ;; - set font and utf preferences ---------------------------------------
 (use-package emacs
-  :ensure nil
   :config
   ;; Use utf-8 everywhere.
   (prefer-coding-system       'utf-8)
@@ -98,7 +94,6 @@
 
 ;; - change window splitting ----------------------------------------
 (use-package emacs
-  :ensure nil
   :preface
   (defun my/split-and-follow-horizontally ()
     "Split window below."
@@ -116,7 +111,6 @@
 
 ;; - CUA Mode -------------------------------------------------------
 (use-package emacs
-  :ensure nil
   :custom
   (delete-selection-mode t)
   (normal-erase-is-backspace t)
@@ -134,7 +128,6 @@
 
 ;; - desktop save mode setup ----------------------------------------
 (use-package emacs
-  :ensure nil
   :preface
   (setq desktop-dirname             "~/.emacs.d/"            ; Path to save folder
         desktop-base-file-name      "emacs.desktop"          ; file name to save in
@@ -149,7 +142,6 @@
 
 ;; - recentf --------------------------------------------------------
 (use-package emacs
-  :ensure nil
   :custom
   ((recentf-max-menu-items 25)
    (recentf-max-saved-items 25))
