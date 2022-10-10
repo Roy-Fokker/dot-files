@@ -159,10 +159,13 @@
   :init
   (load-theme 'doom-dracula t))
 
-;; - mood line ------------------------------------------------------
-(use-package mood-line
+;; - doom modeline --------------------------------------------------
+(use-package doom-modeline
+  :custom
+  ((doom-modeline-icon t)
+   (doom-modeline-bar-width 3))
   :init
-  (mood-line-mode))
+  (doom-modeline-mode))
 
 ;; - rainbow delimiters ---------------------------------------------
 (use-package rainbow-delimiters
@@ -208,65 +211,32 @@
   :bind
   (("C-x g" . magit-status)))
 
-;; - vertico --------------------------------------------------------
-(use-package vertico
-  :straight (:files (:defaults "extensions/*"))
-  :init (vertico-mode)
-  :bind (:map vertico-map
-			  ("C-<backspace>" . vertico-directory-up))
-  :custom (vertico-cycle t))
-
-;; - marginalia -----------------------------------------------------
-(use-package marginalia
-  :after vertico
-  :init (marginalia-mode)
+;; - ivy ------------------------------------------------------------
+(use-package ivy
+  :diminish
   :custom
-  (marginalia-annotators '(marginalia-annotators-heavy
-						   marginalia-annotators-light
-						   nil)))
+  ((ivy-initial-input-alist nil)
+   (ivy-use-virtual-buffers t)
+   (ivy-count-format "(%d/%d) ")
+   (ivy-height 20)
+   (ivy-display-style 'fancy))
+  :hook (after-init . ivy-mode))
 
-;; - orderless ------------------------------------------------------
-(use-package orderless
-  :custom
-  (completion-category-overrides '((file (styles basic partial-completion))))
-  (completion-styles '(orderless-regexp basic)))
+(use-package ivy-rich
+  :hook (after-init . ivy-rich-mode))
 
-;; - consult --------------------------------------------------------
-(use-package consult
-  :bind  (;; Related to the control commands.
-          ("<help> a" . consult-apropos)
-          ("C-x b"    . consult-buffer)
-          ("C-x M-:"  . consult-complex-command)
-          ("C-c k"    . consult-kmacro)
-          ;; Related to the navigation.
-          ("M-g a" . consult-org-agenda)
-          ("M-g e" . consult-error)
-          ("M-g g" . consult-goto-line)
-          ("M-g h" . consult-org-heading)
-          ("M-g i" . consult-imenu)
-          ("M-g k" . consult-global-mark)
-          ("C-f"   . consult-line)
-          ("M-g m" . consult-mark)
-          ("M-g o" . consult-outline)
-          ("M-g I" . consult-project-imenu)
-          ;; Related to the search and selection.
-          ("M-s G" . consult-git-grep)
-          ("M-s g" . consult-grep)
-          ("M-s k" . consult-keep-lines)
-          ("M-s l" . consult-locate)
-          ("M-s m" . consult-multi-occur)
-          ("M-s r" . consult-ripgrep)
-          ("M-s u" . consult-focus-lines)
-          ("M-s f" . consult-find))
-  :custom
-  (completion-in-region-function #'consult-completion-in-region)
-  (consult-narrow-key "<")
-  (consult-project-root-function #'projectile-project-root)
-  ;; Provides consistent display for both `consult-register' and the register
-  ;; preview when editing registers.
-  (register-preview-delay 0)
-  (register-preview-function #'consult-register-preview))
+(use-package all-the-icons-ivy
+  :init
+  (all-the-icons-ivy-setup))
 
+;; - counsel --------------------------------------------------------
+(use-package counsel
+  :bind (("M-x" . counsel-M-x)
+         ("C-x C-f" . counsel-find-file)))
+
+;; - swiper ---------------------------------------------------------
+(use-package swiper
+  :bind (("C-f" . swiper)))
 
 (setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
 
