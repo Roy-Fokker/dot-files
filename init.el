@@ -159,35 +159,30 @@
   (after-init . recentf-mode))
 
 ;; = Third-Party Packages' Configuration ============================
+;; - dracula Theme --------------------------------------------------
+(use-package dracula-theme
+  :init
+  (load-theme 'dracula t))
 
-;; - which key ------------------------------------------------------
-(use-package which-key
-  :hook
-  (after-init . which-key-mode))
+;; - mood line ------------------------------------------------------
+(use-package mood-line
+  :init
+  (mood-line-mode))
 
 ;; - rainbow delimiters ---------------------------------------------
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-;; - treemacs -------------------------------------------------------
-(use-package treemacs
-  :custom
-  ((treemacs-python-executable "python.exe"))
-  :init
-  (which-key-add-key-based-replacements "C-c t" "treemacs")
-  :bind
-  (("M-0"       . treemacs-select-window)
-   ("C-c t 1"   . treemacs-delete-other-windows)
-   ("C-c t t"   . treemacs)
-   ("C-c t b"   . treemacs-bookmark)
-   ("C-c t f"   . treemacs-find-file)
-   ("C-c t M-f" . treemacs-find-tag)))
-
-(use-package treemacs-icons-dired
-  :after treemacs
+;; - smartparens ----------------------------------------------------
+(use-package smartparens
   :hook
-  (treemacs-mode . treemacs-icons-dired-mode))
+  (prog-mode . smartparens-mode))
+
+;; - which key ------------------------------------------------------
+(use-package which-key
+  :hook
+  (after-init . which-key-mode))
 
 ;; - company --------------------------------------------------------
 (use-package company
