@@ -228,9 +228,8 @@
 ;; - orderless ------------------------------------------------------
 (use-package orderless
   :custom
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles . (partial-completion)))))
-  (completion-styles '(orderless)))
+  (completion-category-overrides '((file (styles basic partial-completion))))
+  (completion-styles '(orderless-regexp basic)))
 
 ;; - consult --------------------------------------------------------
 (use-package consult
