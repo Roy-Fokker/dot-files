@@ -40,8 +40,20 @@
 (add-hook 'focus-out-hook #'garbage-collect)
 
 ;; ------------------------------------------------------------------
-;; Configure Package Archives
-(require 'package) ; package management
+;; - Straight.el ----------------------------------------------------
+(defvar bootstrap-version)
+(let ((bootstrap-file
+	   (expand-file-name "straight/repos/straight.el/bootstrap.el"
+						 user-emacs-directory))
+	  (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+	(with-current-buffer
+		(url-retrieve-synchronously "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+									'silent
+									'inhibit-cookies)
+	  (goto-char (point-max))
+	  (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 ;; Don't load any packages by default
 (setq package-enable-at-startup nil)
@@ -50,19 +62,17 @@
 (setq package-check-signature nil)
 
 ;; Where to look for packages
-(add-to-list 'package-archives '("org"   . "https://orgmode.org/elpa/") t)
-(add-to-list 'package-archives '("elpa"  . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(setq package-archives
+	  '(("org"   . "https://orgmode.org/elpa/")
+		("elpa"  . "https://elpa.gnu.org/packages/")
+		("melpa" . "https://melpa.org/packages/")))
 
 ;; install use-package if it's not present
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+(straight-use-package 'use-package)
 
-;; compile it
-(eval-and-compile
-  (require 'use-package))
+(use-package straight
+  :custom
+  ((straight-use-package-by-default   t)    ; always use straight.el with use-package
+   (use-package-verbose               t)    ; make output verbose
+   ))
 
-(setq use-package-always-ensure t ; always download on first run
-      use-package-always-defer  t ; always defer loading packages
-      )
