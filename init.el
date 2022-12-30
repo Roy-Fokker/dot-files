@@ -23,7 +23,7 @@
                             STRING))
    (mouse-yank-at-point t)                               ; Paste at text-cursor, not mouse-cursor.
    (scroll-preserve-screen-position t)                   ; Preserve line/column position.
-   (delete-old-versions -1)                              ; Delete execess backup files
+   (delete-old-versions t)                               ; Delete execess backup files
    (backup-directory-alist `(("." .                      ; where to put backup files
                               (expand-file-name "backups"
                                                 user-emacs-directory))))
@@ -34,6 +34,7 @@
    (frame-resize-pixelwise t)                            ; ensure text size is not rounded
    (create-lockfiles nil)                                ; don't create lockfiles
    (frame-title-format "%b %& emacs")                    ; Window Title => {Buffer Name} {Modified Status}
+;; (default-frame-alist `((undecorated . t)))            ; Hide windows title bar, default = ((vertical-scroll-bars))
    (delete-by-moving-to-trash t)                         ; delete moves to recycle bin
    (column-number-mode t)                                ; display column number
    (show-paren-delay 0)                                  ; show matching immediately
@@ -52,6 +53,7 @@
    (native-comp-async-query-on-exit t)                   ; kill any async jobs on exit
    (native-comp-async-jobs-number 0)                     ; only run 4 async jobs at a time
    (native-comp-async-report-warnings-errors nil)        ; don't care for warning messages
+   (use-short-answers t)                                 ; use y/n instead of yes/no
    ))
 
 ;; - Set a default dark theme, overriden later ----------------------
@@ -73,8 +75,8 @@
   (global-hl-line-mode)                           ; Highlight current line
   (show-paren-mode)                               ; Parenthesis highlighting
   (set-face-attribute 'show-paren-match
-					   nil
-					   :weight 'ultra-bold)
+					  nil
+					  :weight 'ultra-bold)
   (delete-selection-mode)                         ; Make delete work as expected
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
@@ -92,8 +94,7 @@
 
   ;; Set default font
   (set-frame-font "Cascadia Code"  nil t)
-  (set-face-attribute 'default nil)
-  )
+  (set-face-attribute 'default nil))
 
 ;; - change window splitting ----------------------------------------
 (use-package emacs
@@ -140,7 +141,7 @@
         desktop-files-not-to-save   "^$"                     ; reload tramp paths
         desktop-load-locked-desktop nil                      ; don't load locked file
         desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
-  )
+	)
   (desktop-save-mode t))
 
 ;; - recentf --------------------------------------------------------
@@ -153,7 +154,21 @@
   :hook
   (after-init . recentf-mode))
 
-;; = Third-Party Packages' Configuration ============================
+
+;; = Third party packages ===========================================
+;; - No Littering ---------------------------------------------------
+(use-package no-littering
+  :demand t
+  :custom
+  ((auto-save-file-name-transforms `((".*"
+									  ,(no-littering-expand-var-file-name "auto-save/")
+									  t)))
+   (custom-file (no-littering-expand-etc-file-name
+				 "custom.el")))
+  :config
+  (when (file-exists-p custom-file)
+    (load custom-file)))
+
 ;; - dracula Theme --------------------------------------------------
 (use-package doom-themes
   :init
@@ -185,8 +200,18 @@
 
 ;; - which key ------------------------------------------------------
 (use-package which-key
+  :custom
+  ((which-key-separator " ")
+   (which-key-add-column-padding 2)
+   (which-key-mini-display-lines 4)
+   (which-key-idle-delay 0.001))
   :hook
   (after-init . which-key-mode))
+
+;; - prescient ------------------------------------------------------
+(use-package prescient
+  :hook
+  (after-init . prescient-persist-mode))
 
 ;; - treemacs -------------------------------------------------------
 (use-package treemacs
@@ -225,6 +250,11 @@
   :hook
   (company-mode . company-box-mode))
 
+(use-package company-prescient
+  :after company
+  :hook
+  (company-mode . company-prescient-mode))
+
 ;; - yasnippets -----------------------------------------------------
 (use-package yasnippet
   :after company
@@ -234,89 +264,49 @@
   :hook
   (prog-mode . yas-global-mode))
 
-(use-package yasnippet-snippets)
+(use-package yasnippet-snippets
+  :after yasnippet
+  :defer)
 
 ;; - magit ----------------------------------------------------------
 (use-package magit
   :bind
   (("C-x g" . magit-status)))
 
-;; - ivy ------------------------------------------------------------
+;; - ivy, swiper, counsel -------------------------------------------
 (use-package ivy
-  :diminish
   :custom
   ((ivy-initial-input-alist nil)
    (ivy-use-virtual-buffers t)
    (ivy-count-format "(%d/%d) ")
    (ivy-height 20)
    (ivy-display-style 'fancy))
-  :hook (after-init . ivy-mode))
+  :hook
+  (after-init . ivy-mode))
+
+(use-package swiper
+  :bind
+  (("C-f" . swiper)))
+
+(use-package counsel
+  :after ivy
+  :bind
+  (("M-x"     . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)
+   ("<f1> v"  . counsel-describe-variable)
+   ("<f1> f"  . counsel-descbinds-function))
+  :hook
+  (ivy-mode . counsel-mode))
+ 
+(use-package ivy-prescient
+  :after counsel
+  :hook
+  (ivy-mode . ivy-prescient-mode))
 
 (use-package ivy-rich
-  :hook (after-init . ivy-rich-mode))
-
-(use-package all-the-icons-ivy
-  :init
-  (all-the-icons-ivy-setup))
-
-;; - counsel --------------------------------------------------------
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)))
-
-;; - swiper ---------------------------------------------------------
-(use-package swiper
-  :bind (("C-f" . swiper)))
-
-;; = Languages ======================================================
-;; - C/C++ ----------------------------------------------------------
-(use-package eglot
-  :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  :after ivy
   :hook
-  ((c-mode
-	c++-mode) . eglot-ensure))
+  (ivy-mode . ivy-rich-mode))
 
-;; - Common Lisp ----------------------------------------------------
-;; ------------------------------------------------------- Snippets -
-(use-package common-lisp-snippets)
-
-;; ---------------------------------------------------------- Slime -
-(use-package slime
-  :custom
-  (slime-contribs '(slime-fancy
-					slime-company
-					slime-quicklisp
-					slime-asdf
-					slime-hyperdoc
-					slime-xref-browser
-					slime-cl-indent))
-  :config
-  (setq inferior-lisp-program "sbcl")
-  :hook
-  ((lisp-mode          . slime-mode)
-   (inferior-lisp-mode . inferior-slime-mode)))
-
-(use-package slime-company
-  :after (slime company)
-  :custom
-  ((slime-company-completion       'simple)
-   (slime-company-after-completion 'slime-company-just-one-space)))
-
-;; ------------------------------------------------------------ Sly -
-;; (use-package sly
-;;   :config
-;;   (setq inferior-lisp-program "sbcl")
-;;   :hook
-;;   ((lisp-mode . sly-editing-mode)))
-
-;; (use-package sly-quicklisp
-;;   :after sly)
-
-;; (use-package sly-asdf
-;;   :after sly)
-
-(setq initial-scratch-message (concat ";; Startup time: " (emacs-init-time)))
-
+;; = end of config ==================================================
 (provide 'init)
-;;; init.el ends here
