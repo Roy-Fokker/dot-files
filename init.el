@@ -128,7 +128,8 @@
    ("C-w"     . 'kill-this-buffer)
    ("C-S-w"   . 'delete-window)
    ("C-z"     . 'undo)
-   ("<escape>". 'keyboard-escape-quit)))
+   ("<escape>". 'keyboard-escape-quit)
+   ("M-/"     . 'comment-line)))
 
 ;; - desktop save mode setup ----------------------------------------
 (use-package emacs
@@ -307,6 +308,33 @@
   :after ivy
   :hook
   (ivy-mode . ivy-rich-mode))
+
+;; - slime or sly ---------------------------------------------------
+;; sly doesn't work due to some errors with slynk server
+;; not sure what the issue is.
+;; slime doesn't work with company mode in repl. Again not sure
+;; where the issue is.
+;; (use-package slime
+;;   :init
+;;   (setq inferior-lisp-program "sbcl")
+;;   :custom
+;;   (slime-contribs '(slime-fancy
+;; 					slime-quicklisp
+;; 					slime-asdf))
+;;   :hook
+;;   ((common-lisp-mode   . slime-mode)
+;;    (inferior-lisp-mode . slime-mode)))
+
+;; (use-package slime-company
+;;   :ensure t
+;;   :after (slime company)
+;;   :hook (slime-editing-mode-hook
+;;          . (lambda ()
+;;              (set (make-local-variable 'company-backends)
+;;                   '((company-slime company-dabbrev-code company-semantic)))))
+;;   :config
+;;   (setq slime-company-completion 'fuzzy
+;;         slime-company-after-completion 'slime-company-just-one-space))
 
 ;; = end of config ==================================================
 (provide 'init)
