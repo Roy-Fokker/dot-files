@@ -56,6 +56,12 @@
   ;; 1MB in bytes, default 4096 bytes
   (setq read-process-output-max 1048576))
 
+(when (boundp 'w32-pipe-read-delay)
+  (setq w32-pipe-read-delay 0))
+
+(when (boundp 'w32-pipe-buffer-size)
+  (setq w32-pipe-buffer-size (* 64 1024)))
+
 ;; - Print message to *messages* buffer with total startup time -------------
 (add-hook 'emacs-startup-hook
 		  (lambda ()

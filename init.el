@@ -80,7 +80,14 @@
   (delete-selection-mode)                         ; Make delete work as expected
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
+  (global-font-lock-mode)                         ; Enable buffer colorization
+  (global-tab-line-mode)                          ; Enable Tab Bar line at top of window
   )
+
+;; - set tab bar prefrences ---------------------------------------------
+(use-package emacs
+  :config
+  (setq tab-bar-separator "-"))
 
 ;; - set font and utf preferences ---------------------------------------
 (use-package emacs
@@ -143,7 +150,8 @@
         desktop-load-locked-desktop nil                      ; don't load locked file
         desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
 	)
-  (desktop-save-mode t))
+										;(desktop-save-mode nil)
+  )
 
 ;; - recentf --------------------------------------------------------
 (use-package emacs
@@ -189,10 +197,15 @@
   (prog-mode . rainbow-delimiters-mode))
 
 ;; - all-the-icons --------------------------------------------------
-(use-package all-the-icons
-  :commands all-the-icons-install-fonts
-  :config (unless (find-font (font-spec :name "all-the-icons"))
-			(all-the-icons-install-fonts t)))
+;(use-package all-the-icons
+;  :commands all-the-icons-install-fonts
+;  :config (unless (find-font (font-spec :name "all-the-icons"))
+;			(all-the-icons-install-fonts t)))
+
+;; - nerd-icons -----------------------------------------------------
+(use-package nerd-icons
+  :commands nerd-icons-install-fonts
+  )
 
 ;; - smartparens ----------------------------------------------------
 (use-package smartparens
@@ -263,7 +276,7 @@
   :config
   (yas-reload-all)
   :hook
-  (prog-mode . yas-global-mode))
+  (prog-mode . yas-minor-mode))
 
 (use-package yasnippet-snippets
   :after yasnippet
@@ -308,6 +321,34 @@
   :after ivy
   :hook
   (ivy-mode . ivy-rich-mode))
+
+;; - lsp-mode -------------------------------------------------------
+(use-package lsp-mode
+  :after yasnippet
+  :custom
+  ((lsp-keymap-prefix "C-c l")
+   (lsp-clangd-binary-path "clangd")
+   (lsp-headerline-breadcrumb-mode t)
+   (lsp-modeline-code-actions-mode t)
+   (lsp-enable-suggest-server-download nil)
+   (lsp-idle-delay 0.1)
+   (lsp-clients-clangd-args
+	'("-j=4"
+	  "--header-insertion=never"
+	  "--all-scopes-completion"
+	  "--background-index"
+      "--clang-tidy"
+      "--compile-commands-dir=build"
+      "--cross-file-rename"
+      "--suggest-missing-includes")))
+  :hook
+  ((c-mode . lsp)
+   (c++-mode . lsp)
+   (lsp-mode . lsp-enable-which-key-integration))
+  :commands (lsp lsp-deferred)
+  :bind
+  (("C-c l" . lsp-command-map))
+)
 
 ;; - slime or sly ---------------------------------------------------
 ;; sly doesn't work due to some errors with slynk server
