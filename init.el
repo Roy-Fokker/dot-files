@@ -77,7 +77,6 @@
   (set-face-attribute 'show-paren-match
 					  nil
 					  :weight 'ultra-bold)
-  (delete-selection-mode)                         ; Make delete work as expected
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
   (global-font-lock-mode)                         ; Enable buffer colorization
@@ -123,7 +122,7 @@
 ;; - CUA Mode -------------------------------------------------------
 (use-package emacs
   :custom
-  (delete-selection-mode t)
+  (delete-selection-mode t)                ; Make delete work as expected
   (normal-erase-is-backspace t)
   :hook
   (window-setup . cua-mode)
