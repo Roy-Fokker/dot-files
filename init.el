@@ -142,15 +142,15 @@
 (use-package emacs
   :preface
   (setq desktop-dirname             "~/.emacs.d/"            ; Path to save folder
-        desktop-base-file-name      "emacs.desktop"          ; file name to save in
-        desktop-base-lock-name      "lock"                   ; temp file
-        desktop-path                (list desktop-dirname)   ; ???
-        desktop-save                t                        ; save without asking
-        desktop-files-not-to-save   "^$"                     ; reload tramp paths
-        desktop-load-locked-desktop nil                      ; don't load locked file
-        desktop-auto-save-timeout   30                       ; frequency of checks for changes to desktop
-	)
-										;(desktop-save-mode nil)
+		desktop-base-file-name      "emacs.desktop"          ; file name to save in
+		desktop-base-lock-name      "lock"                   ; temp file
+		desktop-path                (list desktop-dirname)   ; ???
+		desktop-save                t                        ; save without asking
+		desktop-files-not-to-save   "^$"                     ; reload tramp paths
+		desktop-load-locked-desktop nil                      ; don't load locked file
+		desktop-auto-save-timeout   30)                      ; frequency of checks for changes to desktop
+  :config
+  (desktop-save-mode t)                                      ; Enable desktop save mode
   )
 
 ;; - recentf --------------------------------------------------------
