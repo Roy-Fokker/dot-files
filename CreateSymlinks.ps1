@@ -1,16 +1,15 @@
 # Get the ID and security principal of the current user account
-$myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()
-$myWindowsPrincipal=new-object System.Security.Principal.WindowsPrincipal($myWindowsID)
+$myWindowsID = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+$myWindowsPrincipal = new-object System.Security.Principal.WindowsPrincipal($myWindowsID)
 
 # Get the security principal for the Administrator role
-$adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
+$adminRole = [System.Security.Principal.WindowsBuiltInRole]::Administrator
 
 # Check to see if we are currently running "as Administrator"
 if ($myWindowsPrincipal.IsInRole($adminRole)) {
 	$srcDir = (Get-Location).Path
 	$emacsAppDataDir = Join-Path -Path $env:APPDATA -ChildPath ".emacs.d"
 	$emacsHomeDir = Join-Path -Path (Resolve-Path ~).Path -ChildPath ".emacs.d"
-#	$nvimHomeDir = Join-Path -Path (Resolve-Path ~).Path -ChildPath "AppData\Local\nvim"
 
 	if (! (Test-Path $emacsAppDataDir)) {
 		New-Item -ItemType Directory -Path $emacsAppDataDir
@@ -30,20 +29,15 @@ if ($myWindowsPrincipal.IsInRole($adminRole)) {
 
 		if (Test-Path $tgtFile) {
 			Write-Error "File already exists! [$tgtFile]"
-		} else {
+		}
+		else {
 			New-Item -ItemType SymbolicLink -Path $tgtFile -Value $srcFile
 		}
 	}
 
 	New-SymLink -FileName .\init.el -TargetDir $emacsAppDataDir
-	New-SymLink -FileName .\emacs-config.org -TargetDir $emacsAppDataDir
-
-	New-SymLink -FileName .\init.el -TargetDir $emacsHomeDir
-	New-SymLink -FileName .\emacs-config.org -TargetDir $emacsHomeDir
-
-	New-SymLink -FileName .\.bashrc -TargetDir $env:APPDATA
-
-#	New-SymLink -FileName .\init.vim -TargetDir $nvimHomeDir
-} else {
+	New-SymLink -FileName .\early-init.el -TargetDir $emacsAppDataDir
+}
+else {
 	Write-Error "This script requires Admin Privileges"
 }
