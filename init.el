@@ -196,12 +196,6 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-;; - all-the-icons --------------------------------------------------
-;(use-package all-the-icons
-;  :commands all-the-icons-install-fonts
-;  :config (unless (find-font (font-spec :name "all-the-icons"))
-;			(all-the-icons-install-fonts t)))
-
 ;; - nerd-icons -----------------------------------------------------
 (use-package nerd-icons
   :commands nerd-icons-install-fonts
