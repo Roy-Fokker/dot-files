@@ -80,14 +80,8 @@
   (global-prettify-symbols-mode)                  ; prettify symbols (like lambda)
   (windmove-default-keybindings)                  ; Window Movement
   (global-font-lock-mode)                         ; Enable buffer colorization
-  (global-tab-line-mode)                          ; Enable Tab Bar line at top of window
   (global-so-long-mode)                           ; handle very long lines without hurting emacs
   )
-
-;; - set tab bar prefrences ---------------------------------------------
-(use-package emacs
-  :config
-  (setq tab-bar-separator "-"))
 
 ;; - set font and utf preferences ---------------------------------------
 (use-package emacs

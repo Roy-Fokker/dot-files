@@ -10,3 +10,6 @@
 !.vim*
 !*.vim
 !*.sh
+!/nvim
+!/nvim/**/*
+
