@@ -112,7 +112,8 @@
     (other-window 1))
   :bind
   (("C-x 2" . 'my/split-and-follow-horizontally)
-   ("C-x 3" . 'my/split-and-follow-vertically)))
+   ("C-x 3" . 'my/split-and-follow-vertically)
+   ))
 
 ;; - CUA Mode -------------------------------------------------------
 (use-package emacs
@@ -310,34 +311,6 @@
   :hook
   (ivy-mode . ivy-rich-mode))
 
-;; - lsp-mode -------------------------------------------------------
-(use-package lsp-mode
-  :after yasnippet
-  :custom
-  ((lsp-keymap-prefix "C-c l")
-   (lsp-clangd-binary-path "clangd")
-   (lsp-headerline-breadcrumb-mode t)
-   (lsp-modeline-code-actions-mode t)
-   (lsp-enable-suggest-server-download nil)
-   (lsp-idle-delay 0.1)
-   (lsp-clients-clangd-args
-	'("-j=4"
-	  "--header-insertion=never"
-	  "--all-scopes-completion"
-	  "--background-index"
-      "--clang-tidy"
-      "--compile-commands-dir=build"
-      "--cross-file-rename"
-      "--suggest-missing-includes")))
-  :hook
-  ((c-mode . lsp)
-   (c++-mode . lsp)
-   (lsp-mode . lsp-enable-which-key-integration))
-  :commands (lsp lsp-deferred)
-  :bind
-  (("C-c l" . lsp-command-map))
-)
-
 ;; - slime or sly ---------------------------------------------------
 ;; sly doesn't work due to some errors with slynk server
 ;; not sure what the issue is.
@@ -364,6 +337,45 @@
 ;;   :config
 ;;   (setq slime-company-completion 'fuzzy
 ;;         slime-company-after-completion 'slime-company-just-one-space))
+
+;; - C++/CMake LSP mode ---------------------------------------------
+(use-package lsp-mode
+  :ensure t
+  :custom
+  (lsp-completion-enable-additional-text-edit nil)
+  :hook
+  (lsp-mode . lsp-enable-which-key-integration))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(use-package lsp-treemacs
+  :ensure t)
+
+(use-package cmake-mode
+  :ensure t
+  :mode
+  ("CMakeLists\\.txt\\'" "\\.cmake\\'")
+  :hook
+  (cmake-mode . lsp-deferred))
+
+(use-package cmake-font-lock
+  :ensure t
+  :after cmake-mode
+  :config
+  (cmake-font-lock-activate))
+
+(use-package emacs
+  :mode
+  (("\\.ixx\\'" . c++-mode)
+   ("\\.cppm\\'" . c++-mode)))
+
+(use-package modern-cpp-font-lock
+  :ensure t
+  :hook
+  (cpp-mode . modern-c++-font-lock-mode))
+
 
 ;; = end of config ==================================================
 (provide 'init)
