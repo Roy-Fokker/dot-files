@@ -141,7 +141,7 @@
    ("C-f"     . 'isearch-forward)
    ("C-S-f"   . 'isearch-backward)
    ("C-<tab>" . 'other-window)
-   ("C-w"     . 'kill-this-buffer)
+   ("C-w"     . 'kill-current-buffer)
    ("C-S-w"   . 'delete-window)
    ("C-z"     . 'undo)
    ("<escape>". 'keyboard-escape-quit)
