@@ -115,6 +115,20 @@
    ("C-x 3" . 'my/split-and-follow-vertically)
    ))
 
+;; - change cursor style on INS -------------------------------------
+(use-package emacs
+  :preface
+  (defun my/set-cursor-style-per-mode()
+	"change cursor style based on minor mode"
+	(setq cursor-type
+		  (if overwrite-mode
+			  'box
+			'bar)
+		  ))
+  :hook
+  ((post-command . my/set-cursor-style-per-mode)
+   (after-init . my/set-cursor-style-per-mode)))
+
 ;; - CUA Mode -------------------------------------------------------
 (use-package emacs
   :custom
