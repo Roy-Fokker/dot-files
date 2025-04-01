@@ -353,42 +353,6 @@
 ;;         slime-company-after-completion 'slime-company-just-one-space))
 
 ;; - C++/CMake LSP mode ---------------------------------------------
-(use-package lsp-mode
-  :ensure t
-  :custom
-  (lsp-completion-enable-additional-text-edit nil)
-  :hook
-  (lsp-mode . lsp-enable-which-key-integration))
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
-
-(use-package lsp-treemacs
-  :ensure t)
-
-(use-package cmake-mode
-  :ensure t
-  :mode
-  ("CMakeLists\\.txt\\'" "\\.cmake\\'")
-  :hook
-  (cmake-mode . lsp-deferred))
-
-(use-package cmake-font-lock
-  :ensure t
-  :after cmake-mode
-  :config
-  (cmake-font-lock-activate))
-
-(use-package emacs
-  :mode
-  (("\\.ixx\\'" . c++-mode)
-   ("\\.cppm\\'" . c++-mode)))
-
-(use-package modern-cpp-font-lock
-  :ensure t
-  :hook
-  (cpp-mode . modern-c++-font-lock-mode))
 
 
 ;; = end of config ==================================================
