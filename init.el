@@ -353,7 +353,24 @@
 ;;         slime-company-after-completion 'slime-company-just-one-space))
 
 ;; - C++/CMake LSP mode ---------------------------------------------
+(use-package modern-cpp-font-lock 
+  :hook
+  (c++-mode . modern-c++-font-lock-mode))
 
+(use-package cmake-mode 
+  :mode
+  ("CMakeLists\\.txt\\'"
+   "\\.cmake\\'"))
+
+(use-package cmake-font-lock
+  :after cmake-mode
+  :hook
+  (cmake-mode . cmake-font-lock-activate))
+
+(use-package emacs
+  :mode
+  (("\\.ixx\\'"  . c++-mode)
+   ("\\.cppm\\'"  . c++-mode)))
 
 ;; = end of config ==================================================
 (provide 'init)
