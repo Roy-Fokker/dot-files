@@ -382,5 +382,15 @@
   (("\\.ixx\\'"  . c++-mode)
    ("\\.cppm\\'"  . c++-mode)))
 
+;; - HLSL/GLSL Shaders ----------------------------------------------
+(use-package glsl-mode)
+
+(use-package hlsl-mode
+  :straight (:host github
+				   :repo "xeechou/hlsl-mode.el"
+				   :branch "main")
+  :mode
+  ("\\.hlsl\\'"))
+
 ;; = end of config ==================================================
 (provide 'init)
