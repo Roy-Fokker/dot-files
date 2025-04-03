@@ -353,6 +353,16 @@
 ;;         slime-company-after-completion 'slime-company-just-one-space))
 
 ;; - C++/CMake LSP mode ---------------------------------------------
+(use-package counsel-etags
+  :bind
+  (("C-]" . counsel-etags-find-tag-at-point))
+  :config
+  (setq counsel-etags-update-interval 60)
+  :hook
+  (prog-mode . (lambda ()
+				 (add-hook 'after-save-hook
+						   'counsel-etags-virtual-update-tags 'append 'local))))
+
 (use-package modern-cpp-font-lock 
   :hook
   (c++-mode . modern-c++-font-lock-mode))
