@@ -101,15 +101,15 @@
 (use-package emacs
   :preface
   (defun my/split-and-follow-horizontally ()
-    "Split window below."
-    (interactive)
-    (split-window-below)
-    (other-window 1))
+	"Split window below."
+	(interactive)
+	(split-window-below)
+	(other-window 1))
   (defun my/split-and-follow-vertically ()
-    "Split window right."
-    (interactive)
-    (split-window-right)
-    (other-window 1))
+	"Split window right."
+	(interactive)
+	(split-window-right)
+	(other-window 1))
   :bind
   (("C-x 2" . 'my/split-and-follow-horizontally)
    ("C-x 3" . 'my/split-and-follow-vertically)
@@ -187,7 +187,7 @@
 				 "custom.el")))
   :config
   (when (file-exists-p custom-file)
-    (load custom-file)))
+	(load custom-file)))
 
 ;; - dracula Theme --------------------------------------------------
 (use-package doom-themes
@@ -316,7 +316,7 @@
    ("<f1> f"  . counsel-descbinds-function))
   :hook
   (ivy-mode . counsel-mode))
- 
+
 (use-package ivy-prescient
   :after counsel
   :hook
@@ -347,8 +347,8 @@
 ;;   (setq inferior-lisp-program "sbcl")
 ;;   :custom
 ;;   (slime-contribs '(slime-fancy
-;; 					slime-quicklisp
-;; 					slime-asdf))
+;;					slime-quicklisp
+;;					slime-asdf))
 ;;   :hook
 ;;   ((common-lisp-mode   . slime-mode)
 ;;    (inferior-lisp-mode . slime-mode)))
@@ -375,11 +375,11 @@
 				 (add-hook 'after-save-hook
 						   'counsel-etags-virtual-update-tags 'append 'local))))
 
-(use-package modern-cpp-font-lock 
+(use-package modern-cpp-font-lock
   :hook
   (c++-mode . modern-c++-font-lock-mode))
 
-(use-package cmake-mode 
+(use-package cmake-mode
   :mode
   ("CMakeLists\\.txt\\'"
    "\\.cmake\\'"))
