@@ -327,6 +327,16 @@
   :hook
   (ivy-mode . ivy-rich-mode))
 
+;; - indentation highlight ------------------------------------------
+(use-package highlight-indent-guides
+  :custom
+  (highlight-indent-guides-method 'character)
+  (highlight-indent-guides-auto-odd-face-perc 75)
+  (highlight-indent-guides-auto-even-face-perc 50)
+  (highlight-indent-guides-auto-character-face-perc 50)
+  :hook
+  (prog-mode . highlight-indent-guides-mode))
+
 ;; - slime or sly ---------------------------------------------------
 ;; sly doesn't work due to some errors with slynk server
 ;; not sure what the issue is.
