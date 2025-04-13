@@ -394,6 +394,12 @@
   (("\\.ixx\\'"  . c++-mode)
    ("\\.cppm\\'"  . c++-mode)))
 
+(use-package clang-format
+  :commands (clang-format-buffer clang-format-on-save-mode)
+  :hook ((c-mode c++-mode) . clang-format-on-save-mode)
+  :config (clang-format-on-save-mode))
+
+
 ;; - HLSL/GLSL Shaders ----------------------------------------------
 (use-package glsl-mode)
 
