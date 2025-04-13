@@ -390,6 +390,8 @@
   (cmake-mode . cmake-font-lock-activate))
 
 (use-package emacs
+  :config
+  (defvaralias 'c-basic-offset 'tab-width)
   :mode
   (("\\.ixx\\'"  . c++-mode)
    ("\\.cppm\\'"  . c++-mode)))
